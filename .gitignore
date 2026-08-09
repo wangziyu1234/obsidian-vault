@@ -20,3 +20,9 @@ _moved_out/
 
 # ===== 测试残留 =====
 rs-test-folder-*/
+
+# ===== Python 虚拟环境与缓存 =====
+.venv/
+venv/
+__pycache__/
+*.pyc
