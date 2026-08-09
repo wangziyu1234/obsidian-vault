@@ -1,0 +1,19 @@
+# ===== Obsidian 会话状态（频繁变动，不应进 Git）=====
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/cache/
+
+# ===== Obsidian 回收站 =====
+.trash/
+
+# ===== 本地备份与临时文件（不进 Git）=====
+_moved_out/
+.rslsync/
+.DS_Store
+
+# ===== 敏感配置 / 环境目录 =====
+.claude/
+.conda/
+
+# ===== 测试残留 =====
+rs-test-folder-*/
