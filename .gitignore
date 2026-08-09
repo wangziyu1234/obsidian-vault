@@ -6,6 +6,9 @@
 # ===== Obsidian 回收站 =====
 .trash/
 
+# ===== obsidian-git 插件配置（禁用中，防误启用污染仓库）=====
+.obsidian/plugins/obsidian-git/data.json
+
 # ===== 本地备份与临时文件（不进 Git）=====
 _moved_out/
 .rslsync/
