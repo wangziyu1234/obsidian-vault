@@ -2,7 +2,8 @@
 
 ## 仓库概况
 
-- 路径：`D:\obsidian\obsidian\`（非 git 仓库）
+- 路径：`D:\obsidian\`（**git 仓库根目录**，非仅笔记目录）
+- Git：`main` 分支，远程 `git@github.com:wangziyu1234/obsidian-vault.git`；提交由用户手动管理（不依赖自动备份脚本）
 - 内容：Obsidian 学习笔记，主要分两大类：
   - **自动控制原理**（`自动控制原理\`，约 18 个 .md，含 `现代控制理论\` 子目录 5 个 .md）
   - **数学**（`数学\`，含 `高等数学\` 15 讲 + `线性代数\` 7 讲 + 速查表）
@@ -118,4 +119,4 @@
 - 修改笔记前先 `grep` 检查其跨文件引用，避免改号/重命名导致断链
 - 重命名 .md 用 PowerShell `Move-Item -LiteralPath`（路径含中文与括号）
 - 输出中文时需在 bash 里设 `[Console]::OutputEncoding = [System.Text.Encoding]::UTF8`，否则中文乱码
-- **不要主动 commit**（此仓库非 git 仓库；用户未要求时不动）
+- **每次修改完主动 commit + push**：`git add -A` → `git commit` → `git push`，保持与 `origin/main` 同步
