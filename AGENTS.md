@@ -20,7 +20,7 @@
 | `templates\` | 3 个模板 | 只查跨文链接，模板占位符不算问题 |
 | `Excalidraw\` | 1 个绘图文件（JSON 正文） | 基本不查 |
 | `copilot\copilot-custom-prompts\` | 15 个插件 prompt | 不是笔记：无 H1、无链接都正常 |
-| `_moved_out\` | 归档区（gitignore）：全库备份 + `冗余jpg_未引用_2026-08-14\` | 不检查、不进 git；待删素材移这里，不物理删除 |
+| `_moved_out\` | 归档区（gitignore）：全库备份 + `冗余jpg_未引用_2026-08-14\` | 不检查、不进 git；待删素材移这里，不物理删除；**必须在 Obsidian 排除**（`app.json` 的 `userIgnoreFilters`），否则备份与活跃文件同名会让 basename 链接解析歧义（曾致第 9 章入口失效） |
 | `.venv\` `.obsidian\` `.git\` `.trash\` | 环境 / 会话状态 / 回收站 | 不检查 |
 
 ## 笔记规范总纲
@@ -76,6 +76,7 @@
 - `05 第5章` 表格内 `![[…png\|220]]`：转义正确，勿改
 - `\leftrightarrow` → `\left/\right` 计数误报
 - `copilot\copilot-custom-prompts\*.md` 无 H1 正常；`AGENTS.md` 自身、`_moved_out\`、`.venv\` 不参与检查
+- `_moved_out\` 内的备份与活跃文件**同名**：必须在 Obsidian「设置 → 文件与链接 → 排除文件」里排除 `_moved_out/`（已写入 `.obsidian/app.json` 的 `userIgnoreFilters`），否则 `[[现代控制理论/01 绪论]]` 这类短路径链接会因重名解析失败
 
 ### 修改流程
 - 修改/重命名前先 `grep` 检查跨文件引用，避免断链；重命名用 PowerShell `Move-Item -LiteralPath`（路径含中文与括号）
