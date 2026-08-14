@@ -80,7 +80,7 @@
 ### 修改流程
 - 修改/重命名前先 `grep` 检查跨文件引用，避免断链；重命名用 PowerShell `Move-Item -LiteralPath`（路径含中文与括号）
 - 每次修改完主动 commit + push（中文提交信息，前缀见「仓库概况」）
-- **本机沙箱下 `git push` 会失败**：ssh.exe 无法创建 signal pipe（Win32 error 5）。用 `sandbox_permissions: "danger-full-access"` 重试**同一条命令**即可（会触发用户审批）
+- **git push 与沙箱**：受限沙箱下 `git push` 会因 ssh.exe 无法创建 signal pipe 而失败（Win32 error 5）。优先直接执行；只有沙箱拦截且会话允许带权限重试（审批策略不是 never）时，才用 `sandbox_permissions` 重试同一条命令；**审批策略为 never 时不要设置 `sandbox_permissions`**（会被自动拒绝），改为在回复中说明失败原因
 
 ## 历史记录
 
