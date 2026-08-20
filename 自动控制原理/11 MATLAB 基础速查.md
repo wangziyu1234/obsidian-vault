@@ -42,4 +42,5 @@ tags: [知识点, 自动控制原理, 公式速查]
 | 9 | 李雅普诺夫方程 | `P = lyap(A',Q)` |
 
 > [!warning] ⚠️ 两个易错
-> ① `margin` 返回的幅值裕度 `Gm` 是**倍数**不是 dB，报告 $h(\mathrm{dB})=20\lg Gm$；② MATLAB 的 `lyap(M,Q)` 解的是 $MX+XM^{T}=-Q$，所以求 $A^TP+PA=-Q$ 必须传**转置** `lyap(A',Q)`（教材附录 B 同此写法）。
+> ① `margin` 返回的幅值裕度 `Gm` 是**倍数**不是 dB，报告 $h(\mathrm{dB})=20\lg Gm$。
+> ② MATLAB 的 `lyap(M,Q)` 解的是 $MX+XM^{T}=-Q$，所以求 $A^TP+PA=-Q$ 必须传**转置** `lyap(A',Q)`（教材附录 B 同此写法）。
