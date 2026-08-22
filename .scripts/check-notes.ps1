@@ -54,6 +54,7 @@ $excludeSeg = @('\.obsidian\', '\.venv\', '\.trash\', '_moved_out\', '\copilot\'
 function Is-Excluded([string]$p) {
   foreach ($s in $excludeSeg) { if ($p -match [regex]::Escape($s)) { return $true } }
   if ($p -match '\\AGENTS\.md$') { return $true }
+  if ($p -match '\\README\.md$') { return $true }
   return $false
 }
 
