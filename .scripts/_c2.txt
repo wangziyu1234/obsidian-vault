@@ -1,3 +1,0 @@
-L130: $\int\dfrac{dx}{\sqrt{ax^{2}+bx+c}}$ => 结果[配方后化 $\int\dfrac{du}{\sqrt{u^{2}\pm k^{2}}}$ 或 $\int\dfrac{d]
-L131: $\int\sqrt{ax^{2}+bx+c}\,dx$ => 结果[配方后化 $\int\sqrt{u^{2}\pm k^{2}}\,du$ 或 $\int\sqrt{k^{2}-u^{2]
-L158: $\int\ln^{n}x\,dx$ => 结果[$x\ln^{n}x-n\displaystyle\int\ln^{n-1}x\,dx$]
