@@ -12,7 +12,7 @@
                （剔除 \leftrightarrow）
    3. 编号   ：目录内 ## X.Y 小节号无重复；无 TODO/FIXME/待补/??；无空链接
    4. 结构   ：唯一 H1；abstract 在 H1 后（索引/入口文件用 > 定位 豁免）；
-               附录 无 H3（附录 图像变换 为已知豁免）；无 >400 行文件
+               附录 无 H3（附录 图像变换 为已知豁免）；无 >300 行文件
 
   豁免（AGENTS 已知，不误报）：
    - 05 第5章 表格内 ![[…png\|220]] 转义；\leftrightarrow
@@ -120,7 +120,7 @@ function Test-OneFile([string]$path) {
   }
 
   # ---- 超长 ----
-  if ($nLines -gt 400) { $warnings.Add("[$rel] 共 $nLines 行（>400，建议按拆分约定处理）") }
+  if ($nLines -gt 300) { $warnings.Add("[$rel] 共 $nLines 行（>300，建议按拆分约定处理）") }
 
   # ---- 占位符 ----
   if ($text -match 'TODO|FIXME|待补|待完善') { $warnings.Add("[$rel] 含 TODO/FIXME/待补 占位符") }
