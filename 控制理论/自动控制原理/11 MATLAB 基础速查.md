@@ -29,7 +29,7 @@ tags: [知识点, 自动控制原理, 公式速查]
 | 部分分式展开 | `[r,p,k] = residue(num,den)`（$\dfrac{\text{num}}{\text{den}}=\sum\dfrac{r_i}{s-p_i}+k$，拉氏反变换直接查表，00 章配） |
 | 延迟环节有理近似 | `sysp = pade(sys, n)`（$e^{-Ts}$ 用 $n$ 阶 Pade 逼近，含纯延迟系统频域/奈氏分析用） |
 | 相似变换 | `sysT = ss2ss(sys, T)`（$x_\text{新}=T\,x_\text{旧}$ 坐标变换，现控 2.6 线性变换） |
-| 标准型变换 | `csys = canon(sys,'companion')`（能控标准型）、`msys = canon(sys,'modal')`（约当/对角型，现控 2.3/2.5） |
+| 标准型变换 | `csys = canon(sys,'companion')`（相伴型＝**能观标准型排布**：系数在 A 末列、B=$[1;0;\cdots;0]$、C=$[0\ \cdots\ 0\ 1]$，为能控标准型的转置，非现控 §1.2.2 直读形）、`msys = canon(sys,'modal')`（约当/对角型，现控 2.3/2.5） |
 
 **② 结构图连接**：串联 `series(G1,G2)`（等价 `G1*G2`）、并联 `parallel(G1,G2)`（等价 `G1+G2`）、反馈 `feedback(G,H,sign)`——`sign` 缺省为 $-1$（负反馈），**正反馈用 `feedback(G,H,+1)`**；单位负反馈闭环即 `feedback(G,1)`。
 
@@ -63,4 +63,4 @@ tags: [知识点, 自动控制原理, 公式速查]
 > ① `margin` 返回的幅值裕度 `Gm` 是**倍数**不是 dB，报告 $h(\mathrm{dB})=20\lg Gm$。
 > ② MATLAB 的 `lyap(M,Q)` 解的是 $MX+XM^{T}=-Q$，所以求 $A^TP+PA=-Q$ 必须传**转置** `lyap(A',Q)`（教材附录 B 同此写法）。
 > ③ `acker` 只适用于 **SISO** 且对重极点敏感（数值不稳），多输入/重极点优先用 `place`。
-> ④ `ss2ss(sys,T)` 中 $T$ 是 $x_\text{新}=T\,x_\text{旧}$——方向反了会得到错误状态方程；`canon` 的 `'companion'` 输出为能控标准型（对照现控 2.5 记号时注意）。
+> ④ `ss2ss(sys,T)` 中 $T$ 是 $x_\text{新}=T\,x_\text{旧}$——方向反了会得到错误状态方程；`canon` 的 `'companion'` 输出为**能观标准型排布**（相伴型：系数在 A 末列、B=$e_1$、C=$e_n^T$，恰为现控 §1.2.2 能控型的转置，勿当能控型使用；MATLAB R2026a 实测验证）。
