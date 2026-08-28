@@ -18,9 +18,6 @@ _moved_out/
 .claude/
 .conda/
 
-# ===== 墨墨开放 API token（绝不入库、绝不推送远程）=====
-.maimemo_token
-
 # ===== 测试残留 =====
 rs-test-folder-*/
 
