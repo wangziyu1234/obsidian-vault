@@ -15,7 +15,7 @@ tags: [知识点, 自动控制原理, 公式速查]
 
 用 `rlocus(sys)` 直接绘制根轨迹，`rlocfind(sys)` 可在图上点选并读取对应增益，`zpk(Z,P,K)` 或 `tf(num,den)` 建立模型。MATLAB 基础用法见 [[11 MATLAB 基础速查]]。
 
-> [!example] 例：$G(s)=\dfrac{K^*}{s(s+1)(s+2)}$ 的 MATLAB 表示与根轨迹
+> [!example] ✏️ 例：$G(s)=\dfrac{K^*}{s(s+1)(s+2)}$ 的 MATLAB 表示与根轨迹
 > `num=[1]; den=conv(conv([1 0],[1 1]),[1 2]); sys=tf(num,den); rlocus(sys);`
 
 ## 4.6 应用根轨迹法分析和设计控制系统实例
@@ -34,7 +34,7 @@ tags: [知识点, 自动控制原理, 公式速查]
 
 **① 绘制根轨迹**：按法则清单顺序执行——标开环零极点 → 实轴段 → 渐近线（$\sigma_a$、$\varphi_a$）→ 分离点 → 出射/入射角 → 虚轴交点。
 
-> [!example] **例：$G(s)=\dfrac{K^*}{s(s+1)(s+2)}$ 根轨迹完整绘制**
+> [!example] ✏️ **例：$G(s)=\dfrac{K^*}{s(s+1)(s+2)}$ 根轨迹完整绘制**
 > **MATLAB 表示**：`num=[1]; den=conv(conv([1 0],[1 1]),[1 2]); sys = tf(num, den)`
 > 开环零极点：$p_1=0,\ p_2=-1,\ p_3=-2$，无零点（$n=3,\ m=0$）。
 >
