@@ -2,4 +2,12 @@
 .callout[data-callout="derivation"] {
   --callout-color: 0, 150, 136;
   --callout-icon: lucide-sigma;
+  border-left: 4px solid rgb(0, 150, 136) !important;
+  background-color: rgba(0, 150, 136, 0.12) !important;
+}
+.callout[data-callout="derivation"] .callout-title {
+  color: rgb(0, 150, 136) !important;
+}
+.callout[data-callout="derivation"] .callout-title .callout-icon {
+  color: rgb(0, 150, 136) !important;
 }
