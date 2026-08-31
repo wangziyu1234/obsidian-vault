@@ -1,0 +1,5 @@
+/* 自定义 callout：推导 / 证明（青色 teal，区别于 灰蓝 note、绿 tip、紫 example、橙 warning） */
+.callout[data-callout="derivation"] {
+  --callout-color: 0, 150, 136;
+  --callout-icon: lucide-sigma;
+}
