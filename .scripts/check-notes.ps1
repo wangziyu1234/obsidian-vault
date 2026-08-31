@@ -50,7 +50,7 @@ if ($File) {
 }
 
 # 排除路径片段
-$excludeSeg = @('\.obsidian\', '\.venv\', '\.trash\', '_moved_out\', '\copilot\', '\templates\', '\Excalidraw\', '\scripts\')
+$excludeSeg = @('\.obsidian\', '\.venv\', '\.trash\', '_moved_out\', '\copilot\', '\templates\', '\Excalidraw\', '\scripts\', '\教材OCR\')
 function Is-Excluded([string]$p) {
   foreach ($s in $excludeSeg) { if ($p -match [regex]::Escape($s)) { return $true } }
   if ($p -match '\\AGENTS\.md$') { return $true }
