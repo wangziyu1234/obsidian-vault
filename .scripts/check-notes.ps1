@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
   对标 AGENTS.md 检查清单的全库笔记校验脚本。
 
@@ -63,6 +63,8 @@ $allMd = Get-ChildItem -Path $Root -Recurse -Filter '*.md' -File -ErrorAction Si
   Where-Object { -not (Is-Excluded $_.FullName) -and -not $_.Name.EndsWith('.excalidraw.md') }
 $allNames = @{}
 foreach ($m in $allMd) { $allNames[$m.BaseName] = $true }
+# README 免于正文审校，但仍是总目录返回链接的合法目标。
+if (Test-Path -LiteralPath (Join-Path $Root 'README.md') -PathType Leaf) { $allNames['README'] = $true }
 
 # 索引/入口文件：用 > 定位 而非 abstract，豁免 abstract 检查
 $indexBase = @('高等数学公式速查', '数学', '自动控制原理', '英语')
@@ -91,7 +93,7 @@ function Split-WikiTarget([string]$raw) {
 
 function Test-OneFile([string]$path) {
   $rel = $path.Substring($Root.Length).TrimStart('\', '/')
-  $lines = Get-Content -LiteralPath $path
+  $lines = Get-Content -LiteralPath $path -Encoding UTF8
   $text   = $lines -join "`n"
   $nLines = $lines.Count
   $base   = [System.IO.Path]::GetFileNameWithoutExtension($path)
@@ -135,8 +137,8 @@ function Test-OneFile([string]$path) {
     } else { $i++ }
   }
   if($sc % 2 -ne 0){ $errors.Add("[$rel] LaTeX：单 \$ = $sc 为奇数（\$\$ 误用或单 \$ 缺失闭合）") }
-  $left  = [regex]::Matches($text,'(?<!\\leftrightarrow)\\left(?!rightarrow)').Count
-  $right = [regex]::Matches($text,'\\right').Count
+  $left  = [regex]::Matches($text,'\\left(?![A-Za-z])').Count
+  $right = [regex]::Matches($text,'\\right(?![A-Za-z])').Count
   if($left -ne $right){ $errors.Add("[$rel] LaTeX：\left=$left vs \right=$right 不配对") }
   $b=[regex]::Matches($text,'\\begin\{').Count; $e=[regex]::Matches($text,'\\end\{').Count
   if($b -ne $e){ $errors.Add("[$rel] LaTeX：\begin\{=$b vs \end\{=$e 不配对") }
@@ -161,7 +163,7 @@ function Test-OneFile([string]$path) {
   }
 
   # ---- ## X.Y 编号（返回给目录去重）----
-  foreach($l in $lines){ if($l -match '^##\s+(\d+(?:\.\d+)?)\s'){ $secNums.Add($Matches[1]) } }
+  foreach($l in $lines){ if($l -match '^##\s+(?:[^\d\s]+\s+)?(\d+(?:\.\d+)?)\s'){ $secNums.Add($Matches[1]) } }
   return ,$secNums
 }
 
