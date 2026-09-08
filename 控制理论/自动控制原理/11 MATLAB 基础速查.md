@@ -1,6 +1,6 @@
 ---
 create: 2026-07-25
-modify: 2026-09-08
+modify: 2026-09-09
 tags: [知识点, 自动控制原理, 公式速查]
 ---
 
@@ -9,58 +9,120 @@ tags: [知识点, 自动控制原理, 公式速查]
 # MATLAB 基础速查（对应教材附录 B）
 
 > [!abstract] 本讲定位
-> MATLAB 基础命令速查（对应教材附录 B），按「建模 → 连接 → 分析」三步组织。
+> 按“建模 → 连接 → 分析 → 回验”查命令；对应教材附录 B 的分析任务，并注明 MATLAB 指标口径、模型类型与函数限制。
 
-> [!note]
-> 只列基础命令，按"建模 → 连接 → 分析"三步使用；命令均出自教材附录 B。离散模型在建模命令末尾多传采样周期 `Ts`。
+## 🔧 建模与模型转换
 
-**① 建模与模型转换**
+| 用途 | 命令与条件 |
+|:--|:--|
+| 传递函数 | `sys = tf(num,den)`；系数按降幂排列，例如 `tf(1,[1 1 0])` 表示 $\frac{1}{s^2+s}$ |
+| 因式相乘 | `den = conv([0.1 1],[1 3])` |
+| 零极点模型 | `sys = zpk(z,p,k)`；无零点用 `[]` |
+| 状态空间 | `sys = ss(A,B,C,D)`；离散模型增加采样周期 `Ts` |
+| 模型互转 | `tf2zp`、`zp2tf`、`tf2ss`；LTI 对象可直接用 `tf(sys)`、`ss(sys)`、`zpk(sys)` |
+| 连续 → 离散 | `sysd = c2d(sys,Ts,'zoh')`，对应零阶保持输入假设 |
+| 离散 → 连续 | `sysc = d2c(sysd,'zoh')`；是指定方法下的等效还原，**不是无条件唯一的逆运算** |
+| 最小实现 | `sysr = minreal(sys)`；注意数值容差，不要据简化后的模型掩盖内部不稳定模态 |
+| 部分分式 | `[r,p,k] = residue(num,den)`；重极点对应高次分母，`k` 是直项多项式的系数向量，不一定是常数 |
+| 纯延迟近似 | `sysp = pade(sys,n)`；用于含时延模型的 $n$ 阶有理近似，不能当成精确时延 |
+| 坐标变换 | `sysT = ss2ss(sys,T)`，约定 $x_{\rm 新}=T x_{\rm 旧}$ |
+| 标准型 | `csys = canon(sys,'companion')`；查看实际返回的 `A,B,C,D`，不要预设输入/输出向量 |
+| 模态形式 | `msys = canon(sys,'modal')`；实模态块与复极点的实二阶块，不能一概当成任意系统的对角阵 |
 
-| 用途 | 命令 |
-| :-- | :-- |
-| 传递函数模型 | `sys = tf(num, den)`——num/den 为分子/分母**降幂**系数向量，如 `tf([1],[1 1 0])` ↔ $\frac{1}{s^2+s}$ |
-| 因式相乘展开 | `den = conv([0.1 1],[1 3])`（多项式卷积 = 相乘） |
-| 零极点模型 | `sys = zpk(z, p, k)`——零/极点向量与增益，无零点用 `[]`，如 `zpk([-2],[0 -1],1)` |
-| 状态空间模型 | `sys = ss(A, B, C, D)` |
-| 模型互转 | `[z,p,k] = tf2zp(num,den)`、`[num,den] = zp2tf(z,p,k)`、`[A,B,C,D] = tf2ss(num,den)` |
-| 连续 → 离散 | `sysd = c2d(sys, Ts, 'zoh')`（零阶保持器离散化，第 7 章求 $G(z)$ 可代替查表） |
-| 离散 → 连续 | `sysc = d2c(sysd)`（与 `c2d` 互逆；也可 `d2c(sysd,'zoh')` 指定保持器） |
-| 最小实现 | `sysr = minreal(sys)`（自动消零极点对消，验证"最小实现⇔能控能观"） |
-| 部分分式展开 | `[r,p,k] = residue(num,den)`（$\frac{\text{num}}{\text{den}}=\sum\frac{r_i}{s-p_i}+k$，拉氏反变换直接查表，00 章配） |
-| 延迟环节有理近似 | `sysp = pade(sys, n)`（$e^{-Ts}$ 用 $n$ 阶 Pade 逼近，含纯延迟系统频域/奈氏分析用） |
-| 相似变换 | `sysT = ss2ss(sys, T)`（$x_\text{新}=T\,x_\text{旧}$ 坐标变换，现控 2.6 线性变换） |
-| 标准型变换 | `csys = canon(sys,'companion')`（相伴型＝**能观标准型排布**：系数在 A 末列、B=$[1;0;\cdots;0]$、C=$[0\ \cdots\ 0\ 1]$，为能控标准型的转置，非现控 §1.2.2 直读形）、`msys = canon(sys,'modal')`（约当/对角型，现控 2.3/2.5） |
+> [!note] 连续与离散模型要分清
+> `tf`、`zpk`、`ss` 的离散形式需提供 `Ts`；采样只保留采样点信息，$z=e^{sT}$ 的反求存在频率混叠，不能由 `d2c` 无条件恢复唯一的原连续系统。
 
-**② 结构图连接**：串联 `series(G1,G2)`（等价 `G1*G2`）、并联 `parallel(G1,G2)`（等价 `G1+G2`）、反馈 `feedback(G,H,sign)`——`sign` 缺省为 $-1$（负反馈），**正反馈用 `feedback(G,H,+1)`**；单位负反馈闭环即 `feedback(G,1)`。
+## 🔗 结构图连接
 
-**③ 分章分析命令**
+- **串联**：输入先经过 `G1`，再经过 `G2`，用 `series(G1,G2)`。SISO 可写 `G1*G2`；MIMO 的矩阵乘法次序是 `G2*G1`。
+- **并联**：`parallel(G1,G2)`，即维数相容时的 `G1+G2`。
+- **反馈**：`feedback(G,H)` 默认负反馈；正反馈用 `feedback(G,H,+1)`。
+- **单位负反馈**：`Phi = feedback(G,1)`。先分清传入的是开环 `G` 还是闭环 `Phi`。
 
-| 章 | 任务 | 命令 |
-| :-- | :-- | :-- |
-| 3 | 阶跃 / 脉冲 / 任意输入 / 零输入响应 | `step(sys)`、`impulse(sys)`、`lsim(sys,u,t,x0)`、`initial(sys,x0,t)`；配合 `gensig` 生成正弦/方波测试信号：`[u,t] = gensig('sin', Tp, Tf)` |
-| 3 | 特征根 / 零极点分布 | `roots(den)`、`pzmap(sys)`、`eig(A)` |
-| 3 | 阻尼比 / 自然频率 | `[Wn,Zeta] = damp(sys)`（三阶及以上直接给出各极点对应 $\zeta,\omega_n$，判别欠/过阻尼） |
-| 3 | 阶跃性能指标 | `S = stepinfo(sys)`——`S.Peak`（$M_p$）、`S.PeakTime`（$t_p$）、`S.SettlingTime`（$t_s$，2%）、`S.RiseTime`（$t_r$）、`S.Overshoot`（$\sigma\%$） |
-| 3 | 稳态增益 | `K = dcgain(sys)`（$=\lim_{s\to0}G(s)$，求静态误差系数/终值用） |
-| 4 | 根轨迹 | `rlocus(G)`（图上单击轨迹可读出该点 $K^*$ 与闭环极点） |
-| 4 | 根轨迹选点求 $K^*$ | `[K,p] = rlocfind(G)`（需先画出 `rlocus` 图，再在图窗单击轨迹，返回该点增益与闭环极点） |
-| 4 | 等 $\zeta$ / 等 $\omega_n$ 网格 | `sgrid`（叠加网格，配 rlocus 按阻尼比/频率定主导极点） |
-| 5 | Bode / 奈氏 / 尼科尔斯图 | `bode(sys)`、`nyquist(sys)`、`nichols(sys)` |
-| 5 | 稳定裕度 | `[Gm,Pm,Wcg,Wcp] = margin(sys)`——$Gm=h$（**倍数**，$20\lg Gm$ 才是 dB 值）、$Pm=\gamma$、$Wcg=\omega_g$、$Wcp=\omega_c$ |
-| 5 | 带宽 | `Wb = bandwidth(sys)`（幅值降 3 dB 处频率；也可 `bandwidth(sys,dbdrop)`） |
-| 5 | 指定频率点频率响应 | `H = freqresp(sys, w)`（任意 $\omega$ 的复数响应，验证奈氏穿越点/谐振点） |
-| 7 | 离散系统响应 | `c2d` 离散化后直接 `step(sysd)`，或经典命令 `dstep(sysd)` / `dimpulse(sysd)` |
-| 7 | 离散等 $\zeta$ / 等 $\omega_n$ 网格 | `zgrid`（z 域网格，配离散根轨迹 `rlocus(sysd)` 用） |
-| 8 | 非线性方程数值解（画相轨迹） | `[t,x] = ode45(@fun, t, x0)`（推荐用函数句柄 `@fun`，旧式字符串传函数已弃用） |
-| 9 | 可控 / 可观判定 | `S = ctrb(A,B)`、`V = obsv(A,C)`，再 `rank(S)`、`rank(V)` 与 $n$ 比较 |
-| 9 | 可控性 / 可观性格拉姆矩阵 | `Wc = gram(sys,'c')`、`Wo = gram(sys,'o')`（对应现控 4.1.4 格拉姆判据；奇异时判不完全能控/可观） |
-| 9 | 矩阵指数 $e^{At}$ | `Phi = expm(A*t)`（数值计算，与现控 3 章拉氏/对角化/凯莱-哈密顿三法对照） |
-| 9 | 结构分解 | `[Ac,Bc,Cc,T] = ctrbf(A,B,C)`（按可控性）、`obsvf(...)`（按可观测性） |
-| 9 | 极点配置 | `K = place(A,B,P)` 或 `K = acker(A,b,P)`——`P` 为期望极点向量；观测器增益用对偶：`L = acker(A',C',P)'` |
-| 9 | 李雅普诺夫方程 | `P = lyap(A',Q)` |
+## 📊 分章分析命令
 
-> [!warning] 四个易错
-> ① `margin` 返回的幅值裕度 `Gm` 是**倍数**不是 dB，报告 $h(\mathrm{dB})=20\lg Gm$。
-> ② MATLAB 的 `lyap(M,Q)` 解的是 $MX+XM^{T}=-Q$，所以求 $A^TP+PA=-Q$ 必须传**转置** `lyap(A',Q)`（教材附录 B 同此写法）。
-> ③ `acker` 用于单输入极点配置；多输入可用 `place`。遇到重根，先按教材的特征多项式比较系数法求增益，再用 `eig(A-B*K)` 回验，不要把“重根”当作盲目改用 `place` 的理由。
-> ④ `ss2ss(sys,T)` 中 $T$ 是 $x_\text{新}=T\,x_\text{旧}$——方向反了会得到错误状态方程；`canon` 的 `'companion'` 输出为**能观标准型排布**（相伴型：系数在 A 末列、B=$e_1$、C=$e_n^T$，恰为现控 §1.2.2 能控型的转置，勿当能控型使用；MATLAB R2026a 实测验证）。
+| 章 | 任务 | 命令与条件 |
+|:--|:--|:--|
+| 3 | 阶跃 / 脉冲 / 任意输入 | `step(sys)`、`impulse(sys)`、`lsim(sys,u,t)` |
+| 3 | 非零初始状态 | `lsim(sys,u,t,x0)`、`initial(sys,x0,t)`；`x0` 必须属于所用状态空间模型的坐标 |
+| 3 | 生成测试输入 | `[u,t] = gensig('sin',Tp,Tf)` |
+| 3 | 特征根 / 零极点 | `roots(den)`、`pzmap(sys)`、`eig(A)` |
+| 3 | 极点的阻尼参数 | `[Wn,Zeta,p] = damp(sys)`；按**每个极点**输出，不能直接据此给整个高阶系统定阻尼类型 |
+| 3 | 阶跃指标 | `S = stepinfo(sys)`；`Peak` 为峰值，`Overshoot` 为超调百分数，另有 `PeakTime`、`SettlingTime`、`RiseTime` |
+| 3/7 | 直流增益 | `dcgain(sys)`；连续模型在 $s=0$，离散模型在 $z=1$ 求值；稳态解释仍需稳定性条件 |
+| 4 | 根轨迹 | `rlocus(G)`；`[K,p] = rlocfind(G)` 可在图中选点求增益 |
+| 4 | 连续极点网格 | `sgrid`，等阻尼比/等自然频率网格 |
+| 5 | 频率特性 | `bode(sys)`、`nyquist(sys)`、`nichols(sys)` |
+| 5 | 稳定裕度 | `[Gm,Pm,Wcg,Wcp] = margin(G)`；`Gm` 为倍数，`Pm` 为度，`Wcg` 为相位穿越频率，`Wcp` 为增益交越频率 |
+| 5 | 闭环带宽 | `Wb = bandwidth(Phi)`；相对闭环**直流幅值**下降 3 dB 的频率 |
+| 5 | 指定频率响应 | `H = freqresp(sys,w)`，返回复数响应，单位通常为 rad/s |
+| 7 | 离散响应 | 对 `sysd` 直接使用 `step`、`impulse`、`lsim`；不要把旧式 `dstep`/`dimpulse` 当作 LTI 对象接口 |
+| 7 | 离散极点网格 | `zgrid`，可配合 `rlocus(sysd)` |
+| 8 | 非线性微分方程 | `[t,x] = ode45(@fun,tspan,x0)`；函数句柄见 [[08-1 非线性系统基本概念与相平面法\|相平面法]] |
+| 9 | 能控 / 能观判据 | `rank(ctrb(A,B))`、`rank(obsv(A,C))` 与状态维数 $n$ 比较 |
+| 9 | 格拉姆矩阵 | `gram(sys,'c')`、`gram(sys,'o')` 返回稳定模型的无限时域格拉姆矩阵；不稳定系统不要直接套此接口 |
+| 9 | 状态转移矩阵 | `expm(A*t)`，见 [[控制理论/现代控制理论/02 状态空间表达式的解\|状态空间解]] |
+| 9 | 结构分解 | `[Ac,Bc,Cc,T] = ctrbf(A,B,C)`，可观测分解用 `obsvf` |
+| 9 | 极点配置 | `K = place(A,B,P)`；单输入也可用 `acker(A,b,P)`；观测器用对偶 `L = place(A',C',P)'` |
+| 9 | 李雅普诺夫方程 | `P = lyap(A',Q)`，解 $A^TP+PA=-Q$ |
+
+## ⚠️ 口径与适用条件
+
+> [!warning] `stepinfo` 默认值不等于教材所有口径
+> 默认上升时间按最终变化量的 **10%–90%** 计算，调节时间默认 **2%** 误差带。与欠阻尼二阶系统“首次到达终值”的上升时间、或 5% 调节时间比较时，要显式设置参数。
+
+```matlab
+Phi = tf(4,[1 2 4]);
+S = stepinfo(Phi,'RiseTimeLimits',[0 1], ...
+    'SettlingTimeThreshold',0.05);
+```
+
+这里的 0%–100% 上升时间用于会在有限时间到达终值的响应；单调渐近响应通常仍用 10%–90% 口径。性能公式见 [[03-2 二阶系统的动态指标与极点位置]]。
+
+> [!warning] `damp` 的两个“1”不代表临界阻尼
+> 对 `tf(1,[1 3 2])`，极点为 $-1,-2$，`damp` 对两个负实极点均给出阻尼参数 1；但二阶分母的整体阻尼比为 $\frac{3}{2\sqrt2}>1$，系统是过阻尼而不是临界阻尼。见 [[04-2-4 开环重极点与闭环临界阻尼]]。
+
+> [!warning] 裕度、重根与李雅普诺夫方程
+> - 幅值裕度换算为 dB：$h_{\rm dB}=20\lg Gm$；若存在多个交越点，结合完整奈氏曲线或 `allmargin` 判断，勿仅凭一个正裕度判稳。
+> - `place` 不能配置重数超过 `rank(B)` 的极点；`acker` 用于单输入。重根设计可比较特征多项式系数，再用 `eig(A-B*K)` 回验。
+> - `lyap(M,Q)` 解 $MX+XM^T=-Q$，因此此处必须传 `A'`。当 $A$ 渐近稳定且 $Q>0$ 时，所得对称解 $P>0$。
+
+## 🧪 标准型反例与回验
+
+> [!example] ✏️ `canon` 不能固定写成 $C=e_n^T$
+> 对 $G(s)=\frac{2s+3}{s^2+4s+5}$，在 MATLAB R2026a 执行：
+>
+> ```matlab
+> sys = ss(tf([2 3],[1 4 5]));
+> csys = canon(sys,'companion');
+> [A,B,C,D] = ssdata(csys);
+> ```
+>
+> 得到
+>
+> $$
+> A=\begin{bmatrix}0&-5\\1&-4\end{bmatrix}
+> $$
+>
+> $$
+> B=\begin{bmatrix}1\\0\end{bmatrix}
+> $$
+>
+> $$
+> C=\begin{bmatrix}2&-5\end{bmatrix}
+> $$
+>
+> $$
+> D=0
+> $$
+>
+> 此时 $C\ne e_2^T$；直接验证
+>
+> $$
+> C(sE-A)^{-1}B+D=\frac{2s+3}{s^2+4s+5}
+> $$
+>
+> 所以“$A$ 系数在末列”不意味着 $B,C$ 都固定，也不能只凭 $A$ 的外观就套用教材另一种能控/能观标准型。
+
+> [!tip] 每次变换都回验
+> 坐标变换检查 $A_{\rm 新}=TAT^{-1}$、$B_{\rm 新}=TB$、$C_{\rm 新}=CT^{-1}$；传函用 `tf(sys)` 对照，反馈用 `eig(A-B*K)` 对照，李雅普诺夫方程检查残差 `A'*P+P*A+Q`。
