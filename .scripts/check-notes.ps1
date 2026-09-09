@@ -12,12 +12,13 @@
                （剔除 \leftrightarrow）
    3. 编号   ：目录内 ## X.Y 小节号无重复；无 TODO/FIXME/待补/??；无空链接
    4. 结构   ：唯一 H1；abstract 在 H1 后（索引/入口文件用 > 定位 豁免）；
-               附录 无 H3（附录 图像变换 为已知豁免）；无 >250 行文件
+               附录 无 H3（附录 图像变换 为已知豁免）；>250 行提示拆分（完整单题豁免）
 
   豁免（AGENTS 已知，不误报）：
    - 05 第5章 表格内 ![[…png\|220]] 转义；\leftrightarrow
    - copilot prompts / Excalidraw 绘图 / 模板 / AGENTS.md 自身
    - 附录 图像变换 的 H3
+   - frontmatter 标记 single-exercise: true 的完整单题仅豁免篇幅告警
 
 .PARAMETER Root  扫描根目录（默认当前目录）
 .PARAMETER File  只查单文件（相对/绝对路径）
@@ -121,8 +122,29 @@ function Test-OneFile([string]$path) {
     if ($text -match '(?m)^### ') { $errors.Add("[$rel] 附录含 H3（附录统一不用 ## 以下）") }
   }
 
-  # ---- 超长 ----
-  if ($nLines -gt 250) { $warnings.Add("[$rel] 共 $nLines 行（>250，建议按拆分约定处理）") }
+  # ---- 超长：完整单题只豁免篇幅，其他检查照常执行 ----
+  if ($nLines -gt 250) {
+    $isSingleExercise = $false
+    # 逐行读取已闭合的 frontmatter；兼容 LF/CRLF，不接受正文中的同名标记。
+    if ($lines[0].Trim() -eq '---') {
+      $markedSingleExercise = $false
+      for ($lineNo = 1; $lineNo -lt $nLines; $lineNo++) {
+        $frontmatterLine = $lines[$lineNo].Trim()
+        if ($frontmatterLine -eq '---') {
+          $isSingleExercise = $markedSingleExercise
+          break
+        }
+        if ($frontmatterLine -match '^single-exercise:\s*(true|false)\s*(?:#.*)?$') {
+          $markedSingleExercise = $Matches[1] -eq 'true'
+        }
+      }
+    }
+    if ($isSingleExercise) {
+      $infos.Add("[$rel] 共 $nLines 行（完整单题，豁免篇幅拆分）")
+    } else {
+      $warnings.Add("[$rel] 共 $nLines 行（>250，建议按拆分约定处理）")
+    }
+  }
 
   # ---- 占位符 ----
   if ($text -match 'TODO|FIXME|待补|待完善') { $warnings.Add("[$rel] 含 TODO/FIXME/待补 占位符") }
