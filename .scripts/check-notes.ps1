@@ -163,7 +163,7 @@ function Test-OneFile([string]$path) {
   }
 
   # ---- ## X.Y 编号（返回给目录去重）----
-  foreach($l in $lines){ if($l -match '^##\s+(?:[^\d\s]+\s+)?(\d+(?:\.\d+)?)\s'){ $secNums.Add($Matches[1]) } }
+  foreach($l in $lines){ if($l -match '^##\s+(?:[^\d\s]+\s+)?(\d+\.\d+)\s'){ $secNums.Add($Matches[1]) } }
   return ,$secNums
 }
 
