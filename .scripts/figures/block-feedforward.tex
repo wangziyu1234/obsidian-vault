@@ -31,10 +31,10 @@
                 anchor=center, font=\small, text=figacc},
   sum/.style = {draw=figink, line width=0.95pt, circle, inner sep=0pt,
                 minimum size=0.42cm, anchor=center},
-  sig/.style = {font=\small, color=figink},
+  sig/.style = {font=\small, color=figink, fill=white},
   acc/.style = {font=\small, color=figacc},
-  lbl/.style = {font=\small, inner sep=1.5pt},
-  sub/.style = {font=\footnotesize, color=figsub}
+  lbl/.style = {font=\small, inner sep=1.5pt, fill=white},
+  sub/.style = {font=\footnotesize, color=figsub, fill=white}
 ]
 
 \node[sum] (s1) at (0,0) {};
@@ -61,7 +61,7 @@
 \node[lbl] at (5.06,0.28) {$+$};
 \node[lbl] at (5.3,-0.46) {$+$};
 
-\node[sub] at (-1.5,1.1) {前馈};
+\node[sub] at (-2.3,1.1) {前馈};
 \node[sub] at (4.0,2.45) {按输入前馈 $U=E+F_rR$};
 
 \end{tikzpicture}

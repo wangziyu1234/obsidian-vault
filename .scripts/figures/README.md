@@ -29,9 +29,12 @@ cd .scripts\figures
 | 文件 | 作用 |
 |:--|:--|
 | `build.ps1` | 构建入口：`.tex` 走 xelatex → pdftocairo；`.py` 直接运行 |
+| `list-labels.ps1` | 列出源码里所有文字节点与线段坐标，人工核对"标签是否压在线上" |
 | `figures_style.py` | matplotlib 公共样式：字体、配色、`new_bode_axes()`、`tidy()`、`save()` |
 | `circuit-RC-eq.tex` | 电路图模板（circuitikz）：正弦源 + R + C，含直箭头电压标注 |
 | `geom-alpha-triangle.tex` | 几何图模板（TikZ）：辅助直角三角形，含角弧/旋转标签/图例 |
+| `block-*.tex` | 结构图模板（TikZ）：反馈环 / 扰动 / 顺馈 / PID / 状态空间 / 死区 / 等效变换六规则 |
+| `sfg-mason.tex` | 信号流图与梅森公式标注 |
 | `bode-first-order.py` | 曲线图模板（control + matplotlib）：一阶低通伯德图 |
 | `bode-typical-links.py` | 一次生成 8 张典型环节伯德图（05-1-2 §5.2 表格用） |
 
@@ -59,3 +62,8 @@ cd .scripts\figures
    推荐用 `ct.frequency_response()` 取数据自己画，样式完全可控。
 5. **控制台中文乱码**：`build.ps1` 已设 `[Console]::OutputEncoding` 与 `PYTHONIOENCODING=utf-8`；
    直接跑 `.py` 时若乱码，先设这两个环境变量。
+6. **文字压在线上**：标注样式统一加 `fill=white` 即可自动遮断底下的线，
+   **但 `fill=white` 必须写在 `font=`/`color=` 之后**，否则整个节点被填成实心块、文字消失。
+7. **不要尝试自动检测中文压线**：`pdftotext -bbox` 对纯中文返回 "no word list"；
+   压线时文字与线连通，连通域法必然失败；开运算又会吃掉笔画（300 dpi 下笔画仅 2~4px）。
+   用 `list-labels.ps1` 列出坐标人工核对，比图像启发式快且准。

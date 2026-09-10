@@ -129,6 +129,9 @@
 - 统一配色：图线 `#1E2228`、强调/相频 `#B23020`、幅频 `#1F3D7A`、次要文字 `#606874`、填充 `#E8EFF8`
 - 输出 600 dpi 起（`pdftocairo -r 600` / `dpi=300` 配高 figsize），白底或透明底，直接可嵌
 - 命名沿用 `自控-xxx.png` / `频域-xxx.png` / `高数-xxx.png`，嵌入尺寸按「wikilink 与图片」节
+- **文字压线一律加白底遮罩，不要靠反复挪坐标**：写在信号线上的标注样式（`sig`/`lbl`/`gain`/`sub`/`figcap`）统一加 `fill=white`，文字会把底下的线自动遮断；方框内的文字（`blk`/`sum`）不要加——方框已有填充。
+  ⚠ **`fill=white` 必须放在 `font=`、`color=` 之后**——写在样式最前面会把整个节点填成实心块、文字被吞掉（实测：`{fill=white, font=\small, color=figink}` 出黑块，`{font=\small, color=figink, fill=white}` 正常）
+- **不要指望自动检测"中文压线"**：三种判据都不稳——`pdftotext -bbox` 对纯中文返回 "no word list"（只认西文/数字）；压线时文字与线互相连通，连通域法必然把两者并成一个巨块；开运算在 300 dpi 下会把汉字笔画一并吃掉。**改用 `list-labels.ps1` 列出所有文字节点坐标与线段坐标，人工对照**——源码级核对比图像启发式快且准
 
 ### git 检出与恢复（同步覆盖事故）
 - **行尾符差异**会让 status 报 M 而正文无差，用 `git diff --ignore-space-at-eol` 鉴别后 `git restore` 归一
