@@ -38,6 +38,7 @@ cd .scripts\figures
 | `bode-first-order.py` | 曲线图模板（control + matplotlib）：一阶低通伯德图 |
 | `bode-typical-links.py` | 一次生成 8 张典型环节伯德图（05-1-2 §5.2 表格用），**上下两层**：上幅频、下相频 |
 | `ch5-legacy-bode.py` | 把早期两张伯德图（`伯德-例512` / `伯德-例515`）重绘为同一两层风格 |
+| `ch5-vector-method.py` | 矢量法 s 平面极点矢量图 + 惯性环节逐点描点图（05-1-1 §5.1.3、05-1-2 §5.2.2） |
 | `ch5-nyquist.py` | 第5章例题补图：奈氏图 4 张（三张自编例 + 例5-8 条件稳定示意） |
 | `ch5-bode-examples.py` | 第5章例题补图：伯德/时域 7 张（例5-6、5-7、5-13、5-14、5-17、5-18、渐近线反算例） |
 | `block-2nd-order.tex` | 结构图模板（TikZ）：典型二阶系统（05-3-b-2 例5-13） |
