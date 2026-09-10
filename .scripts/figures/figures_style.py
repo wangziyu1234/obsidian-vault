@@ -42,8 +42,11 @@ DPI = 300
 def use_style() -> None:
     """套用笔记插图统一风格。每个脚本开头调用一次即可。"""
     plt.rcParams.update({
-        "font.family": "serif",
-        "font.serif": ["Cambria", "Times New Roman", "DejaVu Serif"],
+        # 必须给「字体列表」而不是 'serif' 这个别名：matplotlib 只在 font.family
+        # 是列表时逐字形回退，别名写法遇到 Cambria 缺字（CJK）直接画方框。
+        # font.serif 也要设成同一列表——否则它自己的默认值会盖掉回退链。
+        "font.family": ["Cambria", "Times New Roman", "Microsoft YaHei", "SimHei"],
+        "font.serif": ["Cambria", "Times New Roman", "Microsoft YaHei", "SimHei"],
         "mathtext.fontset": "cm",
         "font.size": 13,
         "axes.titlesize": 14,

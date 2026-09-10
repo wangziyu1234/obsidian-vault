@@ -33,8 +33,10 @@ cd .scripts\figures
 | `circuit-RC-eq.tex` | 电路图模板（circuitikz）：正弦源 + R + C，含直箭头电压标注 |
 | `geom-alpha-triangle.tex` | 几何图模板（TikZ）：辅助直角三角形，含角弧/旋转标签/图例 |
 | `bode-first-order.py` | 曲线图模板（control + matplotlib）：一阶低通伯德图 |
+| `bode-typical-links.py` | 一次生成 8 张典型环节伯德图（05-1-2 §5.2 表格用） |
 
-构建产物：`附件\频域-RC电路.png`、`附件\频域-一阶正弦响应.png`、`附件\频域-一阶低通Bode.png`。
+构建产物：`附件\频域-RC电路.png`、`附件\频域-一阶正弦响应.png`、`附件\频域-一阶低通Bode.png`、
+`附件\频域-典型环节-*Bode.png`（8 张）。
 
 > `频域-一阶低通Bode.png` 目前是**范例产物**，未嵌入任何笔记——它是曲线类插图的
 > 可运行样例。不需要时把 `bode-first-order.py` 和这张图一起删掉即可。
@@ -49,8 +51,10 @@ cd .scripts\figures
 1. **`pdftocairo` 不支持非 ASCII 输出路径**——`Error opening output file`，exit 2。
    `build.ps1` 已改为先渲到 `%TEMP%` 的 ASCII 临时名再搬到 `附件\`。
 2. **`pdftocairo` 会给输出名追加 `.png`**：传 `foo.png` 得到 `foo.png.png`，要传不带扩展名的前缀。
-3. **图内中文会变方框**：Cambria / Times 无 CJK 字形。标注优先用数学符号
-   （`$L(\omega)$`）；确需中文时把字体族改成 `["Microsoft YaHei", "SimHei"]`。
+3. **图内中文会变方框**：两处坑——① `font.family` 必须写成字体列表，
+   `= "serif"` 这种别名不会逐字形回退；② **同一条字符串里不要混中文和 `$…$`**，
+   mathtext 会接管整串并套 CM 字体集，中文随即掉字形。标题写两行：
+   `"惯性环节\n$1/(Ts+1)$"`。
 4. **`control` 的 rcParams 不注册进 matplotlib**：`plt.rcParams["control.grid"]` 抛 `KeyError`。
    推荐用 `ct.frequency_response()` 取数据自己画，样式完全可控。
 5. **控制台中文乱码**：`build.ps1` 已设 `[Console]::OutputEncoding` 与 `PYTHONIOENCODING=utf-8`；

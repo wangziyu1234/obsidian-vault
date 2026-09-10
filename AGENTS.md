@@ -119,7 +119,8 @@
 **必踩的坑（已实测）**：
 - **`pdftocairo` 打不开非 ASCII 输出路径**（报 `Error opening output file`，exit 2）→ build.ps1 已改为先渲到 `%TEMP%` 的 ASCII 临时名再 `Move-Item` 过去，别绕开这一步
 - **`pdftocairo` 会给输出名追加 `.png`**：传 `foo.png` 会得到 `foo.png.png`。传不带扩展名的前缀
-- **中文字体**：matplotlib 的 `font.serif` 只写 Cambria 时，图内中文全部变成方框（Cambria 无 CJK 字形）。图内标注优先用数学符号（`$L(\omega)$`）；必须写中文时把字体族改成 `["Microsoft YaHei", "SimHei"]`
+- **中文字体**：matplotlib 的 `font.family` 必须写成**字体列表**（`= "serif"` 这种别名写法不会逐字形回退，Cambria 缺 CJK 字形就画方框）；`figures_style.py` 已配好 `["Cambria", "Times New Roman", "Microsoft YaHei", "SimHei"]`
+- **同一字符串里不要混中文和 `$…$`**：mathtext 会接管整串并套 CM 字体集，中文随即变方框（纯中文、纯公式、中文+西文都正常）。标题写两行：`"惯性环节\n$1/(Ts+1)$"`
 - **`control` 的 rcParams 不在 matplotlib 里**：`plt.rcParams["control.grid"]` 会 `KeyError`。与其和它的默认样式搏斗，不如用 `ct.frequency_response()` 取数据自己画
 - **控制台中文乱码**：build.ps1 已设 `[Console]::OutputEncoding` 与 `PYTHONIOENCODING=utf-8`
 
