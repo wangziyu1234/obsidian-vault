@@ -114,7 +114,11 @@
 - 源码与样式模块放 `.scripts\figures\`（ASCII 文件名），成图落 `附件\<中文名>.png`
 - 源文件首行用注释声明输出名：`.tex` 写 `% figure: 频域-xxx.png`，`.py` 写 `# figure: 频域-xxx.png`——源码保持 ASCII，附件名沿用仓库中文命名规范
 - 构建：`.scripts\figures\build.ps1 -File .\xxx.tex`（或 `-Dir` / `-All`，`-Dpi` 默认 600）；`.tex` 走 xelatex → pdftocairo，`.py` 由脚本自己写 `$env:FIGURE_OUT`
-- 新图先 `-File` 单独构建验证，再批量
+- **新图先 `-File` 单独构建验证，再批量**
+- **825 真题材料是本地专用，不进 git**：`.git/info/exclude` 里已有两条规则（`/控制理论/青岛大学825真题/`、`/附件/青大825-*.png`），它们**从未被 git 跟踪过任何文件**，全靠 remotely-save 多端同步。因此：
+  - 对 825 的笔记改动**不要 `git add`**（会被拒；`-f` 强制入库是错的，会把本地专用材料泄漏到版本库）；
+  - 825 的重画源码放 **`.scripts\figures\exam-local\`**（同样已 exclude），不要混进入库的 `.scripts\figures\`；
+  - 出现「只改了 825 笔记」的会话，正常收尾就是**没有 git 提交**（改动由云同步带走），不要为了"有提交"而强行入库
 
 **必踩的坑（已实测）**：
 - **`pdftocairo` 打不开非 ASCII 输出路径**（报 `Error opening output file`，exit 2）→ build.ps1 已改为先渲到 `%TEMP%` 的 ASCII 临时名再 `Move-Item` 过去，别绕开这一步
