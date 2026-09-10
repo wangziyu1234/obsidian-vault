@@ -1,0 +1,23 @@
+% figure: 频域-RC电路.png
+% 用途：自控 05-1-1 例1 —— 一阶低通 RC 电路，正弦电压源 u_r，取电容电压 u_c。
+% 构建：..\build.ps1 -File .\circuit-RC-eq.tex      （xelatex + pdftocairo，600 dpi）
+% 说明：unicode-math + Cambria Math 与笔记正文（MathJax）字体一致；
+%       字体不同步时把 main/math 换成 TeX Gyre Termes + TeX Gyre Termes Math。
+\documentclass[border=8pt]{standalone}
+\usepackage{fontspec}
+\setmainfont{Cambria}
+\usepackage{unicode-math}
+\setmathfont{Cambria Math}
+\usepackage[straightvoltages]{circuitikz}
+
+\ctikzset{bipoles/thickness=1.35}   % 元件线宽，与正文图线统一
+
+\begin{document}
+\begin{circuitikz}[scale=1.2, transform shape]
+  \draw (0,0)
+    to[sinusoidal voltage source, l=$u_r(t)$] (0,3)
+    to[R, l=$R$, i=$i$]                       (3.2,3)
+    to[C, l=$C$, v=$u_c$, voltage=straight]   (3.2,0)
+    -- (0,0);
+\end{circuitikz}
+\end{document}

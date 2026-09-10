@@ -76,7 +76,7 @@
 ### 修改流程
 - 修改/重命名前先 `grep` 检查跨文件引用，避免断链；重命名用 PowerShell `Move-Item -LiteralPath`（路径含中文与括号）
 - 每次修改完主动 commit + push（中文提交信息，前缀见 [[README]]「Git 同步」）
-- **自绘图**：写 GDI+（System.Drawing）PowerShell 脚本生成 PNG 存 `附件\`（命名沿用 `自控-xxx.png`/`高数-xxx.png`），嵌入 `![[...png|430]]`；本模型不能读图，用**像素抽样**自检（关键位置取色验证）后再入库
+- **自绘图**：一律走 `.scripts\figures\` 工具链（见「绘图规范」），源码入库、图入 `附件\`；不要再新增 GDI+ 手绘脚本
 - **git push 与沙箱**：受限沙箱下 `git push` 会因 ssh.exe 无法创建 signal pipe 而失败（Win32 error 5）。优先直接执行；只有沙箱拦截且会话允许带权限重试（审批策略不是 never）时，才用 `sandbox_permissions` 重试同一条命令；**审批策略为 never 时不要设置 `sandbox_permissions`**，改为在回复中说明失败原因
 
 ## 方法技巧与注意事项
@@ -100,10 +100,39 @@
 - OCR 路线：旧 .doc/.ppt 二进制含公式图片 → Word COM `SaveAs(FileFormat=17)` 转 PDF → PyMuPDF 渲染 → RapidOCR；中文路径用 `os.listdir` 枚举；控制台 GBK 打印 emoji/✓ 报错 → 写 UTF-8 文件或纯 ASCII；pip 装 RapidOCR 默认源极慢，改清华镜像 `-i https://pypi.tuna.tsinghua.edu.cn/simple`
 - RapidOCR v1.4.4 传参用 `RapidOCR(params={...})`（dict 形式，旧 kwargs 不再适用）
 
+### 绘图规范（长期遵守）
+
+**工具选择**：按图的性质选，不要在 GDI+ 里手调像素（历史上反复返工）。三者都是纯文本源码，可复现、可版本管理。
+
+| 图的性质 | 工具 | 说明 |
+|:--|:--|:--|
+| 电路图 | **circuitikz**（TeX Live 已含） | 元件形状/线宽/字号由包统一，期刊标准；`voltages=straight` 出直箭头电压标注 |
+| 频域曲线、时域响应、根轨迹、相平面 | **Python `control` + matplotlib** | 数据由库算，不手算采样点 |
+| 几何示意、结构图、角弧标注 | **TikZ** | 弧线、旋转标签、直角标记都有现成写法 |
+
+**目录与构建**：
+- 源码与样式模块放 `.scripts\figures\`（ASCII 文件名），成图落 `附件\<中文名>.png`
+- 源文件首行用注释声明输出名：`.tex` 写 `% figure: 频域-xxx.png`，`.py` 写 `# figure: 频域-xxx.png`——源码保持 ASCII，附件名沿用仓库中文命名规范
+- 构建：`.scripts\figures\build.ps1 -File .\xxx.tex`（或 `-Dir` / `-All`，`-Dpi` 默认 600）；`.tex` 走 xelatex → pdftocairo，`.py` 由脚本自己写 `$env:FIGURE_OUT`
+- 新图先 `-File` 单独构建验证，再批量
+
+**必踩的坑（已实测）**：
+- **`pdftocairo` 打不开非 ASCII 输出路径**（报 `Error opening output file`，exit 2）→ build.ps1 已改为先渲到 `%TEMP%` 的 ASCII 临时名再 `Move-Item` 过去，别绕开这一步
+- **`pdftocairo` 会给输出名追加 `.png`**：传 `foo.png` 会得到 `foo.png.png`。传不带扩展名的前缀
+- **中文字体**：matplotlib 的 `font.serif` 只写 Cambria 时，图内中文全部变成方框（Cambria 无 CJK 字形）。图内标注优先用数学符号（`$L(\omega)$`）；必须写中文时把字体族改成 `["Microsoft YaHei", "SimHei"]`
+- **`control` 的 rcParams 不在 matplotlib 里**：`plt.rcParams["control.grid"]` 会 `KeyError`。与其和它的默认样式搏斗，不如用 `ct.frequency_response()` 取数据自己画
+- **控制台中文乱码**：build.ps1 已设 `[Console]::OutputEncoding` 与 `PYTHONIOENCODING=utf-8`
+
+**风格约定**：
+- 与正文 MathJax 一致：`unicode-math` + `Cambria Math`（TikZ/circuitikz）、`mathtext.fontset="cm"`（matplotlib）
+- 统一配色：图线 `#1E2228`、强调/相频 `#B23020`、幅频 `#1F3D7A`、次要文字 `#606874`、填充 `#E8EFF8`
+- 输出 600 dpi 起（`pdftocairo -r 600` / `dpi=300` 配高 figsize），白底或透明底，直接可嵌
+- 命名沿用 `自控-xxx.png` / `频域-xxx.png` / `高数-xxx.png`，嵌入尺寸按「wikilink 与图片」节
+
 ### git 检出与恢复（同步覆盖事故）
 - **行尾符差异**会让 status 报 M 而正文无差，用 `git diff --ignore-space-at-eol` 鉴别后 `git restore` 归一
 - **云同步被静默回退**：环境允许 remotely-save 保留（多端同步主力），git 作版本兜底。检出法：无图笔记看 `git status` + 抽查近期改动文件的内容 marker（回退 diff 常是原提交的镜像符号）；有图笔记看孤儿附件；用 `git hash-object` 磁盘文件比对历史 blob，判定「旧版覆盖」还是「本地新编辑」再动手
 - **恢复对象一律用 `HEAD`**（=远程已确认状态），不要用更老的提交；并行会话期间提交只 `git add` 自己的路径，禁用 `add -A` 扫入对方未完成改动
 
 ### 一次性脚本不沉淀
-- 拆分/提取/清理脚本用完即删，`.scripts/` 只留常驻 `check-notes.ps1`（对标 AGENTS 清单的全库校验，支持 -Root/-Dir/-File）
+- 拆分/提取/清理脚本用完即删，`.scripts/` 只留常驻 `check-notes.ps1`（对标 AGENTS 清单的全库校验，支持 -Root/-Dir/-File）与 `figures\` 绘图工具链（源码入库，属长期设施，不删）

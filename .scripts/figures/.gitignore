@@ -1,0 +1,4 @@
+# 构建产物：PDF 预览与 Python 缓存不入库
+*.pdf
+__pycache__/
+*.pyc
