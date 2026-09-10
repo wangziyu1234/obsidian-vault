@@ -39,26 +39,18 @@ def fdata(sys, w):
 
 
 def bode_axes(w, ylim_db, ylim_ph, yticks_ph=(-180, -90, 0, 90)):
-    fig, ax = plt.subplots(figsize=(6.8, 4.9))
-    ax.set_xscale("log")
-    ax.set_xlim(w[0], w[-1])
-    ax.set_ylim(*ylim_db)
-    ax.set_ylabel("L / dB", color=fs.MAG)
-    ax.tick_params(axis="y", colors=fs.MAG)
-    ax.spines["left"].set_color(fs.MAG)
-    ax.set_xlabel("ω / (rad/s)")
-    ax.grid(True, which="major", color=fs.GRID, linewidth=0.7, alpha=0.9)
-    ax.grid(True, which="minor", color=fs.GRID, linewidth=0.4, alpha=0.5)
-    ax2 = ax.twinx()
-    ax2.set_ylim(*ylim_ph)
-    ax2.set_yticks(list(yticks_ph))
-    ax2.set_ylabel("φ / °", color=fs.PHA)
-    ax2.tick_params(axis="y", colors=fs.PHA)
-    ax2.spines["right"].set_color(fs.PHA)
-    ax2.spines["left"].set_visible(False)
-    ax.axhline(0, color=fs.SUB, linewidth=0.9, linestyle=(0, (4, 3)))
-    ax2.axhline(-180, color=fs.SUB, linewidth=0.9, linestyle=(0, (4, 3)))
-    return fig, ax, ax2
+    """上下两层：上幅频 L/dB、下相频 φ/°，共用横轴（与典型环节伯德图一致）。"""
+    fig, (axm, axp) = fs.new_bode_axes(figsize=(6.6, 6.4))
+    for ax in (axm, axp):
+        ax.set_xscale("log")
+        ax.set_xlim(w[0], w[-1])
+        fs.tidy(ax)
+    axm.set_ylim(*ylim_db)
+    axp.set_ylim(*ylim_ph)
+    axp.set_yticks(list(yticks_ph))
+    axm.axhline(0, color=fs.SUB, linewidth=0.9, linestyle=(0, (4, 3)))
+    axp.axhline(-180, color=fs.SUB, linewidth=0.9, linestyle=(0, (4, 3)))
+    return fig, axm, axp
 
 
 def single(title, xlabel, ylabel, figsize=(6.0, 4.6)):

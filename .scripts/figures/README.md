@@ -36,7 +36,8 @@ cd .scripts\figures
 | `block-*.tex` | 结构图模板（TikZ）：反馈环 / 扰动 / 顺馈 / PID / 状态空间 / 死区 / 等效变换六规则 |
 | `sfg-mason.tex` | 信号流图与梅森公式标注 |
 | `bode-first-order.py` | 曲线图模板（control + matplotlib）：一阶低通伯德图 |
-| `bode-typical-links.py` | 一次生成 8 张典型环节伯德图（05-1-2 §5.2 表格用） |
+| `bode-typical-links.py` | 一次生成 8 张典型环节伯德图（05-1-2 §5.2 表格用），**上下两层**：上幅频、下相频 |
+| `ch5-legacy-bode.py` | 把早期两张伯德图（`伯德-例512` / `伯德-例515`）重绘为同一两层风格 |
 | `ch5-nyquist.py` | 第5章例题补图：奈氏图 4 张（三张自编例 + 例5-8 条件稳定示意） |
 | `ch5-bode-examples.py` | 第5章例题补图：伯德/时域 7 张（例5-6、5-7、5-13、5-14、5-17、5-18、渐近线反算例） |
 | `block-2nd-order.tex` | 结构图模板（TikZ）：典型二阶系统（05-3-b-2 例5-13） |
@@ -52,6 +53,10 @@ cd .scripts\figures
 
 > `频域-一阶低通Bode.png` 目前是**范例产物**，未嵌入任何笔记——它是曲线类插图的
 > 可运行样例。不需要时把 `bode-first-order.py` 和这张图一起删掉即可。
+>
+> **伯德图统一约定**：一律用 `figures_style.new_bode_axes()` 的**上下两层**
+> （上：$L(\omega)$/dB；下：$\varphi(\omega)/^\circ$；共用横轴 $\lg\omega$），
+> 不要再画「单轴左右双刻度」的变体。
 
 ## 已验证的环境
 

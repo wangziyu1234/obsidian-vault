@@ -59,34 +59,26 @@ ax.set_ylabel("虚部")
 ax.set_title("幅相曲线（奈氏图）\n横轴实部、纵轴虚部，ω 为参变量", pad=8)
 save(fig, "频域-图示法-幅相曲线.png")
 
-# ---------------- (b) 伯德图（单轴双刻度） ----------------
-fig, ax = plt.subplots(figsize=(6.6, 4.8))
-ax.set_xscale("log")
+# ---------------- (b) 伯德图（上下两层） ----------------
+fig, (ax, ax2) = fs.new_bode_axes(figsize=(6.6, 6.2))
+for a in (ax, ax2):
+    a.set_xscale("log")
+    a.set_xlim(w[0], w[-1])
+    fs.tidy(a)
 ax.plot(w, mag, color=fs.MAG, linewidth=2.2)
-ax.set_xlim(w[0], w[-1])
-ax.set_ylim(-60, 10)
-ax.set_ylabel("L / dB", color=fs.MAG)
-ax.tick_params(axis="y", colors=fs.MAG)
-ax.spines["left"].set_color(fs.MAG)
-ax.set_xlabel("ω / (rad/s)")
-ax.grid(True, which="major", color=fs.GRID, linewidth=0.7, alpha=0.9)
-ax.grid(True, which="minor", color=fs.GRID, linewidth=0.4, alpha=0.5)
-ax2 = ax.twinx()
 ax2.plot(w, pha, color=fs.PHA, linewidth=2.2)
+ax.set_ylim(-60, 10)
 ax2.set_ylim(-100, 10)
 ax2.set_yticks([0, -45, -90])
-ax2.set_ylabel("φ / °", color=fs.PHA)
-ax2.tick_params(axis="y", colors=fs.PHA)
-ax2.spines["right"].set_color(fs.PHA)
-ax2.spines["left"].set_visible(False)
 ax.axhline(0, color=fs.SUB, linewidth=0.9, linestyle=(0, (4, 3)))
 ax.axvline(2, color=fs.SUB, linewidth=0.9, linestyle=(0, (4, 3)))
-ax.annotate("转折频率 1/T = 2", xy=(2, 7), xytext=(-6, 0), textcoords="offset points",
+ax2.axvline(2, color=fs.SUB, linewidth=0.9, linestyle=(0, (4, 3)))
+ax.annotate("转折频率 1/T = 2", xy=(2, 6), xytext=(-6, 0), textcoords="offset points",
             color=fs.SUB, fontsize=10.5)
 ax.annotate("−20 dB/dec", xy=(24, -30), color=fs.MAG, fontsize=11)
-ax.annotate("ω = 2 处：−3 dB、−45°", xy=(2, -3), xytext=(16, -50),
+ax.annotate("ω = 2 处：−3 dB、−45°", xy=(2, -3), xytext=(16, -34),
             textcoords="offset points", color=fs.INK, fontsize=10.5)
-ax.set_title("对数频率特性（伯德图）\n横轴 lgω 分度，幅频、相频共用横轴", pad=8)
+fig.suptitle("对数频率特性（伯德图）：上幅频、下相频，共用横轴 lgω", fontsize=13, y=0.97)
 save(fig, "频域-图示法-伯德图.png")
 
 # ---------------- (c) 尼科尔斯图 ----------------
