@@ -46,6 +46,7 @@ cd .scripts\figures
 | `openloop-nyquist.py` | 开环幅相：九类单图 + 课程例7—9的五张例题/局部放大图；`control.frequency_response` 采样，内置交点与端点断言 |
 | `_nyquist_style.py` | 幅相图的等比例坐标、极限标记、按实际频响取点的方向箭头；共享模块，不单独构建 |
 | `minimum-phase-comparison.py` | 惯性与不稳定惯性的同幅、反相伯德对照图 |
+| `nyquist-type2-parameter.py` | 习题5-9原题幅相图；参数化Ⅱ型稳定边界、闭环根与真实绕行奈氏围线校验 |
 
 构建产物（一律单图，不做多子图拼版）：
 
