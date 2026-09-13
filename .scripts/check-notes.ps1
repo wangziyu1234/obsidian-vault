@@ -221,6 +221,22 @@ foreach($d in @($secByDir.Keys)){
 }
 
 # --------------------------------------------------------------------------
+# 附件文件名检查：云同步冲突会把文件改名成 xxx_1789228415866.png，
+# 原引用立即断链（且自动备份会把改名结果一并提交）。这里把它当致命项挡下。
+# --------------------------------------------------------------------------
+$attRoot = if([string]::IsNullOrWhiteSpace($Dir)){ Join-Path $Root '附件' } else { Join-Path (Join-Path $Root $Dir) '附件' }
+$attLabel = if([string]::IsNullOrWhiteSpace($Dir)){ '附件' } else { "$Dir\附件" }
+if(Test-Path -LiteralPath $attRoot){
+  $attFiles = Get-ChildItem -LiteralPath $attRoot -File -Recurse -ErrorAction SilentlyContinue
+  $suffixed = @($attFiles | Where-Object { $_.BaseName -match '_\d{10,}$' })
+  foreach($s in $suffixed){
+    $fixed = ($s.BaseName -replace '_\d{10,}$','') + $s.Extension
+    $errors.Add("[附件] $attLabel\$($s.Name) 带同步冲突后缀，应为 $fixed（改回原名或用原名重新引用）")
+  }
+  Write-Host ("附件文件名检查：{0} 个文件，{1} 个带冲突后缀" -f $attFiles.Count, $suffixed.Count) -ForegroundColor DarkGray
+}
+
+# --------------------------------------------------------------------------
 Write-Host ""; Write-Host "===== 笔记检查完成 =====" -ForegroundColor Cyan
 Write-Host ("扫描文件数：{0}" -f $files.Count) -ForegroundColor Cyan
 $code=0
