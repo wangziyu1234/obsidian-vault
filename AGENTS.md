@@ -129,6 +129,11 @@
 - **`control` 的 rcParams 不在 matplotlib 里**：`plt.rcParams["control.grid"]` 会 `KeyError`。与其和它的默认样式搏斗，不如用 `ct.frequency_response()` 取数据自己画
 - **控制台中文乱码**：build.ps1 已设 `[Console]::OutputEncoding` 与 `PYTHONIOENCODING=utf-8`
 
+**与云同步抢文件（长期遵守）**：Remotely Save 现配置为 onedrive / 双向 / **每 60 秒自动同步**、`syncOnSave` 延迟 1 秒、`conflictAction: keep_newer`、`protectModifyPercentage: 50`。**批量重生成图时它在同步运行中**，一批 PNG 在短时间内相继落地，正落在冲突判定与保护阈值附近；一旦判冲突，兜底分支会把**本地那份改名成 `xxx_1789228415866.png`**（云端那份保留原名），笔记里的 `![[原名]]` 当场断链，随后 git 自动备份还把改名结果一并提交（`af63ca6`、`8368f51` 两次同因复发）。
+- **批量生成图前先让同步停手**：暂停 Remotely Save（或用 `onlyAllowPaths` 临时收窄），生成完再恢复，让整批文件一次落地、一次记账。不要在自动同步跑着的时候连续重画整批图。
+- **不要把自控成图放进 `ignorePaths`**：手机端要靠云同步看图，排除了等于图上不了手机。图的正确保障是**可重建**（源码都在 `.scripts/figures/` 且入库，`build.ps1 -File/-All` 随时重生成），所以即使同步把名字搞乱，也不存在"图丢了"的实质损失。
+- **复发时怎么查**：`check-notes.ps1` 已把带 `_<10位以上数字>` 后缀的附件当**致命项**报出并给出原名。两条修法：把文件名改回去，或直接按源码重生成那张图。`data.json` 在 `.obsidian/plugins/remotely-save/.gitignore` 里（**不进版本库、无历史可比**），且 `logToDB: False` 时磁盘无历史日志——想留证据就把 `logToDB` 打开再复现。
+
 **风格约定**：
 - 与正文 MathJax 一致：`unicode-math` + `Cambria Math`（TikZ/circuitikz）、`mathtext.fontset="cm"`（matplotlib）
 - 统一配色：图线 `#1E2228`、强调/相频 `#B23020`、幅频 `#1F3D7A`、次要文字 `#606874`、填充 `#E8EFF8`
