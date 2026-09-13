@@ -1,5 +1,5 @@
-# -*- coding: utf-8 -*-
-"""典型环节幅相曲线：8 张单图（05-1-2 §5.2.6）。
+# figure: 频域-典型环节-比例Nyquist.png
+r"""典型环节幅相曲线：10 张单图（含 2 张非最小相位对应项）。
 
 与 `bode-typical-links.py` 的 8 张伯德图一一对应：
   频域-典型环节-比例Nyquist.png / 积分 / 微分 / 惯性 / 一阶微分 / 振荡 / 二阶微分 / 延迟
@@ -9,13 +9,16 @@
 """
 import os
 
+import control as ct
 import numpy as np
 import matplotlib.pyplot as plt
 
 import figures_style as fs
+from _nyquist_style import canvas, curve, point, note, finish
 
 fs.use_style()
-OUT = os.path.join(fs.REPO_ROOT, "附件")
+OUT = os.path.dirname(os.environ["FIGURE_OUT"]) if os.environ.get("FIGURE_OUT") else str(fs.ATTACH_DIR)
+ONLY = set(filter(None, os.environ.get("FIGURE_ONLY", "").split(";")))
 W = np.logspace(-2, 2, 1200)
 
 
@@ -46,6 +49,9 @@ def dot(ax, x, y, lab, off=(7, 7), color=fs.PHA):
 
 
 def save(fig, name):
+    if ONLY and name not in ONLY:
+        plt.close(fig)
+        return
     path = os.path.join(OUT, name)
     fig.savefig(path, dpi=fs.DPI)
     plt.close(fig)
@@ -140,25 +146,26 @@ ax.annotate("单位圆：|G| ≡ 1，相位 −ωτ\n顺时针无限绕转", xy=
             xytext=(-1.35, 1.0), color=fs.INK, fontsize=11)
 save(fig, "频域-典型环节-延迟Nyquist.png")
 
-# 9 不稳定惯性（非最小相位）：第一象限半圆（惯性半圆关于实轴的镜像）
-fig, ax = newfig()
-style(ax, (-0.25, 1.3), (-0.35, 0.8), "不稳定惯性环节  1/(1−Ts)（T = 1）")
-G = 1 / (1 - 1j * W)
-ax.plot(G.real, G.imag, color=fs.MAG, linewidth=2.2)
-arrow(ax, 0.68, 0.37, -0.05, -0.06)
-dot(ax, 1, 0, "起点 (1, j0)（ω = 0）", off=(-150, -20))
-dot(ax, 0, 0, "终点：原点 ∠+90°", off=(8, -4))
-ax.annotate("第一象限半圆：圆心 (0.5, 0)、半径 0.5\n（与惯性环节关于实轴对称）",
-            xy=(0.5, 0.55), xytext=(-0.2, 0.7), color=fs.SUB, fontsize=10.5)
-save(fig, "频域-典型环节-不稳定惯性Nyquist.png")
+# 9-10: actual response paths and on-curve increasing-frequency arrows.
+s = ct.tf("s")
+w = np.geomspace(1e-4, 1e4, 10000)
+name = "频域-典型环节-不稳定惯性Nyquist.png"
+if not ONLY or name in ONLY:
+    fig, ax = canvas("不稳定惯性：惯性曲线关于实轴的镜像",
+                     r"$G(s)=1/(1-s)$", (-0.22,1.22),(-0.23,0.78))
+    curve(ax, 1/(1-s), w, (0.6,2.0))
+    point(ax, 1, r"$\omega=0$", (-44,-23))
+    point(ax, 0, r"$\omega\to\infty$", (8,-23), limit=True)
+    note(ax, r"$\varphi:0^\circ\to+90^\circ$", (0.04,0.88))
+    finish(fig, os.path.join(OUT,name))
 
-# 10 不稳定振荡（非最小相位）：上半平面（振荡曲线关于实轴的镜像）
-fig, ax = newfig()
-style(ax, (-0.65, 1.3), (-0.4, 1.45), "不稳定振荡环节  1/(s²−2ζs+1)，ζ = 0.5")
-G = 1 / (1 - W ** 2 - 2j * 0.5 * W)
-ax.plot(G.real, G.imag, color=fs.MAG, linewidth=2.2)
-arrow(ax, -0.12, 0.9, 0.1, -0.12)
-dot(ax, 1, 0, "起点 (1, j0)（ω = 0）", off=(-150, -16))
-dot(ax, 0, 1, "ωn 处 (0, j/(2ζ))", off=(10, 4))
-ax.annotate("ω→∞：原点 ∠+180°", xy=(0, 0), xytext=(10, -14), color=fs.INK, fontsize=11)
-save(fig, "频域-典型环节-不稳定振荡Nyquist.png")
+name = "频域-典型环节-不稳定振荡Nyquist.png"
+if not ONLY or name in ONLY:
+    fig, ax = canvas("不稳定振荡（ζ = 0.5，ωₙ = 1）",
+                     r"$G(s)=1/(s^2-s+1)$", (-0.62,1.42),(-0.43,1.4))
+    curve(ax, 1/(s*s-s+1), w, (0.48,1.4))
+    point(ax, 1, r"$\omega=0$", (-44,-23))
+    point(ax, 0, r"$\omega\to\infty$", (-30,-23), limit=True)
+    point(ax, 1j, r"$\omega_n=1$", (-64,15))
+    note(ax, r"$\varphi:0^\circ\to+180^\circ$", (0.06,0.87))
+    finish(fig, os.path.join(OUT,name))

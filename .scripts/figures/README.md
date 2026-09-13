@@ -43,6 +43,9 @@ cd .scripts\figures
 | `ch5-bode-examples.py` | 第5章例题补图：伯德/时域 7 张（例5-6、5-7、5-13、5-14、5-17、5-18、渐近线反算例） |
 | `block-2nd-order.tex` | 结构图模板（TikZ）：典型二阶系统（05-3-b-2 例5-13） |
 | `ch5-three-plots.py` | 三种图示法对照（05-1-1 §5.1.4）：同一 RC 系统的奈氏图/伯德图/尼科尔斯图 |
+| `openloop-nyquist.py` | 开环幅相：九类单图 + 课程例7—9的五张例题/局部放大图；`control.frequency_response` 采样，内置交点与端点断言 |
+| `_nyquist_style.py` | 幅相图的等比例坐标、极限标记、按实际频响取点的方向箭头；共享模块，不单独构建 |
+| `minimum-phase-comparison.py` | 惯性与不稳定惯性的同幅、反相伯德对照图 |
 
 构建产物（一律单图，不做多子图拼版）：
 
