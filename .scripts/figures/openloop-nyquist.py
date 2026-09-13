@@ -84,10 +84,10 @@ def verify():
 
 
 def shape(name, title, formula, system, limits, arrows, phase, start=None,
-          crossing=None, asymptote=None, note_text=None):
+          crossing=None, asymptote=None, note_text=None, figsize=(6.6,6.0)):
     if not selected(name):
         return
-    fig, ax = canvas(title, formula, *limits)
+    fig, ax = canvas(title, formula, *limits, figsize=figsize)
     curve(ax, system, W, arrows)
     if asymptote is not None:
         ax.axvline(asymptote, color=fs.SUB, lw=1.1, ls=(0,(4,3)), zorder=2)
@@ -125,8 +125,9 @@ def draw_shapes():
           crossing=(-2/3,r"$-2/3$",(-25,19)))
     shape("频域-奈氏-Ⅰ型带零点.png", "Ⅰ型：带零点（τ = 4，T₁ = 1，T₂ = 2）",
           r"$G(s)=(1+4s)/[s(1+s)(1+2s)]$", GIZ,
-          ((-1.65,1.65),(-3.65,0.5)), (0.35,1.4),
-          r"$\varphi:-90^\circ\to-180^\circ$", asymptote=1)
+          ((-1.4,1.6),(-8.0,0.6)), (0.16,0.35,1.4),
+          r"$\varphi:-90^\circ\to-180^\circ$", asymptote=1,
+          figsize=(5.5,8.7))
     shape("频域-奈氏-Ⅱ型单惯性.png", "Ⅱ型：单惯性（K = 1，T = 1）",
           r"$G(s)=1/[s^2(1+s)]$", GII1, ((-4.1,0.7),(-0.65,2.4)), (0.52,1.05),
           r"$\varphi:-180^\circ\to-270^\circ$",
