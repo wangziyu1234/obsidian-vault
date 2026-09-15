@@ -62,9 +62,10 @@ axp.annotate("两种 K 的相频相同", xy=(0.02, 0.06), xycoords="axes fractio
              color=fs.SUB, fontsize=10.5)
 axm.axhline(0, color=fs.SUB, linewidth=0.9, linestyle=(0, (4, 3)))
 axp.axhline(-180, color=fs.SUB, linewidth=0.9, linestyle=(0, (4, 3)))
-axm.set_ylim(-45, 25)
-axp.set_ylim(-300, -60)
-axp.set_yticks([-270, -180, -90])
+# 三条重极点使高频幅值跌到 -108 dB、相频到 -270°，纵轴必须留够，否则曲线被压平在边界
+axm.set_ylim(-75, 25)
+axp.set_ylim(-300, 0)
+axp.set_yticks([-270, -180, -90, 0])
 axm.legend(loc="lower left", fontsize=11)
 fig.suptitle("例5-12  G = K/(s+1)³：K = 4 与 K = 10", fontsize=13, y=0.97)
 save(fig, "伯德-例512.png")
