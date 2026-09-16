@@ -86,13 +86,17 @@ foreach ($item in $Map.Split(',')) {
 
 # 先长后短替换，避免 "5.1" 命中 "5.10" 的前缀
 $ordered = $pairs.Keys | Sort-Object { $_.Length } -Descending
+$MARK = "__EXNUM__"
 $changed = 0
 foreach ($f in $files) {
     $text = Get-Content -LiteralPath $f.FullName -Encoding UTF8 -Raw
     $new = $text
+    # 两段式：先把所有旧号改成标记（避免 17→14 之后又被 14→11 命中），再落成新号
     foreach ($old in $ordered) {
-        $new = $new -replace ("例\s?5\." + [regex]::Escape($old) + "(?!\d)"), ("例5." + $pairs[$old])
+        $new = $new -replace ("例\s?5\." + [regex]::Escape($old) + "(?!\d)"),
+                             ($MARK + $pairs[$old])
     }
+    $new = $new -replace [regex]::Escape($MARK), "例5."
     if ($new -ne $text) {
         $changed++
         if ($Apply) {
