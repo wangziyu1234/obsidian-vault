@@ -1,9 +1,19 @@
 # figure: 频域-奈氏-虚轴零点判稳.png
 """Nyquist plot for exercise 5-16: a conjugate pair of imaginary-axis zeros.
 
-G(s) = k(s**2+1)/[s(s+5)].  The figure shows the positive-frequency branch for
-k = 10; the closed-loop stability condition k > 0 is verified symbolically and
-against the actual right-indented Nyquist contour.
+G(s) = k(s**2+1)/[s(s+5)].  The figure shows both frequency branches for k = 2
+(k = 10 would squeeze the loop into a sliver); the closed-loop stability
+condition k > 0 is verified symbolically and against the indented Nyquist
+contour, and cross-checked with MATLAB.
+
+Plotting lessons baked in (see 05-2-c-1 for the note-side text):
+  * Im G spans four decades, so a symlog axis with EXPLICIT tick labels is
+    used; matplotlib's own symlog formatter collapses ticks to "10".
+  * Sampling runs to both ends (omega -> 0+ and omega -> inf) so the two
+    branches meet the real axis and read as one closed loop, no "cut ends".
+  * Chinese must never sit in a string that also contains $...$ (mathtext
+    takes over the whole string and CJK falls back to boxes), and this
+    environment's mathtext also chokes on \\mathrm - use plain letters.
 """
 from __future__ import annotations
 
@@ -13,17 +23,18 @@ from pathlib import Path
 import control as ct
 import numpy as np
 import sympy as sp
-from matplotlib.ticker import MaxNLocator
 
 import matplotlib.pyplot as plt
-
 from matplotlib.patches import FancyArrowPatch
 from matplotlib.path import Path as MplPath
 
 import figures_style as fs
-from _nyquist_style import canvas, curve, response, note, finish, BOX
+from _nyquist_style import response, BOX
 
 s = ct.tf("s")
+
+K_PLOT = 2.0          # gain used in the figure
+Y_LIM = 200.0         # symlog window of the figure
 
 
 def model(k):
@@ -88,30 +99,24 @@ def verify():
     assert sp.simplify(re_g.subs(w, 1)) == 0 and sp.simplify(im_g.subs(w, 1)) == 0
     assert sp.simplify(im_g / re_g - 5 / w) == 0                # 过原点，方向 y = 5x
     assert sp.simplify(sp.limit(re_g, w, 0, "+") + k / 25) == 0  # Re 下界 -k/25
-    assert sp.limit(im_g, w, 0, "+") == -sp.oo                  # 起点 -j∞
+    assert sp.limit(im_g, w, 0, "+") == -sp.oo                   # 起点 -j∞
     assert sp.simplify(sp.diff(re_g, w) - 52 * k * w / (w**2 + 25) ** 2) == 0
     assert sp.simplify(sp.limit(re_g, w, sp.oo) - k) == 0
     assert sp.simplify(sp.limit(im_g, w, sp.oo)) == 0
-    # Im has a single positive maximum on w > 0.
     extrema = [r for r in sp.solve(sp.diff(im_g, w), w) if r.is_real and r > 0]
     assert len(extrema) == 1, extrema
     assert abs(float(im_g.subs({w: extrema[0], k: 1})) - 0.4814338) < 1e-6
-    # The branch stays in the strip -k/25 < Re G < k; Im G changes sign at w = 1.
-    for wv in (0.05, 0.3, 1.0, 1.5, 2.24, 5.0, 20.0, 200.0):
-        assert -1 / 25 < float(re_g.subs({w: wv, k: 1})) < 1.0, wv
+    # Re G changes sign exactly at w = 1; Im G does too.
     for wv in (0.05, 0.3, 0.8):
         assert float(im_g.subs({w: wv, k: 1})) < 0, wv
+        assert float(re_g.subs({w: wv, k: 1})) < 0, wv
     for wv in (1.2, 2.24, 5.0, 200.0):
         assert float(im_g.subs({w: wv, k: 1})) > 0, wv
-    # Re G changes sign exactly at w = 1.
-    for wv in (0.2, 0.9):
-        assert float(re_g.subs({w: wv, k: 1})) < 0
-    for wv in (1.2, 5.0, 60.0):
-        assert float(re_g.subs({w: wv, k: 1})) > 0
+        assert float(re_g.subs({w: wv, k: 1})) > 0, wv
     # The hint arctan 0.2 = 11.3 deg is arctan(1/5), the w = 1 value.
     assert abs(float(sp.atan(sp.Rational(1, 5))) * 180 / np.pi - 11.3099) < 1e-3
     print("PASS: Re G = k(w^2-1)/(w^2+25), Im G = 5k(w^2-1)/[w(w^2+25)]; G(j1)=0, "
-          "-k/25 < Re G < k, Im G < 0, Im peak 0.4814k near w = 5.37")
+          "-k/25 < Re G < k, Im peak 0.4814k near w = 5.37")
 
     def poles(kv):
         return ct.poles(ct.feedback(model(kv), 1))
@@ -120,7 +125,7 @@ def verify():
         """Roots of the closed-loop characteristic polynomial (k+1)s^2+5s+k."""
         return np.roots([kv + 1, 5, kv])
 
-    for kv in (0.01, 0.5, 1, 7.3, 100, 5000):
+    for kv in (0.01, 0.5, 1, 2, 10, 100, 5000):
         r = poles(kv)
         assert np.all(r.real < -1e-9), (kv, r)
         assert np.allclose(np.sort(r.real), np.sort(char_roots(kv).real)), kv
@@ -142,52 +147,64 @@ def verify():
         assert samples.real.min() > -kv / 25 - 1e-9, (kv, samples.real.min())
         # (b) The clockwise-contour winding counter returns 0 as well.
         assert winding(model(kv)) == 0, kv
-    print("PASS: 6 positive gains give two left-half-plane poles; -k/25 < Re G < k "
-          "for 7 gains from k=0.05 to k=1000, so (-1,0) is never encircled")
+    print("PASS: 7 positive gains give two left-half-plane poles; -k/25 < Re G < k, "
+          "so (-1,0) is never encircled")
 
 
 def draw():
-    # 图内只用数学式与拉丁标签：matplotlib 的字体回退对含 $...$ 的串不生效，
-    # 一旦把汉字写进同一字符串就会渲染成方框；中文说明放在笔记的图注里。
-    # 曲线纵向跨度极大（Im 从 ω→0+ 的 -∞ 回到 ω→∞ 的 0），用 symlog 纵轴
-    # 一栏画全；频率采样取到两端极限，让两支在两端自然贴轴、闭合成环。
-    k = 10.0
+    # 画法取舍（四种画法实测对比后选定）：
+    #   ① symlog 纵轴 + 显式刻度 —— 形状完整、判据点与环的位置一眼可见（采用）
+    #   ② Re G 对 1/Im G 的有界图 —— 数学上最干净，但换了坐标，不适合当教材图
+    #   ③ 双对数 |Re|-|Im| —— 拐点全糊，放弃
+    #   ④ 线性纵轴 —— 曲线压成一条，放弃
+    k = K_PLOT
     system = model(k)
     fs.use_style()
-    fig, ax = plt.subplots(figsize=(7.4, 4.6))
+    fig, ax = plt.subplots(figsize=(7.6, 4.8))
 
-    w = np.unique(np.r_[np.geomspace(1e-4, 1e6, 30000),
-                        np.sqrt(5), 1.0 - 1e-12, 1.0 + 1e-12])
+    # 采样取到两端极限，两支在两端贴轴闭合成环，不出现断头。
+    w = np.unique(np.r_[np.geomspace(1e-5, 1e6, 40000), np.sqrt(5),
+                        1.0 - 1e-12, 1.0 + 1e-12])
     w = w[w != 1.0]
-    samples = response(system, w)
-    order = np.argsort(w)
-    pos = samples[order]
+    pos = response(system, w)[np.argsort(w)]
     ax.plot(pos.real, pos.imag, color=fs.MAG, lw=2.2, zorder=4,
-            label=r"positive branch: $\omega:0^+\to\infty$")
+            label=r"positive branch, $\omega:0^+\to\infty$")
     ax.plot(pos.real, -pos.imag, color=fs.PHA, lw=1.4, ls=(0, (6, 3)), zorder=3,
             label="negative branch (mirror image)")
-    for at in (0.45, 1.6, 5.0):
+
+    # 方向箭头沿真实采样点铺设。
+    for at in (0.5, 1.1, 3.0):
         q = response(system, np.geomspace(at / 1.25, at * 1.25, 40))
         ax.add_patch(FancyArrowPatch(path=MplPath(np.column_stack((q.real, q.imag))),
-                                     arrowstyle="-|>", mutation_scale=13,
+                                     arrowstyle="-|>", mutation_scale=14,
                                      color=fs.MAG, lw=1.5, zorder=6))
 
     ax.set_yscale("symlog", linthresh=1e-2)
-    ax.set_ylim(-2.5e4, 2.5e4)
-    ax.set_xlim(-3.2, 12.4)
+    ax.set_ylim(-Y_LIM, Y_LIM)
+    ax.set_xlim(-1.6, 2.9)
+    ax.set_yticks([-Y_LIM, -10, -1, 0, 1, 10, Y_LIM])
+    ax.set_yticklabels([r"$-200$", r"$-10$", r"$-1$", r"$0$", r"$1$", r"$10$",
+                        r"$200$"])
+    ax.set_xticks([-1, 0, 1, 2])
     ax.axhline(0, color=fs.SUB, lw=0.9, zorder=1)
     ax.axvline(0, color=fs.SUB, lw=0.9, zorder=1)
     ax.grid(True, color=fs.GRID, lw=0.55, alpha=0.55)
     ax.spines[["top", "right"]].set_visible(False)
     ax.tick_params(labelsize=10)
-    ax.set_xlabel(r"$Re G$", fontsize=11)
-    ax.set_ylabel(r"$Im G$   (symlog scale)", fontsize=11)
+    ax.set_xlabel(r"$Re\,G(j\omega)$", fontsize=11.5)
+    ax.set_ylabel(r"$Im\,G(j\omega)$  (symlog)", fontsize=11.5)
 
-    ax.plot(-1, 0, marker="x", color=fs.INK, markersize=9, zorder=8,
+    # 上下两端各补一个箭头：曲线在 ω→0+ 处还要继续伸向 -j∞，不是被截断。
+    ax.annotate("", xy=(pos.real[0], Y_LIM + 14), xytext=(pos.real[0], Y_LIM + 4),
+                arrowprops=dict(arrowstyle="-|>", color=fs.MAG, lw=1.8),
+                annotation_clip=False, zorder=6)
+
+    # 判据点与两个特征点。
+    ax.plot(-1, 0, marker="x", color=fs.INK, markersize=9, mew=1.6, zorder=8,
             label=r"critical point $(-1,\,0)$")
-    ax.annotate(r"$\omega=1:\ G=0$", (0, 0), xytext=(16, -34),
+    ax.annotate(r"$\omega=1:\ G=0$", (0, 0), xytext=(12, -30),
                 textcoords="offset points", fontsize=10, color=fs.PHA, bbox=BOX)
-    ax.annotate(r"$\omega\to\infty:\ G\to(k,\,0)$", (k, 0), xytext=(-118, 30),
+    ax.annotate(r"$G\to(k,\,0)$", (k, 0), xytext=(-88, 24),
                 textcoords="offset points", fontsize=10, color=fs.SUB, bbox=BOX,
                 arrowprops=dict(arrowstyle="-|>", color=fs.SUB, lw=1.0))
     ax.legend(loc="upper left", fontsize=9.5, framealpha=0.95,

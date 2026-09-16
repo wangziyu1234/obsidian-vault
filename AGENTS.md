@@ -126,8 +126,25 @@
 - **`pdftocairo` 会给输出名追加 `.png`**：传 `foo.png` 会得到 `foo.png.png`。传不带扩展名的前缀
 - **中文字体**：matplotlib 的 `font.family` 必须写成**字体列表**（`= "serif"` 这种别名写法不会逐字形回退，Cambria 缺 CJK 字形就画方框）；`figures_style.py` 已配好 `["Cambria", "Times New Roman", "Microsoft YaHei", "SimHei"]`
 - **同一字符串里不要混中文和 `$…$`**：mathtext 会接管整串并套 CM 字体集，中文随即变方框（纯中文、纯公式、中文+西文都正常）。标题写两行：`"惯性环节\n$1/(Ts+1)$"`
+- **本机 mathtext 对 `\mathrm{...}` 会报 `ParseFatalException: Unknown symbol: \mathrm`**（同一串里其他 `$…$` 段正常，未定位到根因）。稳妥写法：直接用普通字母（`$G(jw)$`、`$Re G$`），别用 `\mathrm` / `\operatorname`
 - **`control` 的 rcParams 不在 matplotlib 里**：`plt.rcParams["control.grid"]` 会 `KeyError`。与其和它的默认样式搏斗，不如用 `ct.frequency_response()` 取数据自己画
+- **`from matplotlib.path import Path` 与 `pathlib.Path` 撞名**：绘图脚本里同时用到两者时，把前者 `as MplPath`，否则 `fig.savefig(Path(...))` 会抛 `float() argument must be … not 'WindowsPath'`
+- **不要用 PowerShell 管道改含中文的源码**：`python -c "...read/write..."` 经管道会按 GBK 写回，注释成乱码，且 git 不易察觉。改笔记/脚本一律走编辑工具的定点替换
 - **控制台中文乱码**：build.ps1 已设 `[Console]::OutputEncoding` 与 `PYTHONIOENCODING=utf-8`
+
+**曲线动态范围大时怎么画（奈氏/伯德，长期遵守）**：频率特性常有 3–4 个数量级的纵向跨度（如 $1/[s(s+5)]$ 的 $\operatorname{Im}G$ 在 $\omega\to0^+$ 处到 $-\infty$），线性纵轴会把曲线压成一条线。四条经验：
+- **纵轴用 symlog 并显式设刻度**：`ax.set_yscale("symlog", linthresh=…)` 之后**必须** `set_yticks` + `set_yticklabels`，matplotlib 自带的 symlog 刻度格式器会把 $-10^1,-10^2,-10^3$ 全压成 "10"（实测）
+- **采样要取到两端极限**，让两支自然贴轴闭合成环；端点若超出视野，用文字或小箭头标"还要继续伸向无穷远"，不要留下看起来像被截断的断头
+- **形状比数值更重要时，先换增益**：同一个"对任意 $k>0$ 稳定"的结论，取 $k=2$ 画出的环宽高比远好于 $k=10$（后者扁成一条）
+- **先做多画法对比再定稿**：临时脚本一次画 2×2（symlog / 有界倒数坐标 / 局部放大 / 双对数）存一张 PNG，肉眼挑完再写正式脚本，比反复改正式脚本快得多
+- **成图必须自己看图**：`read_image` 逐张确认，别只看"脚本没报错"。历史上多次出现刻度被压、页脚被裁、插图压线而脚本"完全正常"
+
+**MATLAB 作为独立复核（环境已装 R2026a）**：不要求用，但**核对容易算错的解析式时值得跑**（见「子代理与数学核对」）。三个已实测的调用坑：
+- **`.m` 文件必须纯 ASCII**：`matlab -batch` 按系统 ANSI 读文件，含中文注释直接报"文本字符无效"，把 `%` 注释写成英文即可
+- **从含中文的路径 `run()` 会失败**（`D:\obsidian\...` 实测报字符错误）→ 把临时 `.m` 复制到 `%TEMP%` 再跑，用完即删
+- **`s = tf('s')` 之后再 `syms s` 会冲突**（`无法从 tf 转换为 sym`）→ 符号段单独 `clear` 并重新 `syms`
+- **`nyquist()` 的自动量程会被 $s=0$ 极点拉到 $10^{19}$**，糊成直线 → 给频率范围 `nyquist(G, {wmin, wmax})`，或干脆自己取 `freqresp` 数据画
+
 
 **与云同步抢文件（长期遵守）**：Remotely Save 现配置为 onedrive / 双向 / **每 60 秒自动同步**、`syncOnSave` 延迟 1 秒、`conflictAction: keep_newer`、`protectModifyPercentage: 50`。**批量重生成图时它在同步运行中**，一批 PNG 在短时间内相继落地，正落在冲突判定与保护阈值附近；一旦判冲突，兜底分支会把**本地那份改名成 `xxx_1789228415866.png`**（云端那份保留原名），笔记里的 `![[原名]]` 当场断链，随后 git 自动备份还把改名结果一并提交（`af63ca6`、`8368f51` 两次同因复发）。
 - **批量生成图前先让同步停手**：暂停 Remotely Save（或用 `onlyAllowPaths` 临时收窄），生成完再恢复，让整批文件一次落地、一次记账。不要在自动同步跑着的时候连续重画整批图。
