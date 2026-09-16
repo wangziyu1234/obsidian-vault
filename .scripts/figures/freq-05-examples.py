@@ -92,9 +92,9 @@ def fig_nyquist_512():
     ax.set_ylabel(r"$Im\,G(j\omega)$", fontsize=11.5)
     for k, colour, style, label in (
             (4.0, fs.MAG, "-",
-             r"$K=4$$:\ \mathrm{不包围}\ (-1,j0)$$\mathrm{，稳定}$"),
+             r"$K=4$$:\ \mathrm{不包围}\ (-1,j0)$$\mathrm{, 稳定}$"),
             (10.0, fs.PHA, (0, (6, 3)),
-             r"$K=10$$:\ \mathrm{包围}\ (-1,j0)$$\mathrm{，不稳定}$")):
+             r"$K=10$$:\ \mathrm{包围}\ (-1,j0)$$\mathrm{, 不稳定}$")):
         resp = ct.frequency_response(k / (s + 1) ** 3, np.geomspace(1e-2, 1e2, 3000))
         z = resp.fresp[0, 0].squeeze()
         keep = (z.real > -4.0) & (z.real < 1.6) & (np.abs(z.imag) < 3.0)

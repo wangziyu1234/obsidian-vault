@@ -141,7 +141,7 @@ def fig_04_2_2_ex46():
                 xytext=(10, -16), textcoords="offset points", fontsize=10,
                 color=fs.PHA, zorder=9)
     save(fig, ax, "根轨迹-042-例46.png", (-5.2, 2.6), (-3.2, 3.2),
-         r"$\mathrm{例4.6（正反馈）}\ \ G(s)H(s)=K^*(s+2)/[(s+3)(s^2+2s+2)]$")
+         r"$\mathrm{例4.6 (正反馈)}\ \ G(s)H(s)=K^*(s+2)/[(s+3)(s^2+2s+2)]$")
 
 
 def fig_04_4_s012():

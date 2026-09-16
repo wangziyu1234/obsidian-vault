@@ -172,7 +172,7 @@ def draw():
     ax.plot(pos.real, pos.imag, color=fs.MAG, lw=2.2, zorder=4,
             label=r"$\mathrm{正频率支}\ \omega:0^+\to\infty$")
     ax.plot(pos.real, -pos.imag, color=fs.PHA, lw=1.4, ls=(0, (6, 3)), zorder=3,
-            label=r"$\mathrm{负频率支（镜像）}$")
+            label=r"$\mathrm{负频率支 (镜像)}$")
 
     # 方向箭头沿真实采样点铺设。
     for at in (0.5, 1.1, 3.0):
