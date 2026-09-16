@@ -47,7 +47,16 @@ def use_style() -> None:
         # font.serif 也要设成同一列表——否则它自己的默认值会盖掉回退链。
         "font.family": ["Cambria", "Times New Roman", "Microsoft YaHei", "SimHei"],
         "font.serif": ["Cambria", "Times New Roman", "Microsoft YaHei", "SimHei"],
-        "mathtext.fontset": "cm",
+        # 图内中文（实测）：纯文本与 $…$ 混排时 mathtext 接管整串，字体回退失效，
+        # 汉字会变方框。两条可行写法：
+        #   ① 汉字包进 $\mathrm{…}$（mathtext 段内会走下面 fontset=custom 的字体）；
+        #   ② 纯中文段用 plt.text(..., family=["Microsoft YaHei", "SimHei"])。
+        # 所以 mathtext 改 custom：数学符号用 Cambria，\mathrm{} 里的汉字有 CJK 字形。
+        # 注意 mathtext.* 只接受**单个** fontconfig 模式，写逗号列表会 ParseException。
+        "mathtext.fontset": "custom",
+        "mathtext.rm": "Microsoft YaHei",
+        "mathtext.it": "Cambria:italic",
+        "mathtext.bf": "Microsoft YaHei:bold",
         "font.size": 13,
         "axes.titlesize": 14,
         "axes.labelsize": 14,

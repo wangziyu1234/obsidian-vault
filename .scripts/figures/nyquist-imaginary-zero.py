@@ -157,6 +157,8 @@ def draw():
     #   ② Re G 对 1/Im G 的有界图 —— 数学上最干净，但换了坐标，不适合当教材图
     #   ③ 双对数 |Re|-|Im| —— 拐点全糊，放弃
     #   ④ 线性纵轴 —— 曲线压成一条，放弃
+    # 图内中文写法：汉字必须包进 $\mathrm{…}$，否则 mathtext 接管整串后中文变方框
+    # （见 figures_style.use_style 的注释）。
     k = K_PLOT
     system = model(k)
     fs.use_style()
@@ -168,9 +170,9 @@ def draw():
     w = w[w != 1.0]
     pos = response(system, w)[np.argsort(w)]
     ax.plot(pos.real, pos.imag, color=fs.MAG, lw=2.2, zorder=4,
-            label=r"positive branch, $\omega:0^+\to\infty$")
+            label=r"$\mathrm{正频率支}\ \omega:0^+\to\infty$")
     ax.plot(pos.real, -pos.imag, color=fs.PHA, lw=1.4, ls=(0, (6, 3)), zorder=3,
-            label="negative branch (mirror image)")
+            label=r"$\mathrm{负频率支（镜像）}$")
 
     # 方向箭头沿真实采样点铺设。
     for at in (0.5, 1.1, 3.0):
@@ -192,7 +194,8 @@ def draw():
     ax.spines[["top", "right"]].set_visible(False)
     ax.tick_params(labelsize=10)
     ax.set_xlabel(r"$Re\,G(j\omega)$", fontsize=11.5)
-    ax.set_ylabel(r"$Im\,G(j\omega)$  (symlog)", fontsize=11.5)
+    ax.set_ylabel(r"$Im\,G(j\omega)$  ($\mathrm{纵轴为}\ \mathrm{symlog}\ \mathrm{刻度}$)",
+                  fontsize=11.5)
 
     # 上下两端各补一个箭头：曲线在 ω→0+ 处还要继续伸向 -j∞，不是被截断。
     ax.annotate("", xy=(pos.real[0], Y_LIM + 14), xytext=(pos.real[0], Y_LIM + 4),
@@ -201,13 +204,13 @@ def draw():
 
     # 判据点与两个特征点。
     ax.plot(-1, 0, marker="x", color=fs.INK, markersize=9, mew=1.6, zorder=8,
-            label=r"critical point $(-1,\,0)$")
+            label=r"$\mathrm{判据点}\ (-1,\,0)$")
     ax.annotate(r"$\omega=1:\ G=0$", (0, 0), xytext=(12, -30),
                 textcoords="offset points", fontsize=10, color=fs.PHA, bbox=BOX)
     ax.annotate(r"$G\to(k,\,0)$", (k, 0), xytext=(-88, 24),
                 textcoords="offset points", fontsize=10, color=fs.SUB, bbox=BOX,
                 arrowprops=dict(arrowstyle="-|>", color=fs.SUB, lw=1.0))
-    ax.legend(loc="upper left", fontsize=9.5, framealpha=0.95,
+    ax.legend(loc="upper left", fontsize=10, framealpha=0.95,
               facecolor="white", edgecolor=fs.GRID)
 
     out = Path(os.environ.get("FIGURE_OUT",

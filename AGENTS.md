@@ -126,7 +126,11 @@
 - **`pdftocairo` 会给输出名追加 `.png`**：传 `foo.png` 会得到 `foo.png.png`。传不带扩展名的前缀
 - **中文字体**：matplotlib 的 `font.family` 必须写成**字体列表**（`= "serif"` 这种别名写法不会逐字形回退，Cambria 缺 CJK 字形就画方框）；`figures_style.py` 已配好 `["Cambria", "Times New Roman", "Microsoft YaHei", "SimHei"]`
 - **同一字符串里不要混中文和 `$…$`**：mathtext 会接管整串并套 CM 字体集，中文随即变方框（纯中文、纯公式、中文+西文都正常）。标题写两行：`"惯性环节\n$1/(Ts+1)$"`
-- **本机 mathtext 对 `\mathrm{...}` 会报 `ParseFatalException: Unknown symbol: \mathrm`**（同一串里其他 `$…$` 段正常，未定位到根因）。稳妥写法：直接用普通字母（`$G(jw)$`、`$Re G$`），别用 `\mathrm` / `\operatorname`
+- **图内中文的可用写法（已实测，按可靠度排序）**：
+  1. **汉字包进 `$\mathrm{…}$`，且整串要"先数学、后中文"**：`r"$K=4$：$\mathrm{不包围}\ (-1,0)$，稳定"` ✅；反过来写成 `r"不包围 $(-1,0)$"` 会让段首汉字变方框 ❌。
+  2. **纯中文段用字体族**：`plt.text(..., family=["Microsoft YaHei", "SimHei"])` ✅（不掺 `$…$` 时 `figures_style` 的回退链本来就够用）。
+  3. `figures_style.use_style()` 已把 `mathtext.fontset` 设为 `custom` 并把 `mathtext.rm` 指向 `Microsoft YaHei`，这样 `\mathrm{}` 里的汉字有字形。⚠ `mathtext.*` 只接受**单个** fontconfig 模式，写 `"Cambria, Microsoft YaHei"` 会 `ParseException`。
+- **`\mathrm` 后面不能跟空格**：`\mathrm j`、`\mathrm{Re}\,G` 这类写法在 custom 字体集下直接 `ParseFatalException: Unknown symbol: \mathrm`（这才是"本机 mathtext 对 `\mathrm` 报错"的真正机制）。改成 `j`、`\mathrm{j}` 或 `\mathrm{Re}` 都正常。`\sqrt3` 同样要写成 `\sqrt{3}`。
 - **`control` 的 rcParams 不在 matplotlib 里**：`plt.rcParams["control.grid"]` 会 `KeyError`。与其和它的默认样式搏斗，不如用 `ct.frequency_response()` 取数据自己画
 - **`from matplotlib.path import Path` 与 `pathlib.Path` 撞名**：绘图脚本里同时用到两者时，把前者 `as MplPath`，否则 `fig.savefig(Path(...))` 会抛 `float() argument must be … not 'WindowsPath'`
 - **不要用 PowerShell 管道改含中文的源码**：`python -c "...read/write..."` 经管道会按 GBK 写回，注释成乱码，且 git 不易察觉。改笔记/脚本一律走编辑工具的定点替换
@@ -152,7 +156,7 @@
 - **复发时怎么查**：`check-notes.ps1` 已把带 `_<10位以上数字>` 后缀的附件当**致命项**报出并给出原名。两条修法：把文件名改回去，或直接按源码重生成那张图。`data.json` 在 `.obsidian/plugins/remotely-save/.gitignore` 里（**不进版本库、无历史可比**），且 `logToDB: False` 时磁盘无历史日志——想留证据就把 `logToDB` 打开再复现。
 
 **风格约定**：
-- 与正文 MathJax 一致：`unicode-math` + `Cambria Math`（TikZ/circuitikz）、`mathtext.fontset="cm"`（matplotlib）
+- 与正文 MathJax 一致：`unicode-math` + `Cambria Math`（TikZ/circuitikz）；matplotlib 侧 `figures_style.py` 用 `mathtext.fontset="custom"`（数学符号走 Cambria、`\mathrm{}` 里的汉字走 Microsoft YaHei，理由见上）
 - 统一配色：图线 `#1E2228`、强调/相频 `#B23020`、幅频 `#1F3D7A`、次要文字 `#606874`、填充 `#E8EFF8`
 - 输出 600 dpi 起（`pdftocairo -r 600` / `dpi=300` 配高 figsize），白底或透明底，直接可嵌
 - 命名沿用 `自控-xxx.png` / `频域-xxx.png` / `高数-xxx.png`，嵌入尺寸按「wikilink 与图片」节
