@@ -61,14 +61,16 @@ def point(ax, z, label, offset=(7, 10), color=fs.PHA, limit=False, size=5):
                     bbox=BOX, zorder=8)
 
 
-def note(ax, text, xy=(0.025, 0.03), color=fs.SUB, **kwargs):
-    return ax.text(*xy, text, transform=ax.transAxes, fontsize=11,
+def note(ax, text, xy=(0.025, 0.03), color=fs.SUB, size=11, **kwargs):
+    return ax.text(*xy, text, transform=ax.transAxes, fontsize=size,
                    color=color, bbox=BOX, zorder=8, **kwargs)
 
 
-def finish(fig, path, footer="仅正频率支；箭头表示频率增大，空心点表示极限。"):
-    fig.text(0.5, 0.025, footer, ha="center", va="bottom", fontsize=10, color=fs.SUB)
-    fig.tight_layout(rect=(0.005, 0.055, 0.995, 0.94))
+def finish(fig, path, footer="仅正频率支；箭头表示频率增大，空心点表示极限。",
+           footer_size=10, rect=(0.005, 0.055, 0.995, 0.94)):
+    fig.text(0.5, 0.022, footer, ha="center", va="bottom", fontsize=footer_size,
+             color=fs.SUB)
+    fig.tight_layout(rect=rect)
     fig.savefig(path, dpi=fs.DPI)
     plt.close(fig)
     print("saved", path)
