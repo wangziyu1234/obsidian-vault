@@ -243,8 +243,9 @@ foreach($d in @($secByDir.Keys)){
 }
 
 # --------------------------------------------------------------------------
-# 附件文件名检查：云同步冲突会把文件改名成 xxx_1789228415866.png，
-# 原引用立即断链（且自动备份会把改名结果一并提交）。这里把它当致命项挡下。
+# 附件文件名检查：远端客户端（手机等）会把附件改名成 xxx_1789228415866.png，
+# 本机 Remotely Save 只是照做「远端已改名」→ 原引用立即断链（且自动备份会把
+# 改名结果一并提交）。这里把它当致命项挡下，并顺带盯一眼云端镜像目录。
 # --------------------------------------------------------------------------
 $attRoot = if([string]::IsNullOrWhiteSpace($Dir)){ Join-Path $Root '附件' } else { Join-Path (Join-Path $Root $Dir) '附件' }
 $attLabel = if([string]::IsNullOrWhiteSpace($Dir)){ '附件' } else { "$Dir\附件" }
@@ -256,6 +257,24 @@ if(Test-Path -LiteralPath $attRoot){
     $errors.Add("[附件] $attLabel\$($s.Name) 带同步冲突后缀，应为 $fixed（改回原名或用原名重新引用）")
   }
   Write-Host ("附件文件名检查：{0} 个文件，{1} 个带冲突后缀" -f $attFiles.Count, $suffixed.Count) -ForegroundColor DarkGray
+}
+
+# 云端镜像（OneDrive 客户端维护的云上副本，文件名明文）：
+# 若带后缀的名字只出现在这里、本库还是原名，就证明改名是「外部客户端mint、云端持有」的，
+# 定位真凶该去查手机/另一台设备，而不是本机的 Remotely Save。
+if([string]::IsNullOrWhiteSpace($Dir)){
+  $mirror = Join-Path $env:USERPROFILE 'OneDrive\Apps\remotely-save\obsidian\附件'
+  if(Test-Path -LiteralPath $mirror){
+    $mine = @{}
+    foreach($f in @(Get-ChildItem -LiteralPath $attRoot -File -Recurse -ErrorAction SilentlyContinue)){ $mine[$f.Name] = $true }
+    $remoteOnly = @(Get-ChildItem -LiteralPath $mirror -File -Recurse -ErrorAction SilentlyContinue |
+      Where-Object { $_.BaseName -match '_\d{10,}$' -and -not $mine.ContainsKey($_.Name) })
+    if($remoteOnly.Count -gt 0){
+      $errors.Add("[云端] 云上出现本库没有的改名副本 $($remoteOnly.Count) 个（如 $($remoteOnly[0].Name)）：改名由外部客户端发起，请在手机/另一台设备上关掉附件的自动重命名")
+    } else {
+      Write-Host "云端镜像检查：云上无本库没有的改名副本" -ForegroundColor DarkGray
+    }
+  }
 }
 
 # --------------------------------------------------------------------------
