@@ -162,7 +162,22 @@
 - **两道自动保险**：`build.ps1` 构建前后各扫一次成图目录，构建前自动修复、构建后仍冒冲突就报警（`fix-attachment-conflicts.ps1` 挂在 `figures\` 上一层，用相对路径调用）；`check-notes.ps1` 既报「附件带冲突后缀」，也把**笔记直接引用冲突副本名**列为致命项（那种引用当下能命中、下次同步必断，必须改回原名）。
 - **批量重画图的注意点**：既然改名来自外部客户端，**暂停本机同步并不能防它**（9/17 那批就是 PC 关机时被改的）；把间隔放宽到 10 分钟只是让本机"别在别人改名时正好也在动同一批文件"。真·批量重画时仍可暂停 Remotely Save，让成图一次落地、一次记账——这是为了省事，不是防线。
 - **不要把自控成图放进 `ignorePaths`**：手机端要靠云同步看图，排除了等于图上不了手机。图的正确保障是**可重建**（源码都在 `.scripts/figures/` 且入库，`build.ps1 -File/-All` 随时重生成），加上改名副本内容无损，所以这属于"断链"而非"图丢了"。
-- **留证据的办法**：改名只发生在云上、本机只是执行者，所以本机日志（`logToDB`）只能看到 `remote_is_created_then_pull` + `remote_is_deleted_thus_also_delete_local`，看不到"改名"动作本身。真要抓现行，就盯云端镜像目录（见上条）——**PC 关机期间镜像里冒出带后缀的名字**即可定案；`fsutil usn readjournal D:` 与事件日志（Kernel-Power 109 / EventLog 6005）可用来证明本机当时根本没开机。`data.json` 在 `.obsidian/plugins/remotely-save/.gitignore` 里（**不进版本库、无历史可比**），且是**混淆存储**的（`d` 字段 = base64 反转 → 逐字节反转 → UTF-8 JSON）；要看设置**只在内存里解码打印，不要手改这个文件**（含凭据，插件会自动重写），要改设置走插件设置界面。
+- **留证据的办法**：改名只发生在云上、本机只是执行者，所以本机日志（`logToDB`）只能看到 `remote_is_created_then_pull` + `remote_is_deleted_thus_also_delete_local`，看不到"改名"动作本身。真要抓现行，就盯云端镜像目录（见上条）——**PC 关机期间镜像里带后缀的名字冒出来**即可定案；`fsutil usn readjournal D:` 与事件日志（Kernel-Power 109 / EventLog 6005）可用来证明本机当时根本没开机。`data.json` 在 `.obsidian/plugins/remotely-save/.gitignore` 里（**不进版本库、无历史可比**），且是**混淆存储**的（`d` 字段 = base64 反转 → 逐字节反转 → UTF-8 JSON）；要看设置**只在内存里解码打印，不要手改这个文件**（含凭据，插件会自动重写），要改设置走插件设置界面。
+
+**多端同步的方向策略（2026-09-17 血的教训，长期遵守）**：这套库的正确形态是「**PC 唯一作者 + 其他端只读**」。Remotely Save 的「同步方向」（设置里叫「同步方向（实验性）」）才是真正的安全阀——**`protectModifyPercentage` 只是熔断器，管不了方向**：
+
+| 选项值 | 界面名 | 用途 |
+|:--|:--|:--|
+| `bidirectional` | 双向（默认） | 只有 PC 用；多端同时双向 = 一台设备的误删/改名会广播给所有端 |
+| `incremental_push_only` | 仅上传（备份模式） | PC 专用：批量回填云端、恢复事故时用 |
+| **`incremental_pull_only`** | **仅下载** | **手机/平板等只读端必须用这个**：只接收，永不上传 |
+| `incremental_push_and_delete_only` | 仅上传并删除 | 会广播删除，别给非作者端 |
+| `incremental_pull_and_delete_only` | 仅下载并删除 | 会跟随云端删除，慎用 |
+
+- **为什么必须这样**：双向同步下，"删除"是一种**会被广播的指令**。2026-09-17 的实测：平板端删掉 `附件` 文件夹 → 云端被清空（只剩 1 个文件）→ 只差一步就删到 PC（PC 当时没在同步才幸免）。而外部 App 生成的 900 多个历史副本，在双向下也会被一遍遍推上云端。
+- **只读端要改内容怎么办**：一律"在 PC 上改，让只读端同步"。反过来在只读端写、又指望它同步出去，就是把上面那个事故重演一遍。
+- **事故恢复的推回法**（云端被误删、PC 完好时）：PC 端 `syncDirection` 改 `incremental_push_only`，`protectModifyPercentage` 临时改 `100`（批量上传不受熔断阻断），手动同步把本机推回云端，完事**立刻把方向改回 `bidirectional`、阈值改回 `50`**。2026-09-17 用它把 306 个附件从 1 个恢复到 306 个。
+- **动库结构前先让非作者端停手**：要删目录、批量改名、挪文件夹时，先暂停其它端的同步；PC 同步也先暂停更稳妥。
 
 **风格约定**：
 - 与正文 MathJax 一致：`unicode-math` + `Cambria Math`（TikZ/circuitikz）；matplotlib 侧 `figures_style.py` 用 `mathtext.fontset="custom"`（数学符号走 Cambria、`\mathrm{}` 里的汉字走 Microsoft YaHei，理由见上）
