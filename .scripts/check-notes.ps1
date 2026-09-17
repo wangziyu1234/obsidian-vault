@@ -260,19 +260,22 @@ if(Test-Path -LiteralPath $attRoot){
 }
 
 # 云端镜像（OneDrive 客户端维护的云上副本，文件名明文）：
-# 若带后缀的名字只出现在这里、本库还是原名，就证明改名是「外部客户端mint、云端持有」的，
+# 判据用「镜像里的后缀名有没有对应的原名文件」，而不是「本库有没有同名文件」——
+# 两边都被改名时后者会漏报（2026-09-17 14:22 那次就漏了 41 个）。
+# 一旦镜像里出现「没有原名陪着的后缀名」，就说明云上被外部客户端改名了，
 # 定位真凶该去查手机/另一台设备，而不是本机的 Remotely Save。
 if([string]::IsNullOrWhiteSpace($Dir)){
   $mirror = Join-Path $env:USERPROFILE 'OneDrive\Apps\remotely-save\obsidian\附件'
   if(Test-Path -LiteralPath $mirror){
-    $mine = @{}
-    foreach($f in @(Get-ChildItem -LiteralPath $attRoot -File -Recurse -ErrorAction SilentlyContinue)){ $mine[$f.Name] = $true }
-    $remoteOnly = @(Get-ChildItem -LiteralPath $mirror -File -Recurse -ErrorAction SilentlyContinue |
-      Where-Object { $_.BaseName -match '_\d{10,}$' -and -not $mine.ContainsKey($_.Name) })
-    if($remoteOnly.Count -gt 0){
-      $errors.Add("[云端] 云上出现本库没有的改名副本 $($remoteOnly.Count) 个（如 $($remoteOnly[0].Name)）：改名由外部客户端发起，请在手机/另一台设备上关掉附件的自动重命名")
+    $mirNames = @(Get-ChildItem -LiteralPath $mirror -File -Recurse -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Name)
+    $mirNameSet = @{}; foreach($n in $mirNames){ $mirNameSet[$n] = $true }
+    $orphan = @(Get-ChildItem -LiteralPath $mirror -File -Recurse -ErrorAction SilentlyContinue |
+      Where-Object { $_.BaseName -match '_\d{10,}$' -and
+        -not $mirNameSet.ContainsKey((($_.BaseName -replace '_\d{10,}$','') + $_.Extension)) })
+    if($orphan.Count -gt 0){
+      $errors.Add("[云端] 云上 $($orphan.Count) 个改名副本没有对应的原名文件（如 $($orphan[0].Name)）：改名由外部客户端发起，请在手机/另一台设备上关掉附件的自动重命名")
     } else {
-      Write-Host "云端镜像检查：云上无本库没有的改名副本" -ForegroundColor DarkGray
+      Write-Host "云端镜像检查：云上无孤立改名副本" -ForegroundColor DarkGray
     }
   }
 }
