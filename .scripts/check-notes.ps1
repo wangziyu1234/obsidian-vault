@@ -24,16 +24,32 @@
 .PARAMETER Root  扫描根目录（默认当前目录）
 .PARAMETER File  只查单文件（相对/绝对路径）
 .PARAMETER Dir   只查某目录（相对/绝对路径）
+.PARAMETER Fix   先调 fix-attachment-conflicts.ps1 把冲突改名（xxx_1789228415866.png）
+                 的附件改回原名，再继续校验。默认只报告不修改。
 .EXAMPLE
   .\check-notes.ps1
   .\check-notes.ps1 -Dir 数学
   .\check-notes.ps1 -File "数学\高等数学\11 第11讲….md"
+  .\check-notes.ps1 -Fix      # 自动修复同步冲突改名后再校验
 #>
 param(
   [string]$Root = (Get-Location).Path,
   [string]$File,
-  [string]$Dir
+  [string]$Dir,
+  [switch]$Fix
 )
+
+# 同步冲突改名会直接造成断链；-Fix 时先原地修复，避免「报告一堆致命项却要手工改名」
+if ($Fix) {
+  $fixer = Join-Path $PSScriptRoot 'fix-attachment-conflicts.ps1'
+  if (Test-Path -LiteralPath $fixer) {
+    Write-Host '—— 先修复同步冲突改名 ——' -ForegroundColor Cyan
+    & $fixer -Root $Root -Apply
+    Write-Host ''
+  } else {
+    Write-Host "未找到修复脚本：$fixer" -ForegroundColor Yellow
+  }
+}
 
 $ErrorActionPreference = 'Stop'
 
@@ -184,7 +200,13 @@ function Test-OneFile([string]$path) {
       $tgt = Split-WikiTarget $raw
       if ($tgt -eq '') { $warnings.Add("[$rel] L$($ln+1)：空链接 [[]]"); continue }
       if ($tgt -match '\.\w+$') {
+        # 笔记直接引用了「冲突改名后」的文件名（xxx_1789228415866.png）：
+        # 这种引用当下能命中，但下次同步一改名就断，必须改回原名。
         $ib=[System.IO.Path]::GetFileNameWithoutExtension($tgt); $ie=[System.IO.Path]::GetExtension($tgt)
+        if ($ib -match '_\d{10,}$') {
+          $errors.Add("[$rel] L$($ln+1)：图片 ${tgt} 引用的是同步冲突改名的副本，应改回原名")
+          continue
+        }
         $hit=Get-ChildItem -Path $Root -Recurse -File -Filter "*$ib$ie" -ErrorAction SilentlyContinue |
           Where-Object { -not (Is-Excluded $_.FullName) } | Select-Object -First 1
         if(-not $hit){ $errors.Add("[$rel] L$($ln+1)：图片 ${tgt} 未找到") }

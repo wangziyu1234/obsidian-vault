@@ -150,10 +150,14 @@
 - **`nyquist()` 的自动量程会被 $s=0$ 极点拉到 $10^{19}$**，糊成直线 → 给频率范围 `nyquist(G, {wmin, wmax})`，或干脆自己取 `freqresp` 数据画
 
 
-**与云同步抢文件（长期遵守）**：Remotely Save 现配置为 onedrive / 双向 / **每 60 秒自动同步**、`syncOnSave` 延迟 1 秒、`conflictAction: keep_newer`、`protectModifyPercentage: 50`。**批量重生成图时它在同步运行中**，一批 PNG 在短时间内相继落地，正落在冲突判定与保护阈值附近；一旦判冲突，兜底分支会把**本地那份改名成 `xxx_1789228415866.png`**（云端那份保留原名），笔记里的 `![[原名]]` 当场断链，随后 git 自动备份还把改名结果一并提交（`af63ca6`、`8368f51` 两次同因复发）。
-- **批量生成图前先让同步停手**：暂停 Remotely Save（或用 `onlyAllowPaths` 临时收窄），生成完再恢复，让整批文件一次落地、一次记账。不要在自动同步跑着的时候连续重画整批图。
-- **不要把自控成图放进 `ignorePaths`**：手机端要靠云同步看图，排除了等于图上不了手机。图的正确保障是**可重建**（源码都在 `.scripts/figures/` 且入库，`build.ps1 -File/-All` 随时重生成），所以即使同步把名字搞乱，也不存在"图丢了"的实质损失。
-- **复发时怎么查**：`check-notes.ps1` 已把带 `_<10位以上数字>` 后缀的附件当**致命项**报出并给出原名。两条修法：把文件名改回去，或直接按源码重生成那张图。`data.json` 在 `.obsidian/plugins/remotely-save/.gitignore` 里（**不进版本库、无历史可比**），且 `logToDB: False` 时磁盘无历史日志——想留证据就把 `logToDB` 打开再复现。
+**与云同步抢文件（长期遵守）**：Remotely Save 现配置为 onedrive / 双向 / **每 60 秒自动同步**、`syncOnSave` 延迟 1 秒、`conflictAction: keep_newer`、`protectModifyPercentage: 50`、V3 算法、`concurrency: 20`。它在「两侧都改过同一文件」时，会把本地那份**改名成 `xxx_1789228415866.png`**（云端那份保留原名），原文件名当场消失、`![[原名]]` 断链，随后 git 自动备份还把改名结果一并提交（`af63ca6`、`8368f51` 两次同因复发）。
+- **实测事实**（别再重新摸索，直接照做）：① **内容没丢**——改名副本与被删原名逐字节相同（`奈氏-例01` SHA256 前后一致），改回名即可，**不必重画**；② 后缀值是**改名时刻**的 epoch 毫秒，不是文件修改时间，所以同批文件的 mtime 可以早好几天（2026-09-17 01:44:46 那批，mtime 跨 9/11–9/16）；③ 每批 8~11 个文件、集中在 200 ms~4 s 内落盘，重灾区正是 `.scripts\figures\` 产出的成图；④ 到 2026-09-17 已复发四次（`af63ca6`、`8368f51`、`4850b59`、本次）。
+- **修法（常驻工具）**：`.scripts\fix-attachment-conflicts.ps1`（默认只预览，`-Apply` 才落盘）。原名已存在时按 SHA256 判定：相同→删多余副本；不同→留修改时间较新的那份，另一份入 `.trash\附件冲突修复-<时间戳>\`。校验时直接 `check-notes.ps1 -Fix`，会先修复再查断链。
+- **两道自动保险**：`build.ps1` 构建前后各扫一次成图目录，构建前自动修复、构建后仍冒冲突就报警（`fix-attachment-conflicts.ps1` 挂在 `figures\` 上一层，用相对路径调用）；`check-notes.ps1` 既报「附件带冲突后缀」，也把**笔记直接引用冲突副本名**列为致命项（那种引用当下能命中、下次同步必断，必须改回原名）。
+- **批量生成图前先让同步停手**（首选仍是暂停 Remotely Save，或用 `onlyAllowPaths` 临时收窄）：让整批文件一次落地、一次记账。有上面两道保险兜底，但别拿它当借口在自动同步跑着时连续重画整批图。
+- **不要把自控成图放进 `ignorePaths`**：手机端要靠云同步看图，排除了等于图上不了手机。图的正确保障是**可重建**（源码都在 `.scripts/figures/` 且入库，`build.ps1 -File/-All` 随时重生成），加上改名副本内容无损，所以这属于"断链"而非"图丢了"。
+- **尚未坐实的一环（诚实记录）**：插件 bundle 里搜不到生成 `_<数字>` 的代码——它自己的冲突去重命名是 **`.dup` 后缀**（`${name}.dup.${ext}`，还会在 `.dup` 上再叠），Obsidian 本体 `writeBinary`/`write` 不改名，每晚的 git 备份脚本只做 `git add -A` + commit + push，三者都不是元凶。**改插件这条路暂不可行**（不确定改哪儿，改错更危险），所以走"扫描+自愈+文档"路线。
+- **想留证据再复现时**：把 `logToDB` 打开同步一段时间，用同一秒内新出现的 `_\d{13}` 文件名去对日志时间戳。`data.json` 在 `.obsidian/plugins/remotely-save/.gitignore` 里（**不进版本库、无历史可比**），且是**混淆存储**的（`d` 字段 = base64 反转 → 逐字节反转 → UTF-8 JSON）；要看设置**只在内存里解码打印，不要手改这个文件**（含凭据，插件会自动重写），要改设置走插件设置界面。
 
 **风格约定**：
 - 与正文 MathJax 一致：`unicode-math` + `Cambria Math`（TikZ/circuitikz）；matplotlib 侧 `figures_style.py` 用 `mathtext.fontset="custom"`（数学符号走 Cambria、`\mathrm{}` 里的汉字走 Microsoft YaHei，理由见上）
@@ -177,4 +181,4 @@
 - 引用时写"编号 + 所在篇"（如"见 [[05-2-c 奈氏特殊情形与条件稳定]] 例5.13"），重排后仍能对上。
 
 ### 一次性脚本不沉淀
-- 拆分/提取/清理脚本用完即删，`.scripts/` 只留常驻工具：`check-notes.ps1`（对标 AGENTS 清单的全库校验）、`renumber-examples.ps1`（例题编号重排）、`figures\` 绘图工具链（源码入库，属长期设施，不删）
+- 拆分/提取/清理脚本用完即删，`.scripts/` 只留常驻工具：`check-notes.ps1`（对标 AGENTS 清单的全库校验，`-Fix` 时先修同步冲突改名）、`fix-attachment-conflicts.ps1`（把 `xxx_1789228415866.png` 改回原名并清理冗余副本，见「与云同步抢文件」）、`renumber-examples.ps1`（例题编号重排）、`figures\` 绘图工具链（源码入库，属长期设施，不删）

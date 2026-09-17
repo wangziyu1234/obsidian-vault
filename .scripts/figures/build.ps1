@@ -77,6 +77,31 @@ $sources = $sources |
 if (-not $sources) { Write-Host '没有可构建的 .tex / .py'; exit 0 }
 
 <#
+    云同步保险：Remotely Save 双向同步在「两侧都改过同一文件」时，会把本地副本改名成
+    <原名>_<epoch毫秒>.png，原文件名消失、笔记断链（2026-09 已复发四次，重灾区正是
+    本脚本产出的成图）。构建前后各查一次，构建前顺手修好，构建后若又冒出冲突副本就报警。
+#>
+function Invoke-ConflictGuard {
+    param([string]$Stage)
+    $conflicts = @(Get-ChildItem -LiteralPath $OutDir -File -Recurse -ErrorAction SilentlyContinue |
+        Where-Object { $_.BaseName -match '_\d{10,}$' })
+    if ($conflicts.Count -eq 0) {
+        Write-Host "[$Stage] 附件无同步冲突改名" -ForegroundColor DarkGray
+        return
+    }
+    $fixer = Join-Path $ScriptRoot '..\fix-attachment-conflicts.ps1'
+    if ($Stage -eq '构建前' -and (Test-Path -LiteralPath $fixer)) {
+        Write-Host "[$Stage] 发现 $($conflicts.Count) 个冲突改名附件，先修复：" -ForegroundColor Yellow
+        & $fixer -Apply
+    } else {
+        Write-Host "[$Stage] 警告：$($conflicts.Count) 个附件带同步冲突后缀，请跑 .\.scripts\fix-attachment-conflicts.ps1 -Apply" -ForegroundColor Yellow
+        $conflicts | ForEach-Object { Write-Host "    $($_.Name)" -ForegroundColor Yellow }
+    }
+}
+
+Invoke-ConflictGuard -Stage '构建前'
+
+<#
     输出命名：源码首行的 `figure: <名字>.png` 决定附件文件名，从而沿用
     仓库的中文命名规范（自控-xxx.png / 频域-xxx.png …）而不必用中文源码名。
     没有该行时退化为源码同名 .png。
@@ -148,4 +173,5 @@ foreach ($src in $sources) {
 Write-Host ''
 Write-Host "===== 构建完成：$($results.Count) 个 =====" -ForegroundColor Green
 Write-Host ''
+Invoke-ConflictGuard -Stage '构建后'
 Write-Host '注意：生成后请在笔记里核对图片尺寸参数（正文 |430，速查/宽图 |520）。' -ForegroundColor DarkGray
