@@ -1,3 +1,0 @@
-﻿a exit=1
-
-b exit=0
