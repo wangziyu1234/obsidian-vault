@@ -105,6 +105,9 @@
 - OCR 文本有系统性丢字符（分数线、撇号、下标），凡引用例题须用答案反推校验
 - OCR 路线：旧 .doc/.ppt 二进制含公式图片 → Word COM `SaveAs(FileFormat=17)` 转 PDF → PyMuPDF 渲染 → RapidOCR；中文路径用 `os.listdir` 枚举；控制台 GBK 打印 emoji/✓ 报错 → 写 UTF-8 文件或纯 ASCII；pip 装 RapidOCR 默认源极慢，改清华镜像 `-i https://pypi.tuna.tsinghua.edu.cn/simple`
 - RapidOCR v1.4.4 传参用 `RapidOCR(params={...})`（dict 形式，旧 kwargs 不再适用）
+- **旧 `.doc`/`.ppt` 怎么读**（2026-09-18 实测）：OneDrive 资料根目录是 `C:\Users\23720\OneDrive\按章节-原视频和PPT\`（第5章 = 控制88-17~28）与 `C:\Users\23720\OneDrive\Word-补充自O-God\`，不在这两个目录里找旧讲义。
+  - `.doc` → Word COM `SaveAs([ref]$out,[ref]2)`（FileFormat=2 为纯文本）可读；**公式是图片**，只能拿到文字骨架，`第五章小结例4.doc` 这类文档要配合渲染看。
+  - `.ppt` → **PowerPoint COM 在本机一律失败**（`Presentations.Open` 报 `Unexpected HRESULT`，换 `MsoTriState`、传整数参、先复制到 `%TEMP%` 都无效）。改用**原始字节扫描**：旧 PPT 的文本以 UTF-16LE 明文存放，`data.find("关键词".encode("utf-16-le"))` 定位后，取窗口解 UTF-16LE 并抽连续 CJK 串即可读出幻灯片文字（够用来确认某讲有没有某例题）。
 
 ### 绘图规范（长期遵守）
 
