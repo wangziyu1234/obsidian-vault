@@ -107,7 +107,7 @@
 - RapidOCR v1.4.4 传参用 `RapidOCR(params={...})`（dict 形式，旧 kwargs 不再适用）
 - **旧 `.doc`/`.ppt` 怎么读**（2026-09-18 实测）：OneDrive 资料根目录是 `C:\Users\23720\OneDrive\按章节-原视频和PPT\`（第5章 = 控制88-17~28）与 `C:\Users\23720\OneDrive\Word-补充自O-God\`，不在这两个目录里找旧讲义。
   - `.doc` → Word COM `SaveAs([ref]$out,[ref]2)`（FileFormat=2 为纯文本）可读；**公式是图片**，只能拿到文字骨架，`第五章小结例4.doc` 这类文档要配合渲染看。
-  - `.ppt` → **PowerPoint COM 在本机一律失败**（`Presentations.Open` 报 `Unexpected HRESULT`，换 `MsoTriState`、传整数参、先复制到 `%TEMP%` 都无效）。改用**原始字节扫描**：旧 PPT 的文本以 UTF-16LE 明文存放，`data.find("关键词".encode("utf-16-le"))` 定位后，取窗口解 UTF-16LE 并抽连续 CJK 串即可读出幻灯片文字（够用来确认某讲有没有某例题）。
+  - `.ppt` → **PowerPoint COM 在本机一律失败**（`Presentations.Open` 报 `Unexpected HRESULT`，换 `MsoTriState`、传整数参、先复制到 `%TEMP%` 都无效）。改用**按文本框记录头定位**：文本以 UTF-16LE 明文存放在 `TextCharsAtom`(0x0FA0) / `TextBytesAtom`(0x0FA8) 里，`data.find(b'\x00\x00\xa0\x0f')` 命中后，紧跟的 4 字节是**小端长度**，按长度切片解 UTF-16LE 即得整段文字（`.a8\x0f` 同理，按 GBK 解）。12 份第 5 章 PPT 用此法抽出 2238 行干净文本；**不要**直接对整文件按 UTF-16 扫描——那会产出 59 万行垃圾，无法读。
 
 ### 绘图规范（长期遵守）
 
