@@ -12,6 +12,7 @@
   3. 四个必备小节齐全：❌ 我卡在哪 / ✅ 纠正的关键一步 / 🔁 同类与变式 / ⏱️ 复习记录
   4. 复习记录里的勾选项日期 与 frontmatter review 一致：
      每个未完成项必须在 review 里；已完成项(打了叉)不该留在 review 里
+     （`mastery: 3` 视为已归档，跳过这一项检查）
   5. 篇幅：60~90 行为宜（>90 提示拆分，<50 提示过简）
 """
 import io
@@ -78,13 +79,15 @@ def check(path, rel):
 
     review_dates = set(fm.get("review__list", []))
     boxes = re.findall(r"^- \[([ xX])\]\s*(\d{4}-\d{2}-\d{2})", text, re.M)
-    for state, d in boxes:
-        if state == " " and d not in review_dates:
-            errors.append("[%s] 未完成项 %s 不在 frontmatter review 里" % (rel, d))
-        if state.lower() == "x" and d in review_dates:
-            errors.append("[%s] %s 已勾选，但仍留在 review 里（应删掉该日期）" % (rel, d))
-    if not boxes and "review__list" in fm:
-        warns.append("[%s] ⏱️ 复习记录 里没有可勾选的日期项" % rel)
+    archived = fm.get("mastery") == "3"          # mastery 3 = 归档，不再排复习节点
+    if not archived:
+        for state, d in boxes:
+            if state == " " and d not in review_dates:
+                errors.append("[%s] 未完成项 %s 不在 frontmatter review 里" % (rel, d))
+            if state.lower() == "x" and d in review_dates:
+                errors.append("[%s] %s 已勾选，但仍留在 review 里（应删掉该日期）" % (rel, d))
+        if not boxes and "review__list" in fm:
+            warns.append("[%s] ⏱️ 复习记录 里没有可勾选的日期项" % rel)
 
     n = len(lines)
     if n > 90:
