@@ -12,7 +12,7 @@
   3. 四个必备小节齐全：❌ 我卡在哪 / ✅ 纠正的关键一步 / 🔁 同类与变式 / ⏱️ 复习记录
   4. 复习记录里的勾选项日期 与 frontmatter review 一致：
      每个未完成项必须在 review 里；已完成项(打了叉)不该留在 review 里
-     （`mastery: 3` 视为已归档，跳过这一项检查）
+     （`mastery: 3` 视为已归档、`mastery: 0` 视为跳过未做，两者都不排复习节点，跳过这一项检查）
   5. 篇幅：60~90 行为宜（>90 提示拆分，<50 提示过简）
 """
 import io
@@ -60,10 +60,10 @@ def check(path, rel):
         errors.append("[%s] tags 缺少 `错题`" % rel)
     if not fm.get("cause__list"):
         errors.append("[%s] cause 为空（至少要有一个错因）" % rel)
-    if fm.get("mastery") not in ("1", "2", "3"):
-        errors.append("[%s] mastery 应为 1/2/3，现为 %r" % (rel, fm.get("mastery")))
-    if not fm.get("review__list"):
-        errors.append("[%s] review 为空（没有复习节点）" % rel)
+    if fm.get("mastery") not in ("0", "1", "2", "3"):
+        errors.append("[%s] mastery 应为 0/1/2/3，现为 %r" % (rel, fm.get("mastery")))
+    if not fm.get("review__list") and fm.get("mastery") != "0":
+        errors.append("[%s] review 为空（没有复习节点；只有 mastery: 0 的跳过题允许为空）" % rel)
 
     h1 = [l for l in lines if l.startswith("# ")]
     if len(h1) != 1:
@@ -80,7 +80,8 @@ def check(path, rel):
     review_dates = set(fm.get("review__list", []))
     boxes = re.findall(r"^- \[([ xX])\]\s*(\d{4}-\d{2}-\d{2})", text, re.M)
     archived = fm.get("mastery") == "3"          # mastery 3 = 归档，不再排复习节点
-    if not archived:
+    unstarted = fm.get("mastery") == "0"         # mastery 0 = 跳过未做，先不排复习节点
+    if not archived and not unstarted:
         for state, d in boxes:
             if state == " " and d not in review_dates:
                 errors.append("[%s] 未完成项 %s 不在 frontmatter review 里" % (rel, d))
