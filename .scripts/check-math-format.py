@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""数学笔记排版体检：补齐 check-notes.ps1 查不到的「渲染级」问题。
+r"""数学笔记排版体检：补齐 check-notes.ps1 查不到的「渲染级」问题。
 
 用法：
     python .scripts/check-math-format.py                 # 扫描全库
@@ -93,6 +93,11 @@ def check_file(path, rel):
         # 4. 附录 H3（附录 图像变换 为已知豁免）
         if is_appendix and line.startswith('### ') and '附录 图像变换' not in path:
             findings.append(('结构', i, '附录里出现 H3，改用 H2 + **粗体标签**'))
+
+        # 5b. 块级公式定界符应与内容分行（`> $$\\begin{aligned}` 这种写法能渲染，
+        #     但全库其余地方都是 `$$` 独占一行，风格上要统一）
+        if '$$' in line and not RE_DD_LINE.match(line):
+            findings.append(('排版', i, '块级公式定界符未独占一行，应把 $$ 与内容分行'))
 
         # 5. 相邻 $$ 块紧贴
         if RE_DD_LINE.match(line):
