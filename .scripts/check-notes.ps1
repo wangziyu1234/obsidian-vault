@@ -204,7 +204,9 @@ function Test-OneFile([string]$path) {
       if ($raw -match '^#') { continue }            # 页内锚点 [[#...]]
       $tgt = Split-WikiTarget $raw
       if ($tgt -eq '') { $warnings.Add("[$rel] L$($ln+1)：空链接 [[]]"); continue }
-      if ($tgt -match '\.\w+$') {
+      # 只有"扩展名像附件"的才按图片查文件：否则「05-1-2-b 降维观测器与例5.10」里的 `.10`
+      # 会被误当成后缀，把正常的笔记链接报成"图片未找到"（2026-09-22 修）。
+      if ($tgt -match '\.(png|jpg|jpeg|gif|bmp|svg|webp|pdf|mp3|mp4|wav|zip|drawio|excalidraw)$') {
         # 笔记直接引用了「冲突改名后」的文件名（xxx_1789228415866.png）：
         # 这种引用当下能命中，但下次同步一改名就断，必须改回原名。
         $ib=[System.IO.Path]::GetFileNameWithoutExtension($tgt); $ie=[System.IO.Path]::GetExtension($tgt)
@@ -216,7 +218,9 @@ function Test-OneFile([string]$path) {
           Where-Object { -not (Is-Excluded $_.FullName) } | Select-Object -First 1
         if(-not $hit){ $errors.Add("[$rel] L$($ln+1)：图片 ${tgt} 未找到") }
       } else {
+        # 笔记链接：允许写成 [[页名.md]]（有些历史写法带后缀），比对时去掉 .md 再查
         $leaf=($tgt -split '/')[-1]
+        $leaf=$leaf -replace '\.md$',''
         if(-not $allNames.ContainsKey($leaf)){ $errors.Add("[$rel] L$($ln+1)：wikilink [[$tgt]] 目标未命中") }
       }
     }
