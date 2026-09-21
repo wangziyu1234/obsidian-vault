@@ -69,7 +69,9 @@ if ($File) {
 }
 
 # 排除路径片段
-$excludeSeg = @('\.obsidian\', '\.venv\', '\.trash\', '_moved_out\', '\copilot\', '\templates\', '\Excalidraw\', '\scripts\', '\教材OCR\')
+# .workbuddy 是 AI 会话的工作区数据（记忆、临时脚本），不是笔记：里面的 memory/*.md 会原样摘抄
+# `[[…]]`、`$…$` 之类片段，扫进来必然误报，故整体排除。
+$excludeSeg = @('\.obsidian\', '\.venv\', '\.trash\', '\.workbuddy\', '_moved_out\', '\copilot\', '\templates\', '\Excalidraw\', '\scripts\', '\教材OCR\')
 function Is-Excluded([string]$p) {
   foreach ($s in $excludeSeg) { if ($p -match [regex]::Escape($s)) { return $true } }
   if ($p -match '\\AGENTS\.md$') { return $true }
