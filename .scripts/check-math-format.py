@@ -33,8 +33,13 @@ CMDS_GLUE = ('le', 'ge', 'ne', 'pi')
 SKIP_DIRS = ('.obsidian', '.trash', '.venv', 'copilot', 'templates', 'Excalidraw',
              '教材OCR', '_moved_out', '.workbuddy', '.git')
 
+# 整卷真题与解析保持试卷原样（AGENTS.md 的长期约定：真题不做符号与排版统一），
+# 本脚本一律跳过，只在末尾报个数。
+RE_EXAM = re.compile(r'^\d{4}年.*(试题|答案与解析)$')
+
 RE_MATH = re.compile(r'\$\$(.+?)\$\$|\$(.+?)\$', re.S)
-RE_DD_LINE = re.compile(r'^(\s*>\s*)*\$\$\s*$')
+# 块级公式定界行：允许前缀 `>` 与**前导空格**（列表项里的公式块会缩进 2 空格）
+RE_DD_LINE = re.compile(r'^\s*(>\s*)*\$\$\s*$')
 RE_TOKEN = re.compile(r'(\\?)([A-Za-z]+)')
 RE_LIST = re.compile(r'^( +)((?:[-*+]|\d+\.) )')
 
@@ -44,8 +49,10 @@ def norm_quote(line):
 
 
 def is_table(line):
-    # 至少两个竖线才算表格行；公式里的绝对值 |x-x_0| 不算
-    return line.strip().startswith('|') and line.count('|') >= 2
+    # 至少两个竖线才算表格行；公式里的绝对值 |x-x_0| 不算。
+    # callout 里的表格行形如 `> | a | b |`，也要认出来。
+    s = re.sub(r'^(\s*>\s*)+', '', line).strip()
+    return s.startswith('|') and s.count('|') >= 2
 
 
 def is_sep(line):
@@ -108,10 +115,20 @@ def check_file(path, rel):
                 if nxt and RE_DD_LINE.match(nxt):
                     findings.append(('排版', i, '两个 $$ 块紧贴，块间需空行（callout 内插一行 `>`）'))
 
-        # 6. 列表缩进
+        # 6. 列表缩进：1 个空格一定错；3 个空格要看父项标记宽度
+        #    （父项是「1. 」这种 3 字符标记时，子项缩进 3 空格才是对齐的正确写法；
+        #      父项是「- 」这种 2 字符标记时，子项该缩进 2 空格）
         m = RE_LIST.match(line)
         if m and len(m.group(1)) in (1, 3):
-            findings.append(('排版', i, '嵌套列表缩进 %d 个空格，应为 2 或 4' % len(m.group(1))))
+            n_ind = len(m.group(1))
+            prev_item = None
+            for b in range(i - 2, -1, -1):          # i 是 1-based，lines[i-2] 即上一行
+                if lines[b].strip() == '':
+                    continue
+                prev_item = RE_LIST.match(lines[b])
+                break
+            if n_ind == 1 or (prev_item and len(prev_item.group(1)) < 3):
+                findings.append(('排版', i, '嵌套列表缩进 %d 个空格，与父项标记宽度不匹配' % n_ind))
 
         # 7. 行尾空格
         if line != line.rstrip() and line.strip():
@@ -143,6 +160,7 @@ def main():
     targets = sys.argv[1:] or ['.']
     bad = 0
     total = 0
+    exams = 0
     for tgt in targets:
         base = os.path.join(root, tgt)
         for dirpath, dirnames, filenames in os.walk(base):
@@ -151,6 +169,9 @@ def main():
                 if not fn.endswith('.md') or fn.endswith('.excalidraw.md'):
                     continue
                 if fn in ('AGENTS.md', 'README.md'):
+                    continue
+                if RE_EXAM.match(fn[:-3]):
+                    exams += 1
                     continue
                 path = os.path.join(dirpath, fn)
                 rel = os.path.relpath(path, root)
@@ -161,7 +182,8 @@ def main():
                         print('    [%s] L%d  %s' % (kind, ln, msg))
                 total += len(findings)
                 bad += sum(1 for k, _, _ in findings if k == '渲染')
-    print('\n共 %d 处问题，其中渲染级 %d 处。' % (total, bad))
+    print('\n共 %d 处问题，其中渲染级 %d 处。（跳过整卷真题/解析 %d 篇）'
+          % (total, bad, exams))
     return 1 if bad else 0
 
 
