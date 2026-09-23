@@ -37,6 +37,13 @@ def phase_deg(w: np.ndarray) -> np.ndarray:
                     -270.0 - np.degrees(np.arctan(0.2 * w)))
 
 
+def mag_db_asymp(w: np.ndarray) -> np.ndarray:
+    """手绘渐近折线：K=40 低频 -20，转折都在 w=5（振荡对 -40 + 惯性 -20），此后 -80。"""
+    w = np.asarray(w, dtype=float)
+    la = 20 * np.log10(40.0 / w)
+    return la - 60 * np.log10(np.maximum(1.0, w / W_N))
+
+
 def verify() -> float:
     # 特征根复核：闭环 1+G=0 恰有 2 个右半平面根
     cl = np.roots([0.2, 1.0, 5.0, 25.0, 1000.0])
@@ -53,6 +60,8 @@ def verify() -> float:
     assert abs(a_wc - 1.0) < 1e-6, a_wc
     # w=5 在 L>0 计数段内（|G(5-)| -> inf）
     assert mag_db(np.array([4.999]))[0] > 20
+    # 渐近折线在 w=5 处的高度：20lg(40/5)=20lg8
+    assert abs(mag_db_asymp(np.array([W_N]))[0] - 20 * np.log10(8.0)) < 1e-9
     print(f"verified: phi: -135/-315/-360, wc={wc:.4f}, 闭环右半平面根 {n_rhp} 个, Z=2")
     return wc
 
@@ -69,14 +78,17 @@ def draw(wc: float) -> None:
     # --- 幅频：L>0 段着色 + 谐振尖峰 ---
     ax1.axvspan(w_lo, wc, color=fs.FILL, alpha=0.85, zorder=0)
     ax1.axhline(0, color=fs.INK, lw=0.9, zorder=2)
-    ax1.semilogx(w, mag_db(w), color=fs.MAG, lw=2.2, zorder=3)
+    ax1.semilogx(w, mag_db(w), color=fs.MAG, lw=2.2, zorder=3, label="真实 L(ω)")
+    ax1.semilogx(w, mag_db_asymp(w), color=fs.SUB, lw=1.4, ls=(0, (5, 3)), zorder=2,
+                 label="手绘渐近线")
     ax1.axvline(wc, color=fs.SUB, lw=0.9, ls=(0, (4, 3)), zorder=1)
     ax1.annotate("L > 0 段（计数有效）", xy=(0.11, 0.86), xycoords="axes fraction",
                  fontsize=11, color=fs.INK)
-    ax1.annotate("ωc = 8.93", xy=(wc, 0), xytext=(10, -14),
+    ax1.annotate("ωc = 8.93", xy=(wc, 0), xytext=(14, -26),
                  textcoords="offset points", fontsize=11, color=fs.SUB)
     fs.tidy(ax1, turn_freqs=(W_N,))
     ax1.set_ylim(-40, 90)
+    ax1.legend(loc="upper right", fontsize=11)
 
     # --- 相频：w=5 处下跳 180°（补线），穿过 -180° 一次 ---
     ax2.axvspan(w_lo, wc, color=fs.FILL, alpha=0.85, zorder=0)
