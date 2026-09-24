@@ -84,21 +84,24 @@ def verify():
 
 
 def shape(name, title, formula, system, limits, arrows, phase, start=None,
-          crossing=None, asymptote=None, note_text=None, figsize=(6.6,6.0)):
+          crossing=None, asymptote=None, note_text=None, figsize=(6.6,6.0),
+          phase_pos=(0.025,0.03), asym_pos=(0.025,0.9)):
+    """phase_pos / asym_pos 可以逐图覆盖：左下角常常正好是曲线出发的地方，
+    相角说明放那儿必然压曲线；渐近线标签放太靠左又会骑到竖线上。"""
     if not selected(name):
         return
     fig, ax = canvas(title, formula, *limits, figsize=figsize)
     curve(ax, system, W, arrows)
     if asymptote is not None:
         ax.axvline(asymptote, color=fs.SUB, lw=1.1, ls=(0,(4,3)), zorder=2)
-        note(ax, rf"$\mathrm{{Re}}\,G\to {asymptote:g}$", (0.025,0.9))
+        note(ax, rf"$\mathrm{{Re}}\,G\to {asymptote:g}$", asym_pos)
     if start is not None:
         point(ax, start, r"$\omega=0$", (-42,12))
     point(ax, 0, r"$\omega\to\infty$", (9,12), limit=True)
     if crossing is not None:
         value, label, offset = crossing
         point(ax, value, label, offset)
-    note(ax, phase)
+    note(ax, phase, phase_pos)
     if note_text:
         note(ax, note_text, (0.025,0.8))
     finish(fig, OUT/name)
@@ -107,10 +110,10 @@ def shape(name, title, formula, system, limits, arrows, phase, start=None,
 def draw_shapes():
     shape("频域-奈氏-0型单惯性.png", "0 型：单惯性（K = 1，T = 1）",
           r"$G(s)=1/(1+s)$", G1, ((-0.2,1.2),(-0.78,0.22)), (0.65,2.0),
-          r"$\varphi:0^\circ\to-90^\circ$", start=1)
+          r"$\varphi:0^\circ\to-90^\circ$", start=1, phase_pos=(0.157,0.02))
     shape("频域-奈氏-0型双惯性.png", "0 型：双惯性（T₁ = 1，T₂ = 2）",
           r"$G(s)=1/[(1+s)(1+2s)]$", G02, ((-0.28,1.18),(-0.84,0.24)), (0.22,0.8),
-          r"$\varphi:0^\circ\to-180^\circ$", start=1)
+          r"$\varphi:0^\circ\to-180^\circ$", start=1, phase_pos=(0.20,0.02))
     shape("频域-奈氏-0型三惯性.png", "0 型：三惯性（T₁ = 1，T₂ = 2，T₃ = 0.5）",
           r"$G(s)=1/[(1+s)(1+2s)(1+0.5s)]$", G03,
           ((-0.36,1.18),(-0.86,0.30)), (0.23,0.9),
@@ -118,11 +121,13 @@ def draw_shapes():
           crossing=(-4/45,r"$-4/45$",(-40,20)))
     shape("频域-奈氏-Ⅰ型单惯性.png", "Ⅰ型：单惯性（K = 1，T = 1）",
           r"$G(s)=1/[s(1+s)]$", GI1, ((-1.55,0.7),(-2.9,0.4)), (0.4,1.1),
-          r"$\varphi:-90^\circ\to-180^\circ$", asymptote=-1)
+          r"$\varphi:-90^\circ\to-180^\circ$", asymptote=-1,
+          phase_pos=(0.711,0.06), asym_pos=(0.30,0.90))
     shape("频域-奈氏-Ⅰ型双惯性.png", "Ⅰ型：双惯性（K = 1，T₁ = 1，T₂ = 2）",
           r"$G(s)=1/[s(1+s)(1+2s)]$", GI2, ((-3.45,0.6),(-3.3,0.65)), (0.21,0.55),
           r"$\varphi:-90^\circ\to-270^\circ$", asymptote=-3,
-          crossing=(-2/3,r"$-2/3$",(-25,19)))
+          crossing=(-2/3,r"$-2/3$",(-25,19)),
+          phase_pos=(0.20,0.75), asym_pos=(0.16,0.90))
     shape("频域-奈氏-Ⅰ型带零点.png", "Ⅰ型：带零点（τ = 4，T₁ = 1，T₂ = 2）",
           r"$G(s)=(1+4s)/[s(1+s)(1+2s)]$", GIZ,
           ((-1.4,1.6),(-8.0,0.6)), (0.16,0.35,1.4),
@@ -167,12 +172,16 @@ def draw_type2_example():
         (-27,4),(-12,15), figsize=(7.4,6.7))
     curve(ax, GII2, W, (0.21,0.36), fs.MAG, r"$G_1$")
     curve(ax, GEX2, W, (0.24,0.52), fs.PHA, r"$G_2$")
-    point(ax, -128/9, r"$(-128/9,\,0)$", (-47,-28))
+    point(ax, -128/9, r"$(-128/9,\,0)$", (-47,-34))
     point(ax, 0, r"$\omega\to\infty$", (6,13), limit=True)
-    note(ax, "G₁ 低频：第二象限", (0.035,0.89), color=fs.MAG)
-    note(ax, "G₂ 低频：第三象限", (0.035,0.14), color=fs.PHA)
+    # 左上是 G₁ 的低频支、左下是 G₂ 的低频支，两条说明只能挪到右下空区；
+    # 图例默认留的边框余量会让它左边压到纵轴上，borderaxespad 归零贴住右边。
+    note(ax, "G₁ 低频：第二象限", (0.62,0.16), color=fs.MAG)
+    note(ax, "G₂ 低频：第三象限", (0.62,0.06), color=fs.PHA)
     note(ax, r"$\tau=6>1+2+0.5$", (0.035,0.055))
-    ax.legend(loc="upper right", fontsize=11)
+    # 不画图例：纵轴正好落在右上角，任何足够宽的图例框都会压到纵轴上；
+    # 两条曲线已由下面两条同色说明（G₁ / G₂ 低频）直接点名，不靠图例分辨。
+
     finish(fig, OUT/name, "两条曲线均从第一象限趋于原点；无穷远段已裁去。")
 
 
@@ -202,12 +211,17 @@ def draw_origin_zero_example():
         theta = np.linspace(0,np.pi,1200)
         ax.plot(np.cos(theta),np.sin(theta),ls=(0,(4,3)),lw=1,color=fs.SUB,zorder=1)
         curve(ax, GEX3, W, (0.8,2.5,7))
-        point(ax, 0, r"$\omega=0$", (5,-21), limit=True)
-        point(ax, -25/936, "A", (-19,9))
+        # A 点上方是曲线从第二象限下来的那段、左下是它从第三象限上来的那段，
+        # 只有右下方（第四象限）是曲线根本不去的地方 —— 原来放左上，直接咬掉
+        # 267 个采样点。原点的 ω=0 标注同步下移，免得和 A 的框叠在一起。
+        point(ax, 0, r"$\omega=0$", (8,-32), limit=True)
+        point(ax, -25/936, "A", (12,-14))
         point(ax, 1j*31*np.sqrt(155)/936, "B", (-18,7))
         point(ax, 1, r"$\omega\to\infty$", (-66,-22), limit=True)
-        note(ax, r"$|G|=1$", (0.64,0.82))
-        note(ax, r"$\varphi:270^\circ\to0^\circ$", (0.38,0.10))
+        # |G|=1 挪到单位圆内侧、曲线上方的那条夹缝里（原来正压在圆弧上）
+        note(ax, r"$|G|=1$", (0.534,0.708))
+        # 相角说明原来压在横轴上（框跨过 y=0），整块下移到横轴之下
+        note(ax, r"$\varphi:270^\circ\to0^\circ$", (0.38,0.035))
         finish(fig, OUT/name, "虚线为单位圆辅助线；原点附近的第三象限细节另见放大图。")
     name = "频域-幅相例题-三重微分原点放大.png"
     if selected(name):
@@ -217,7 +231,8 @@ def draw_origin_zero_example():
         curve(ax, GEX3, W, (0.12,0.30,0.48))
         point(ax, 0, r"$\omega=0$", (6,-15), limit=True)
         point(ax, -25/936, r"$A=(-25/936,\,0)$", (-13,14))
-        note(ax, "先进入第三象限，再向上穿过负实轴", (0.025,0.9))
+        # 文案拆两行：写成一行框会拖到纵轴上（压住纵轴线）
+        note(ax, "先进入第三象限，" "\n" "再向上穿过负实轴", (0.025,0.9))
         finish(fig, OUT/name, "仅截取起始段；箭头表示频率增大。")
 
 

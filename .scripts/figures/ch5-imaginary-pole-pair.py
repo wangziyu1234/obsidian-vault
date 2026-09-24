@@ -84,7 +84,9 @@ def draw(wc: float) -> None:
     ax1.axvline(wc, color=fs.SUB, lw=0.9, ls=(0, (4, 3)), zorder=1)
     ax1.annotate("L > 0 段（计数有效）", xy=(0.11, 0.86), xycoords="axes fraction",
                  fontsize=11, color=fs.INK)
-    ax1.annotate("ωc = 8.93", xy=(wc, 0), xytext=(14, -26),
+    # 抬到 0 dB 线**上方**：ωc 右侧真实曲线与渐近线都在 0 dB 以下并继续下降，
+    # 放右下必然压住两条线（实测各咬掉 160 个采样点）
+    ax1.annotate("ωc = 8.93", xy=(wc, 0), xytext=(14, 20),
                  textcoords="offset points", fontsize=11, color=fs.SUB)
     fs.tidy(ax1, turn_freqs=(W_N,))
     ax1.set_ylim(-40, 90)
@@ -100,8 +102,13 @@ def draw(wc: float) -> None:
                  xytext=(22, 46), textcoords="offset points", fontsize=11,
                  color=fs.INK, arrowprops=dict(arrowstyle="-", color=fs.SUB, lw=0.8))
     ax2.axhline(-180, color=fs.INK, lw=0.9, ls=(0, (5, 3)), zorder=2)
-    for x, y, lab in ((1.4, -116, "−135°"), (7.2, -296, "−315°")):
-        ax2.annotate(lab, xy=(x, y), fontsize=10, color=fs.SUB)
+    # −135° 标的是 ω→5⁻ 的相角。ω<5 段曲线只占 -91°~-135°，下面 -140°~-310°
+    # 整片是空的，所以把标签沉下去再用引线连回 (5, -135°)（原来贴在曲线上，
+    # 咬掉 263 个采样点）。−315° 在曲线上方空档，保持原位。
+    ax2.annotate("−135°", xy=(W_N, -135.0), xytext=(1.2, -170), fontsize=10,
+                 color=fs.SUB,
+                 arrowprops=dict(arrowstyle="-", color=fs.SUB, lw=0.8))
+    ax2.annotate("−315°", xy=(7.2, -296), fontsize=10, color=fs.SUB)
     fs.tidy(ax2, turn_freqs=(W_N,))
     ax2.set_ylim(-390, -60)
     ax2.set_yticks([-90, -180, -270, -360])
