@@ -85,7 +85,7 @@ def verify():
 
 def shape(name, title, formula, system, limits, arrows, phase, start=None,
           crossing=None, asymptote=None, note_text=None, figsize=(6.6,6.0),
-          phase_pos=(0.025,0.03), asym_pos=(0.025,0.9)):
+          phase_pos=(0.025,0.03), asym_pos=(0.025,0.9), note_pos=(0.025,0.8)):
     """phase_pos / asym_pos 可以逐图覆盖：左下角常常正好是曲线出发的地方，
     相角说明放那儿必然压曲线；渐近线标签放太靠左又会骑到竖线上。"""
     if not selected(name):
@@ -103,7 +103,7 @@ def shape(name, title, formula, system, limits, arrows, phase, start=None,
         point(ax, value, label, offset)
     note(ax, phase, phase_pos)
     if note_text:
-        note(ax, note_text, (0.025,0.8))
+        note(ax, note_text, note_pos)
     finish(fig, OUT/name)
 
 
@@ -130,13 +130,14 @@ def draw_shapes():
           phase_pos=(0.20,0.75), asym_pos=(0.16,0.90))
     shape("频域-奈氏-Ⅰ型带零点.png", "Ⅰ型：带零点（τ = 4，T₁ = 1，T₂ = 2）",
           r"$G(s)=(1+4s)/[s(1+s)(1+2s)]$", GIZ,
-          ((-1.4,1.6),(-8.0,0.6)), (0.16,0.35,1.4),
+          ((-2.2,2.0),(-8.0,0.6)), (0.16,0.35,1.4),
           r"$\varphi:-90^\circ\to-180^\circ$", asymptote=1,
-          figsize=(5.5,8.7))
+          figsize=(5.5,8.7), phase_pos=(0.012,0.03))
     shape("频域-奈氏-Ⅱ型单惯性.png", "Ⅱ型：单惯性（K = 1，T = 1）",
           r"$G(s)=1/[s^2(1+s)]$", GII1, ((-4.1,0.7),(-0.65,2.4)), (0.52,1.05),
           r"$\varphi:-180^\circ\to-270^\circ$",
-          note_text="低频端在第二象限，延伸至图外")
+          # Ⅱ型单惯性整条曲线都在 y ≥ 0（从 −180° 转到 −270°），所以画面下半部的横带是空的
+          note_text="低频端在第二象限，延伸至图外", note_pos=(0.44,0.05))
     shape("频域-奈氏-Ⅱ型双惯性.png", "Ⅱ型：双惯性（K = 1，T₁ = 1，T₂ = 2）",
           r"$G(s)=1/[s^2(1+s)(1+2s)]$", GII2,
           ((-4.8,1.6),(-0.9,5.1)), (0.38,0.8),
@@ -145,8 +146,9 @@ def draw_shapes():
     shape("频域-奈氏-0型振荡.png", "0 型：振荡环节（K = 1，ωₙ = 1，ζ = 0.5）",
           r"$G(s)=1/(s^2+s+1)$", GOSC,
           ((-0.6,1.4),(-1.4,0.45)), (0.5,1.45),
-          r"$\varphi:0^\circ\to-180^\circ$", start=1,
-          crossing=(-1j,r"$\omega_n=1$",(10,-20)))
+          r"$\varphi:0^\circ\to-180^\circ$", start=1, phase_pos=(0.42,0.03),
+          # ωₙ=1 的点正落在曲线最低处，标签改向上抬、避开曲线（原来向下摆会压在曲线上）
+          crossing=(-1j,r"$\omega_n=1$",(12,16)))
 
 
 def draw_type1_example():
@@ -156,7 +158,7 @@ def draw_type1_example():
                      (-17.2,3.0),(-16.0,3.8))
     curve(ax, GEX1, W, (0.18,0.46,1.1))
     ax.axvline(-15, color=fs.SUB, lw=1.2, ls=(0,(4,3)))
-    note(ax, r"$\mathrm{Re}\,G\to-15$", (0.025,0.88))
+    note(ax, r"$\mathrm{Re}\,G\to-15$", (0.50,0.92))
     point(ax, -10/3, r"$(-10/3,\,0)$", (-80,18))
     point(ax, 0, r"$\omega\to\infty$", (7,14), limit=True)
     note(ax, r"$\omega_x=1/\sqrt{2}$", (0.48,0.19))

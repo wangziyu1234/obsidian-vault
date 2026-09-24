@@ -18,7 +18,7 @@ t = np.linspace(0, 2 * T, 2000)
 r = np.sin(W * t)
 c = GAIN * np.sin(W * t - np.pi / 2)
 
-fig, ax = plt.subplots(figsize=(7.4, 3.6))
+fig, ax = plt.subplots(figsize=(7.4, 4.0))
 
 ax.plot(t, c, color=fs.PHA, linewidth=1.8, label=r"$\mathrm{稳态输出}\ c_s(t)$")
 ax.plot(t, r, color=fs.MAG, linewidth=1.6, linestyle=(0, (5, 3)),
@@ -43,13 +43,14 @@ ax.vlines([t_r, t_c], 0, [1.0, 3.0], color=fs.INK, linewidth=0.7,
 
 ax.set_xlabel(r"$t$ / s")
 ax.set_ylabel(r"$r,\ c_s$")
-ax.set_ylim(-3.6, 3.9)
+ax.set_ylim(-3.6, 5.4)
 ax.set_yticks([-3, -1.5, 0, 1.5, 3])
 ax.set_xlim(0, t[-1])
 ax.grid(True, color=fs.GRID, linewidth=0.6, alpha=0.9)
 for side in ("top", "right"):
     ax.spines[side].set_visible(False)
-ax.legend(loc="upper left", ncol=2, fontsize=11.5)
+# 图例改单列：双列宽到 290px，横着铺开会盖住 t≈0.31 处输出曲线的峰值（幅值 3）
+ax.legend(loc="upper left", ncol=1, fontsize=10.5)
 
 fig.tight_layout()
 fs.save(fig, "频域-例527-稳态输出.png")

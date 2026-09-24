@@ -4,7 +4,8 @@
   * 频域-奈氏-开环不稳定.png   —— 05-2-c 自编例一：K/[(s-1)(s+2)(s+3)]，K=8
   * 频域-奈氏-二型补弧.png     —— 05-2-c 自编例二：K/[s^2(s+1)]，K=1
   * 频域-奈氏-虚轴极点.png     —— 05-2-c 自编例三：(s+1)/(s^2+1)
-  * 频域-奈氏-条件稳定.png     —— 05-2-c 教材例5-8 形状示意（交点 -2/-1.5/-0.5）
+  * 频域-奈氏-条件稳定.png     —— 已迁到 nyquist-05-2-c.py（同名的示意图由该脚本生成，
+                                本脚本不再输出，避免两张脚本互相覆盖同一文件）
 
 图内文字**不混用中文与 `$…$`**（mathtext 接管整串会让中文掉字形），
 统一用「中文 + 纯文本数学」（ω、ν、∠、⁻ 等 Unicode 符号）。
@@ -23,7 +24,7 @@ fs.use_style()
 OUT = os.path.join(fs.REPO_ROOT, "附件")
 
 
-def axes(ax, lim, title, aspect=True):
+def axes(ax, lim, title, aspect=True, neg1_off=(7, 9)):
     if aspect:
         ax.set_aspect("equal", adjustable="box")
     ax.set_xlim(*lim[0])
@@ -37,7 +38,7 @@ def axes(ax, lim, title, aspect=True):
     ax.set_ylabel("虚部")
     ax.set_title(title, pad=8)
     ax.plot([-1], [0], marker="*", color=fs.PHA, markersize=13, zorder=6)
-    ax.annotate("(-1, j0)", xy=(-1, 0), xytext=(7, 9),
+    ax.annotate("(-1, j0)", xy=(-1, 0), xytext=neg1_off,
                 textcoords="offset points", color=fs.PHA, fontsize=11)
 
 
@@ -83,7 +84,7 @@ G = K / ((1j * w) ** 2 * (1j * w + 1))
 keep = np.abs(G) <= R                      # 只画落在示意弧以内的部分
 fig, ax = plt.subplots(figsize=(6.8, 5.8))
 axes(ax, ((-R - 0.6, R - 1.2), (-R + 1.8, R - 2.0)),
-      "自编例二   G = K/[s²(s+1)]，K = 1（Ⅱ 型）")
+      "自编例二   G = K/[s²(s+1)]，K = 1（Ⅱ 型）", neg1_off=(7, -20))
 ax.plot(G.real[keep], G.imag[keep], color=fs.MAG, linewidth=2.2,
         label="正频率支", zorder=4)
 # 原点补弧：半径随角度增大，示意「趋向无穷远」
@@ -93,10 +94,14 @@ ax.plot(rr * np.cos(th), rr * np.sin(th), color=fs.PHA, linewidth=1.8,
         linestyle=(0, (6, 4)), label="原点补弧（ν×90° = 180°，顺时针）", zorder=5)
 arrow(ax, rr[150] * np.cos(th[150]), rr[150] * np.sin(th[150]),
       0.5 * np.cos(th[150] - 1.2), 0.5 * np.sin(th[150] - 1.2), color=fs.PHA)
+# 正常支恒在第二象限、补弧恒在下半平面且下探到 y≈−3.8（被裁），
+# 所以「上半部左右两侧」是两张标签的空区，补弧终点标签也抬到左上再用引线连回
 ax.annotate("补弧终点", xy=(-R + 0.4, -0.2),
-            xytext=(-R - 0.3, -1.15), color=fs.PHA, fontsize=11.5)
-ax.annotate("正常支（恒在上半平面）", xy=(-2.6, 1.4), xytext=(-4.5, 1.05),
-            color=fs.MAG, fontsize=11.5)
+            xytext=(-R - 0.45, 2.25), color=fs.PHA, fontsize=11.5,
+            arrowprops=dict(arrowstyle="-", linewidth=0.8, color=fs.SUB))
+ax.annotate("正常支（恒在上半平面）", xy=(-2.6, 1.4), xytext=(0.30, 2.25),
+            color=fs.MAG, fontsize=11.5,
+            arrowprops=dict(arrowstyle="-", linewidth=0.8, color=fs.SUB))
 arrow(ax, G[700].real, G[700].imag, 0.10, 0.16)
 # 图例省去：线型含义写在笔记题注里
 save(fig, "频域-奈氏-二型补弧.png")
@@ -132,31 +137,3 @@ arrow(ax, G1[k1][-40].real, G1[k1][-40].imag, 0.10, 0.22)
 arrow(ax, G2[k2][40].real, G2[k2][40].imag, 0.04, -0.07)
 # 图例省去：线型含义写在笔记题注里
 save(fig, "频域-奈氏-虚轴极点.png")
-
-# ---------------------------------------------------------------- 例5-8 示意
-from scipy.interpolate import make_interp_spline
-
-# 形状示意：从下方上来 → 穿过 −2（自下而上，负）→ 穿回下方（−1.5，自上而下，正）
-# → 再穿过 −0.5（自下而上，负）→ 沿 +90° 方向收进原点
-knots_t = np.array([0.00, 0.12, 0.28, 0.40, 0.52, 0.66, 0.82, 0.93, 1.00])
-knots_x = np.array([-2.75, -2.30, -2.00, -1.78, -1.50, -1.06, -0.50, -0.22, -0.03])
-knots_y = np.array([-3.60, -1.40, 0.00, 0.42, 0.00, -0.45, 0.00, 0.30, 0.02])
-t = np.linspace(0, 1, 900)
-x = make_interp_spline(knots_t, knots_x, k=3)(t)
-y = make_interp_spline(knots_t, knots_y, k=3)(t)
-fig, ax = plt.subplots(figsize=(7.0, 6.0))
-axes(ax, ((-3.2, 1.0), (-4.2, 2.6)),
-      "教材例5-8 形状示意（K = 10、P = 0、ν = 1）", aspect=False)
-ax.plot(x, y, color=fs.MAG, linewidth=2.2, label="正频率支（形状示意）", zorder=4)
-for xv, lab, ty in ((-2.0, "ω₁：−2（自下而上，负穿越）", 1.85),
-                    (-1.5, "ω₂：−1.5（自上而下，正穿越）", -2.35),
-                    (-0.5, "ω₃：−0.5（自下而上，负穿越）", 0.95)):
-    ax.plot([xv], [0], marker="o", color=fs.PHA, markersize=6, zorder=6)
-    ax.annotate(lab, xy=(xv, 0), xytext=(-3.15, ty), color=fs.PHA, fontsize=11.5)
-arrow(ax, x[200], y[200], 0.10, 0.45)
-arrow(ax, x[430], y[430], 0.12, -0.22)
-arrow(ax, x[640], y[640], 0.10, 0.28)
-ax.annotate("三个交点坐标随 K 线性缩放：\nK₁ = 5，K₂ = 20/3，K₃ = 20",
-            xy=(0.05, -3.9), color=fs.INK, fontsize=11.5)
-ax.legend(loc="upper right", fontsize=11)
-save(fig, "频域-奈氏-条件稳定.png")

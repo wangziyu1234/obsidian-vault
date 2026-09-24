@@ -69,7 +69,9 @@ ax_m.annotate("基准点 (1, 40 dB)", (1.0, 40.0), xytext=(10, 8),
               textcoords="offset points", fontsize=12, color=fs.MAG,
               bbox=dict(facecolor="white", edgecolor="none", alpha=0.95, pad=1.2), zorder=7)
 
-for x, y, txt in [(0.06, 72, "-20"), (0.33, 52, "-40"), (0.72, 41, "-20"), (2.2, 16, "-60")]:
+# 斜率标签一律沉到各段渐近线的下方约 15 dB：本图坐标轴只有 157px 高，
+# 一个 20px 的文字框折算下来有 18 dB 高，贴着渐近线放必然同时压住渐近线、低频延长线和精确曲线。
+for x, y, txt in [(0.06, 72, "-20"), (0.33, 21, "-40"), (0.72, 11, "-20"), (2.2, -24, "-60")]:
     ax_m.text(x, y, txt, fontsize=11, color=fs.SUB, ha="center", family=FAM,
               bbox=dict(facecolor="white", edgecolor="none", alpha=0.9, pad=0.8))
 

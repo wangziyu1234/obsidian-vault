@@ -100,7 +100,8 @@ def draw():
     ax.plot(-1,0,marker="x",color=fs.INK,markersize=7,zorder=8)
     ax.annotate(r"$(-1,\,0)$",(-1,0),xytext=(-53,-44),textcoords="offset points",
                 fontsize=11,color=fs.INK,bbox=BOX,zorder=9)
-    point(ax,0,r"$\omega\to\infty$",(-10,-25),limit=True)
+    # 原点就在纵轴上，标签向左摆会骑在纵轴上：右移十几像素放到原点的正下方
+    point(ax,0,r"$\omega\to\infty$",(3,-25),limit=True)
     note(ax,r"$\omega_x=1/(2\sqrt{2})$",(0.045,0.82))
     note(ax,r"$N=-1,\qquad Z=2$",(0.05,0.10))
     out=Path(os.environ.get("FIGURE_OUT",fs.ATTACH_DIR/"频域-奈氏-习题5-9原题.png"))

@@ -79,7 +79,8 @@ ax.set_xlabel(r"$\mathrm{Re}$", fontsize=14, labelpad=6)
 ax.set_ylabel(r"$\mathrm{Im}$", fontsize=14, labelpad=14)
 ax.set_xticks([-1, 0, 1])
 ax.set_yticks([-1, 0, 1])
-ax.legend(loc="lower left", fontsize=11.5, handlelength=2.4)
+# 图例走右下角：左下被 Ⅰ 型的低频竖渐近线（实部 ≈ −(T₁+T₂) = −1.2）占着，放那儿必压
+ax.legend(loc="lower right", fontsize=11.5, handlelength=2.4)
 ax.set_title("同一副两惯性极点、只改型别 ν 的四条幅相曲线\n"
              "T1 = 1，T2 = 0.2，K = 1；ν 越大越贴原点，只看进来的方向与收尾的象限",
              fontsize=12, color=fs.INK, pad=10, family=FAM)

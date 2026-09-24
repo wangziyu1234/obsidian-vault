@@ -17,7 +17,7 @@ import control as ct
 from scipy import signal
 
 import figures_style as fs
-from _nyquist_style import canvas, curve, response, point, note, finish
+from _nyquist_style import canvas, curve, response, point, note, finish, BOX
 
 s = ct.tf("s")
 W = np.geomspace(1e-4, 1e4, 20000)
@@ -172,9 +172,15 @@ def draw_zero_pair():
     curve(ax, G0L, W, (0.35, 1.1), fs.MAG, "左零点：φ 由 0° 到 -90°")
     curve(ax, G0R, W, (0.5, 1.3), fs.PHA, "右零点：φ 由 0° 到 -270°")
     point(ax, 1.0, r"$\omega=0$", (-58, 14), limit=True, color=fs.SUB)
-    point(ax, value_at(G0R, 2.0), r"$\omega=2$", (-14, -22))
+    # ω=2 的点落在曲线自己身上，标签就近摆放必然压线：抬到右上空区再用细引线连回
+    z2 = value_at(G0R, 2.0)
+    ax.plot(z2.real, z2.imag, "o", ms=5, color=fs.PHA, zorder=7)
+    ax.annotate(r"$\omega=2$", (z2.real, z2.imag), xytext=(0.62, 0.22),
+                fontsize=11, color=fs.PHA, bbox=BOX, zorder=8, ha="center",
+                va="center", arrowprops=dict(arrowstyle="-", linewidth=0.8,
+                                             color=fs.SUB))
     point(ax, 0, r"$\omega\to\infty$", (8, 10), limit=True)
-    note(ax, "起点同为 (1, 0)：多转半圈才到正虚轴", (0.035, 0.90))
+    note(ax, "起点同为 (1, 0)：\n多转半圈才到正虚轴", (0.035, 0.86))
     ax.legend(loc="lower left", fontsize=11, bbox_to_anchor=(0.02, 0.12))
     finish(fig, OUT / name, "两条曲线只在低频与高频渐近意义上互为镜像，实部并不处处相等。")
 
@@ -185,13 +191,18 @@ def draw_complex_pair():
                      r"$G_L=\frac{(s/4)^2+0.25s+1}{s(1+s)(1+2s)},\quad"
                      r"G_R=\frac{(s/4)^2-0.25s+1}{s(1+s)(1+2s)}$",
                      (-4.6, 1.1), (-5.6, 0.72), figsize=(7.0, 6.0))
-    curve(ax, GIL, W, (0.35, 1.4), fs.MAG, "左复零点对：φ 由 -270° 到 -90°")
-    curve(ax, GIR, W, (0.35, 1.4), fs.PHA, "右复零点对：φ 由 -90° 到 -450°")
-    point(ax, ZL_CROSS, "跨负实轴", (-16, 26))
+    curve(ax, GIL, W, (0.35, 1.4), fs.MAG, "左复零点对：−270°→−90°")
+    curve(ax, GIR, W, (0.35, 1.4), fs.PHA, "右复零点对：−90°→−450°")
+    point(ax, ZL_CROSS, "跨负实轴", (-40, 26))
     point(ax, 0, r"$\omega\to\infty$", (8, 10), limit=True)
-    note(ax, "复零点对按二阶计：Δm_eff = ±2", (0.035, 0.90))
-    ax.legend(loc="lower left", fontsize=11, bbox_to_anchor=(0.02, 0.12))
-    finish(fig, OUT / name, "低频竖渐近线同为 -K(T₁+T₂) = -3；左对抬 180°、右对再压 180°。")
+    # 两条曲线绕的圈几乎占满坐标轴，任何够宽的框都会压住低频竖渐近线或纵轴；
+    # 而 set_aspect("equal") 又把坐标轴压到画布中间（左右各留约 1/4 空白），
+    # 故放弃图例（改在图注里按颜色点名），说明块写到坐标轴右侧的那片画布留白里。
+    fig.text(0.985, 0.50, "复零点对\n按二阶计\nΔm_eff = ±2", ha="right", va="center",
+             fontsize=10.5, color=fs.SUB, bbox=BOX)
+    finish(fig, OUT / name,
+           "深蓝：左复零点对 −270°→−90°；赭红：右复零点对 −90°→−450°；"
+           "低频竖渐近线同为 −K(T₁+T₂) = −3。")
 
 
 def draw_out_of_table():
@@ -199,11 +210,12 @@ def draw_out_of_table():
     fig, ax = canvas("一阶全通（T = 1）", r"$G(s)=(1-s)/(1+s)$",
                      (-1.28, 1.28), (-1.30, 0.45), figsize=(6.6, 4.6))
     curve(ax, GAP, W, (0.35, 0.9, 2.3))
-    point(ax, 1.0, r"$\omega=0$", (-40, 12), limit=True, color=fs.SUB)
+    point(ax, 1.0, r"$\omega=0$", (-40, 28), limit=True, color=fs.SUB)
     point(ax, -1j, r"$\omega=1/T$", (8, -20))
     point(ax, -1.0, r"$\omega\to\infty$", (8, -20), limit=True)
-    note(ax, "幅值恒为 1：单位圆下半段", (0.035, 0.90))
-    note(ax, "相位由 0° 降到 -180°", (0.035, 0.80))
+    note(ax, "幅值恒为 1：\n单位圆下半段", (0.035, 0.88))
+    # 下半圆只在 y ≤ 0，且框整体右移到 x>0，绕开纵轴与圆的两个端点
+    note(ax, "相位由 0° 降到 -180°", (0.55, 0.80))
     finish(fig, OUT / name, "幅值恒为 1 但相位有界：与纯延迟同落单位圆，一个转半圈、一个永远绕。")
 
 
@@ -215,8 +227,9 @@ def draw_unstable_inertia():
     point(ax, 1.0, r"$\omega=0$", (-58, 12), limit=True, color=fs.SUB)
     point(ax, 1j, r"$\omega=1/T$", (8, 6))
     point(ax, 0, r"$\omega\to\infty$", (8, 10), limit=True)
-    note(ax, "第一象限：圆心 (1/2, 0)、半径 1/2 的上半圆", (0.035, 0.035))
-    note(ax, "相位由 0° 升到 +90°（P = 1）", (0.035, 0.96))
+    # 上半圆只占 y ∈ [0, 0.5]，且两块说明都右移到 x>0，绕开贯穿全高的纵轴
+    note(ax, "第一象限：圆心 (1/2, 0)、\n半径 1/2 的上半圆", (0.45, 0.04))
+    note(ax, "相位由 0° 升到 +90°（P = 1）", (0.23, 0.92))
     finish(fig, OUT / name, "相频与惯性环节互反；开环右半极点数 P = 1，判稳须按完整奈氏计数。")
 
 
