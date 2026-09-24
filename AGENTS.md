@@ -124,6 +124,7 @@
 - 源文件首行用注释声明输出名：`.tex` 写 `% figure: 频域-xxx.png`，`.py` 写 `# figure: 频域-xxx.png`——源码保持 ASCII，附件名沿用仓库中文命名规范
 - 构建：`.scripts\figures\build.ps1 -File .\xxx.tex`（或 `-Dir` / `-All`，`-Dpi` 默认 600）；`.tex` 走 xelatex → pdftocairo，`.py` 由脚本自己写 `$env:FIGURE_OUT`
 - **新图先 `-File` 单独构建验证，再批量**
+- **成图核验**：`.scripts\figures\_check_fig_layout.py` 是「看不了图」时的替代流程——monkeypatch 掉 `figures_style.save` 拿到 fig，用 renderer 量所有文字 artist 的 bbox，报告压字与越出画布。用法 `D:\miniconda3\python.exe _check_fig_layout.py <脚本.py> [...]`（内部把 spec 名取 `__main__`，否则脚本的 `if __name__ == "__main__"` 不执行）。多面板图**每张都跑一遍**再提交；它抓不到的是「文字压住曲线」这类线条冲突，那种要靠选位（轴上方、右下空区）加细引线解决
 - **825 真题材料是本地专用，不进 git**：`.git/info/exclude` 里已有两条规则（`/控制理论/青岛大学825真题/`、`/附件/青大825-*.png`），它们**从未被 git 跟踪过任何文件**，全靠 remotely-save 多端同步。因此：
   - 对 825 的笔记改动**不要 `git add`**（会被拒；`-f` 强制入库是错的，会把本地专用材料泄漏到版本库）；
   - 出现「只改了 825 笔记」的会话，正常收尾就是**没有 git 提交**（改动由云同步带走），不要为了"有提交"而强行入库；
@@ -139,6 +140,9 @@
   2. **纯中文段用字体族**：`plt.text(..., family=["Microsoft YaHei", "SimHei"])` ✅（不掺 `$…$` 时 `figures_style` 的回退链本来就够用）。
   3. `figures_style.use_style()` 已把 `mathtext.fontset` 设为 `custom` 并把 `mathtext.rm` 指向 `Microsoft YaHei`，这样 `\mathrm{}` 里的汉字有字形。⚠ `mathtext.*` 只接受**单个** fontconfig 模式，写 `"Cambria, Microsoft YaHei"` 会 `ParseException`。
 - **`\mathrm` 后面不能跟空格**：`\mathrm j`、`\mathrm{Re}\,G` 这类写法在 custom 字体集下直接 `ParseFatalException: Unknown symbol: \mathrm`（这才是"本机 mathtext 对 `\mathrm` 报错"的真正机制）。改成 `j`、`\mathrm{j}` 或 `\mathrm{Re}` 都正常。`\sqrt3` 同样要写成 `\sqrt{3}`。
+- **`tight_layout()` 遇到 GridSpec 双面板会静默拒绝执行**：只打一条 `UserWarning: ... Axes that are not compatible with tight_layout`，布局**一点不动**，图级 `fig.text` 就压在轴标签上。多面板图用 `fig.subplots_adjust(left=…, right=…, top=…, bottom=…)` 显式排版，别依赖 tight_layout。
+- **`add_subplot(…, sharex=…)` 不会自动隐藏上面板的刻度标签**：共享横轴的双面板要显式写 `ax.tick_params(labelbottom=False)`，否则上一条面板的刻度文字正好落在下面板的标题上。
+- **本机 `Read` 读 PNG 会返回 "current model does not support images"**：换成多模态模型后可目视复核；当前只能靠脚本内断言（相角最低值、交点个数、穿轴位置）+ 上面的排版自检代替，**别跳过断言**——举反例踩过一次形式坑：`(s+0.01)²` 的极点在 ω=0.01，写成 `(0.01s+1)²` 极点就在 ω=100，画出来的相角只到 −89.9°。
 - **`control` 的 rcParams 不在 matplotlib 里**：`plt.rcParams["control.grid"]` 会 `KeyError`。与其和它的默认样式搏斗，不如用 `ct.frequency_response()` 取数据自己画
 - **`from matplotlib.path import Path` 与 `pathlib.Path` 撞名**：绘图脚本里同时用到两者时，把前者 `as MplPath`，否则 `fig.savefig(Path(...))` 会抛 `float() argument must be … not 'WindowsPath'`
 - **不要用 PowerShell 管道改含中文的源码**：`python -c "...read/write..."` 经管道会按 GBK 写回，注释成乱码，且 git 不易察觉。改笔记/脚本一律走编辑工具的定点替换
