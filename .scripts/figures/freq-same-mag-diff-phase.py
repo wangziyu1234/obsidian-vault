@@ -55,7 +55,9 @@ ax_mag.set_xscale("log")
 ax_ph.set_xscale("log")
 ax_mag.set_yticks([-40, -20, 0, 20])
 ax_ph.set_yticks([90, 0, -90, -180, -270])
-ax_ph.set_ylim(-400, 130)
+# 纵轴下界特意放宽到 -430：图例是 2 行、横跨全图，必须整个沉到最低那条
+# 曲线（-270°）之下，否则图例框会把曲线咬掉一大段（上一版咬掉 618 个采样点）。
+ax_ph.set_ylim(-430, 130)
 ax_mag.set_xlim(w[0], w[-1])
 
 ax_mag.text(
@@ -63,8 +65,12 @@ ax_mag.text(
     transform=ax_mag.transAxes, fontsize=12, color=fs.SUB,
 )
 fs.tidy(ax_mag, turn_freqs=(WZ, WP))
-fs.tidy(ax_ph, turn_freqs=(WZ, WP))
+fs.tidy(ax_ph)                       # 相频图自己画转折线
+for xf in (WZ, WP):                  # 竖线只画到曲线区（y≥-280），
+    ax_ph.plot([xf, xf], [-280, 130],  # 不往下伸进图例带，否则图例框会压住它
+               color=fs.SUB, lw=1.0, ls=(0, (4, 3)), zorder=1)
 ax_mag.set_xlabel("")
-ax_ph.legend(loc="lower left", ncol=2, fontsize=10, handlelength=1.6)
+ax_ph.legend(loc="lower left", ncol=2, fontsize=9, handlelength=1.5,
+             borderaxespad=0.4, labelspacing=0.35)
 
 fs.save(fig, "频域-幅频相同相频不同.png")
