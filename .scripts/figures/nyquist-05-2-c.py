@@ -4,9 +4,12 @@
 
 条件稳定：教材例5-8，$K=10$ 时曲线与负实轴有三个交点 $-2,-1.5,-0.5$，
 交点横坐标随 $K$ 线性缩放，故稳定区间为 $(0,5)\\cup(20/3,20)$。
-教材原图为示意，这里用保形插值（PCHIP）构造一条**严格过三个交点**的曲线，
-并把峰谷压在 $\\pm1.1$ 以内——目的一：曲线真的过"交点"（原来圆点画在实轴上、
-曲线却在 $y\\neq0$ 处，是失真的）；目的二：上下各留出一条空白带专门放标注。
+教材原图为示意。曲线用**参数样条**（x 不单调，不能插值成 y(x)）构造，沿 $\\omega$
+增大方向依次经过：低频端 $(0.1,-2.3)$（画外，表现 $\\nu=1$ 时 $\\omega\\to0$ 沿 $-90^\\circ$
+冲向无穷远）$\\to$ 交点 $-2$（自下而上＝负穿越）$\\to-1.5$（自上而下＝正穿越）
+$\\to-0.5$（自下而上＝负穿越）$\\to$ 收于原点 $0\\angle-270^\\circ$。
+（前一版峰谷封在 $\\pm1.1$ 内、两头都不出画，看着像一段小波浪而不像幅相曲线，
+高频端也没回到原点——已改。）穿越方向、过零次数全部由断言把关。
 
 结构不稳定：$G(s)H(s)=K/[s^2(Ts+1)]$，$\\nu=2$ 使低频相角起步 $-180°$，
 相频始终在 $-180°\\sim-270°$，曲线从第三象限冲向无穷远，$(-1,j0)$ 被围住，
@@ -26,7 +29,7 @@ from pathlib import Path
 
 import control as ct
 import numpy as np
-from scipy.interpolate import PchipInterpolator
+from scipy.interpolate import CubicSpline
 
 import matplotlib.pyplot as plt
 
@@ -43,35 +46,55 @@ def fig_conditionally_stable():
                      r"$G(s)=K G_1(s)/s$" "\n"
                      r"$\mathrm{曲线与负实轴有三个交点}$",
                      (-3.4, 1.2), (-2.0, 2.0), figsize=(6.8, 5.4))
-    # 保形插值：强制在 -2 / -1.5 / -0.5 处取零（真交点），峰谷控制在 ±1.1 内，
-    # 于是 y>1.2 与 y<-1.1 各成一条空白带，专门用来放标注。
-    knots_x = np.array([-3.25, -2.6, -2.0, -1.75, -1.5, -1.0, -0.5, 0.15, 0.65])
-    knots_y = np.array([-1.05, -0.55, 0.0, 0.40, 0.0, -0.72, 0.0, 0.85, 1.10])
-    x = np.linspace(knots_x[0], knots_x[-1], 900)
-    ax.plot(x, PchipInterpolator(knots_x, knots_y)(x),
-            color=fs.MAG, lw=2.3, zorder=4)
+    # 参数样条（x 不单调，不能插值成 y(x)）：沿 ω 增大方向依次经过
+    #   低频端 (0.10, -2.30) —— 画外，表现 ν=1 时 ω→0 沿 -90° 冲向无穷远；
+    #   交点 -2（自下而上 = 负穿越）、-1.5（自上而下 = 正穿越）、-0.5（自下而上 = 负穿越）；
+    #   高频端收于原点 0∠-270°（从正虚轴方向下来）。穿越方向与正文一致。
+    knots_x = np.array([0.10, -1.55, -2.00, -2.50, -1.50, -1.05, -0.50, -0.10, 0.0])
+    knots_y = np.array([-2.30, -1.05, 0.0, 0.72, 0.0, -0.62, 0.0, 0.38, 0.0])
+    t = np.linspace(0.0, 1.0, knots_x.size)
+    # 采样点要把控制点的参数值并进去，否则最近采样点可能落在陡峭处，
+    # 断言会误判（如 x=-1.5 处取到 y=-1.13）
+    tt = np.sort(np.concatenate([np.linspace(0.0, 1.0, 900), t]))
+    cx, cy = CubicSpline(t, knots_x)(tt), CubicSpline(t, knots_y)(tt)
+    # 语义自检：① 三个交点处确实 y=0；② 整条曲线只过零三次（样条不许在中间
+    # 多拐出交点）；③ 穿越方向与正文一致（下→上为负、上→下为正）；
+    # ④ 低频端伸到画面之下（表现 ω→0 冲向无穷远）。
+    for xc in crossings:
+        k = int(np.argmin(np.abs(cx - xc)))
+        assert abs(cy[k]) < 0.03, (xc, cy[k])
+    nz = np.where(np.abs(cy) > 0.05, np.sign(cy), 0)
+    nz = nz[nz != 0]
+    assert int(np.sum(nz[:-1] * nz[1:] < 0)) == 3, "过零次数应恰为 3"
+    for xc, want in zip(crossings, (-1, 1, -1)):
+        k = int(np.argmin(np.abs(cx - xc)))
+        lo, hi = cy[k - 40], cy[k + 40]
+        assert (-1 if lo < 0 < hi else 1) == want, (xc, lo, hi)
+    assert cy[0] < -2.0, cy[0]
+    ax.plot(cx, cy, color=fs.MAG, lw=2.3, zorder=4)
 
     ax.axvline(-1, color=fs.SUB, lw=1.1, ls=(0, (4, 3)), zorder=2)
     # 竖线标签放在线的右侧、顶部空白带里，不骑线
-    ax.annotate(r"$-1$", (-1, 1.50), xytext=(8, 0),
+    ax.annotate(r"$-1$", (-1, 1.62), xytext=(8, 0),
                 textcoords="offset points", color=fs.SUB, fontsize=11,
                 ha="left", va="center", bbox=BOX, zorder=8)
-    # 交点文字统一沉到底部空白带，再用细引线连回交点
-    tag_x = (-2.90, -1.90, -0.42)
+    # 交点文字统一抬到曲线上方那条空带；引线取竖直方向，只在交点处与曲线相接，
+    # 不会横穿曲线（曲线在每个 x 上只有一个 y）
+    tag_x = (-2.95, -1.55, -0.45)
     for i, xc in enumerate(crossings):
         colour = fs.PHA if xc < -1 else fs.INK
         ax.plot(xc, 0, "o", ms=6, color=colour, zorder=7)
         ax.annotate(rf"$\omega_{i + 1}$: {xc:g}", (xc, 0),
-                    xytext=(tag_x[i], -1.52), fontsize=10, color=colour,
+                    xytext=(tag_x[i], 1.15), fontsize=10, color=colour,
                     ha="center", va="center", bbox=BOX, zorder=8,
                     arrowprops=dict(arrowstyle="-", lw=0.8, color=colour))
     ax.plot(-1, 0, marker="x", color=fs.INK, ms=10, mew=1.8, zorder=9)
-    # (-1,j0)：抬到曲线正峰（0.40）之上，且整体留在竖线左侧
-    ax.annotate(r"$(-1,\,j0)$", (-1, 0), xytext=(-60, 46),
-                textcoords="offset points", fontsize=10, color=fs.INK,
-                ha="right", va="bottom", bbox=BOX, zorder=9,
+    # (-1,j0)：曲线在这段最低到 -0.62，只能压到 -1.05 一带的下方空档；
+    # 且框要整个留在竖线右侧，否则会压住 x=-1 那条竖虚线
+    ax.annotate(r"$(-1,\,j0)$", (-1, 0), xytext=(-0.60, -1.05), fontsize=10,
+                color=fs.INK, ha="center", va="center", bbox=BOX, zorder=9,
                 arrowprops=dict(arrowstyle="-", lw=0.8, color=fs.INK))
-    ax.text(0.03, 0.94, r"$\mathrm{只有落在}-1\ \mathrm{左侧的交点}$"
+    ax.text(0.03, 0.95, r"$\mathrm{只有落在}-1\ \mathrm{左侧的交点}$"
                         "\n"
                         r"$\mathrm{才计入穿越}$",
             transform=ax.transAxes, fontsize=10, color=fs.SUB, bbox=BOX,

@@ -9,6 +9,10 @@
 映射到 G 平面后分别是 ν×90° 逆时针、q×180° 顺时针的无穷大弧，以及"收于原点、
 图像连续"——这三条写在正文表里，本图只交代 s 平面那一半。
 图内中文一律写进 $\\mathrm{…}$，`$…$` 段内不用全角标点。
+
+**为什么要竖排**（2026-09-24 改）：原来 1×3 横排、整图 11.4 英寸宽，笔记里按
+|520 显示时每张子图只剩 ~170px，字全糊了。改成 3×1 竖排后每张子图占满整幅宽度，
+同样 |520 显示下每张约 520px，能看清绕法与箭头。
 """
 from __future__ import annotations
 
@@ -49,21 +53,23 @@ def arrow_arc(ax, r, a0, a1, colour, lw=2.2):
 
 def fig_spine_arcs():
     fs.use_style()
-    fig, axes = plt.subplots(1, 3, figsize=(11.4, 4.0))
+    # 3×1 竖排：横排时每张子图在笔记里只有 ~170px 宽，字全糊了
+    fig, axes = plt.subplots(3, 1, figsize=(5.4, 11.6))
 
     # (a) 原点 ν 重极点：只绕 1/4 圈
     ax = axes[0]
     setup(ax)
     ax.plot([0, 0], [-1.05, 1.05], color=fs.INK, lw=1.8, zorder=3)
     arrow_arc(ax, 0.45, 0, 90, fs.PHA)
-    ax.text(-0.06, 1.06, r"$\mathrm{轴就是虚轴: }\sigma=0,\ \omega\in\mathbb{R}$",
-            fontsize=9, color=fs.INK, bbox=BOX, ha="left", zorder=8)
+    # 标签摆虚轴**左侧**（ha="right"）：原来从 x=-0.06 往右写，正好骑在虚轴上
+    ax.text(-0.06, 1.06, r"$\mathrm{虚轴: }\sigma=0,\ \omega\in\mathbb{R}$",
+            fontsize=10, color=fs.INK, bbox=BOX, ha="right", zorder=8)
     ax.text(0.52, 0.60,
             r"$\mathrm{小右半圆: }\theta:0\to90^\circ$" "\n"
             r"$\mathrm{(只需绕到正虚轴)}$" "\n"
             r"$\mathrm{映射: 逆时针}\ \nu\times90^\circ$",
-            fontsize=9, color=fs.PHA, bbox=BOX, ha="left", zorder=8)
-    ax.set_title(r"$\mathrm{(a) 原点}\ \nu\ \mathrm{重极点}$", fontsize=11)
+            fontsize=10, color=fs.PHA, bbox=BOX, ha="left", zorder=8)
+    ax.set_title(r"$\mathrm{(a) 原点}\ \nu\ \mathrm{重极点}$", fontsize=11.5)
 
     # (b) 非零 jω₀ 处 q 重极点：绕完整小右半圆
     ax = axes[1]
@@ -78,12 +84,11 @@ def fig_spine_arcs():
             bbox=BOX, ha="left", zorder=8)
     ax.text(0.52, 0.10,
             r"$\mathrm{完整小右半圆: }\theta:-90^\circ\to90^\circ$" "\n"
-            r"$\mathrm{(要绕回}_{\mathrm{轴}})$"
-            r"$\mathrm{, 不是一半}$" "\n"
+            r"$\mathrm{(完整半圈, 不是}\ 1/4\ \mathrm{圈)}$" "\n"
             r"$\mathrm{映射: 顺时针}\ q\times180^\circ$",
-            fontsize=9, color=fs.PHA, bbox=BOX, ha="left", zorder=8)
+            fontsize=10, color=fs.PHA, bbox=BOX, ha="left", zorder=8)
     ax.set_title(r"$\mathrm{(b)}\ j\omega_0\ \mathrm{处}\ q\ \mathrm{重极点}$",
-                 fontsize=11)
+                 fontsize=11.5)
 
     # (c) jω₀ 处零点：不必绕
     ax = axes[2]
@@ -97,8 +102,8 @@ def fig_spine_arcs():
             r"$\mathrm{零点: }G\ \mathrm{在此解析}$" "\n"
             r"$\mathrm{围线直接穿过, 不绕}$" "\n"
             r"$\mathrm{映射: 两端收于原点, 连续}$",
-            fontsize=9, color=fs.MAG, bbox=BOX, ha="left", zorder=8)
-    ax.set_title(r"$\mathrm{(c)}\ j\omega_0\ \mathrm{处零点}$", fontsize=11)
+            fontsize=10, color=fs.MAG, bbox=BOX, ha="left", zorder=8)
+    ax.set_title(r"$\mathrm{(c)}\ j\omega_0\ \mathrm{处零点}$", fontsize=11.5)
 
     # (b)(c) 的围线画在 Im s = 0.55，标注一下
     for ax in axes[1:]:
