@@ -50,8 +50,14 @@
 - 根目录 `C:\Users\23720\OneDrive\按章节-原视频和PPT\`（第5章 = 控制88-17~28）、`Word-补充自O-God\`。
 - 旧 `.doc` 用 Word COM `SaveAs(...,2)` 转文本（公式是图片）；`.ppt` 的 PowerPoint COM 本机必失败，改**文本框记录头法**：`data.find(b'\x00\x00\xa0\x0f')` 后按 4 字节小端长度切片解 UTF-16LE（`\xa8\x0f` 按 GBK）。PPT 里的公式多为图片，文本抽取拿不到式子，**要数值时直接看课件截图或用 control 库重算**。
 - 自绘图走 `.scripts\figures\` 工具链：源码 ASCII 名＋首行 `# figure: 中文名.png`，`figures_style.py` 统一风格，成图入 `附件\`，**成图必须自己看图确认**；图内中文与 `$…$` 混排会字体回退失败（汉字写纯文本或 `\mathrm{}`）。
-- **本机 `Read` 读 JPG 正常、读 PNG 一律报 "current model does not support images"**（2026-09-24 核实）：用户拍的**照片（.jpg）能读出内容**，要整理成例题可直接读；自己出的图是 PNG，**读不了**。
-- **本机 `Read` 读 PNG 一律返回 "current model does not support images"** ⟹ 成图无法目视。用 **`.scripts\figures\_check_fig_layout.py`** 代替：monkeypatch `fs.save` 拿 fig，`FigureCanvasAgg` 挂画布后量所有文字 artist 的 bbox，报「压字」与「越出画布」。用法 `D:\miniconda3\python.exe _check_fig_layout.py <脚本.py> [...]`（spec 名必须取 `__main__`，否则脚本不执行）。已排除 4 类误报：Annotation 的 window extent 含箭头 patch（改用 `Text.get_window_extent`）、`fig.texts[i]` 与 `fig._suptitle` 同一对象、legend frame 天然包住自己的文字、落在坐标范围外被裁掉的刻度标签。**它抓出过真 bug**：只设了 x 轴 log（"双对数"一半没生效）、共享横轴的面板没隐藏刻度标签、`tight_layout` 静默失效。
+- **本机 `Read` 读 JPG 正常、读 PNG 一律报 "current model does not support images"**（2026-09-24 核实）：用户拍的**照片（.jpg）能读出内容**，要整理成例题可直接读；自己出的图是 PNG，**读不了**，只能靠脚本自检。
+- **成图核验三件套**（`.scripts\figures\`，2026-09-24 升级）：
+  - `_check_fig_layout.py` 查三类：`[压字]` 白框两两重叠（legend 框包自己文字已豁免）、`[越界]` 跑出画布、**`[压线]` 白框/图例框压住曲线或参考线**（把 Line2D 数据点投到像素看是否落框内）。用法 `D:\miniconda3\python.exe _check_fig_layout.py <脚本.py> [...]`（spec 名必须取 `__main__`；同时拦 `figures_style.save` 与 `Figure.savefig`**两个出口**，否则 `_nyquist_style.finish` 那批图捕获不到）。**改完标注位置必跑，目标 0 处**。
+  - `[压线]` 三个实现坑：① `axhline/axvline` 只有 2 个端点，必须按 2px **加密采样**，否则横穿白框查不出；② `ax.step` 的数据点不是折线本身，要按 `get_drawstyle()` 展开成台阶，否则插值出对角线全是假象；③ 框按「半个线宽」外扩再内缩 1px 防擦边误报。
+  - `_probe_layout.py`：打印每个标注的**数据坐标** bbox（annotate 要用 `Text.get_window_extent`，别把箭头算进去）。**改落点前先量再改**，不要目测坐标。
+  - 已排除的误报：Annotation 的 window extent 含箭头、`fig.texts[i]` 与 `fig._suptitle` 同一对象、legend frame 天然包住自己的文字、落在坐标范围外被裁掉的刻度标签、被轴裁掉的曲线段。
+  - 它抓出过的真 bug：只设了 x 轴 log（"双对数"一半没生效）、共享横轴的面板没隐藏刻度标签、`tight_layout` 静默失效、七处标注压曲线。
+- **标注不许贴曲线放（长期遵守，2026-09-24 用户指出「遮挡还挺厉害的」后定）**：带白底 `bbox` 的标注压在曲线上＝把曲线咬掉一块。落点优先级：① 挪到该曲线**够不到的空区**（如相频 y<−90° 那条带、Bode 幅频上方留白）；② 三条曲线纠缠不清时**改用图例**，图例框放空白区、颜色对号；③ 曲线斜穿整象限时把标注**上抬/下移到曲线之外**，再拉细引线（`arrowstyle="-"`）连回目标点。竖线标签摆**竖线旁边**（`ha="left"`、`x = kc*1.08`），不骑在线上。**盘点遗留**：99 张图里 72 张有同类遮挡（14 张单条 ≥100 采样点，最重 `nyquist-05-2-c` 889 点、`freq-same-mag-diff-phase` 618 点），待按图批量清。
 - **两个会静默失效的坑**（2026-09-24）：① `tight_layout()` 遇到 GridSpec 双面板会**直接拒绝执行**（只打 UserWarning"not compatible"），图级文字照样压住轴标签 ⟹ 多面板图用 `fig.subplots_adjust(left/right/top/bottom)` 显式排版，别指望 tight_layout；② `add_subplot(sharex=...)` **不会**自动隐藏上面板的刻度标签，要 `ax.tick_params(labelbottom=False)`。
 - **mathtext 写法**：`$\mathrm j\omega$`（`\mathrm` 后带空格）在 matplotlib 3.11 上 `ParseFatalException: Unknown symbol: \mathrm`，必须写 `$\mathrm{j}\omega$`；mathtext 也不认 `\lvert`。图内文字优先「纯文本 + Unicode 数学」（γ、−180°、(−1, j0)、0.1）。
 - ⚠️ **形式坑**：`(s+0.01)²` 的极点在 ω=0.01，写成 `(0.01s+1)²` 极点就在 ω=100——举「相角非单调」的反例时踩过，画出来相角只到 −89.9°。举反例后一定用断言核一遍（相角最低值、交点个数）。
