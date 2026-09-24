@@ -124,7 +124,12 @@
 - 源文件首行用注释声明输出名：`.tex` 写 `% figure: 频域-xxx.png`，`.py` 写 `# figure: 频域-xxx.png`——源码保持 ASCII，附件名沿用仓库中文命名规范
 - 构建：`.scripts\figures\build.ps1 -File .\xxx.tex`（或 `-Dir` / `-All`，`-Dpi` 默认 600）；`.tex` 走 xelatex → pdftocairo，`.py` 由脚本自己写 `$env:FIGURE_OUT`
 - **新图先 `-File` 单独构建验证，再批量**
-- **成图核验**：`.scripts\figures\_check_fig_layout.py` 是「看不了图」时的替代流程——monkeypatch 掉 `figures_style.save` 拿到 fig，用 renderer 量所有文字 artist 的 bbox，报告压字与越出画布。用法 `D:\miniconda3\python.exe _check_fig_layout.py <脚本.py> [...]`（内部把 spec 名取 `__main__`，否则脚本的 `if __name__ == "__main__"` 不执行）。多面板图**每张都跑一遍**再提交；它抓不到的是「文字压住曲线」这类线条冲突，那种要靠选位（轴上方、右下空区）加细引线解决
+- **成图核验**：`.scripts\figures\_check_fig_layout.py` 是「看不了图」时的替代流程，跑一遍绘图脚本（拦 `figures_style.save` 与 `Figure.savefig` 两份出口拿到 fig），用 renderer 量三类问题：
+  - `[压字]` 文字白框两两重叠（图例框天然包住自己的文字，已豁免）；
+  - `[越界]` 文字跑出画布；
+  - `[压线]` **文字白框/图例框压住曲线或参考线**——把每条 Line2D 的数据点（`step*` 按 drawstyle 展开、`axhline/axvline` 按 2px 加密）投到像素后，看有没有落进框里；框按「半个线宽」外扩再内缩 1px，防边界擦边误报。
+  用法：`D:\miniconda3\python.exe _check_fig_layout.py <脚本.py> [...]`（内部把 spec 名取 `__main__`，否则脚本的 `if __name__ == "__main__"` 不执行）。**改完任何图的标注位置都要跑**，目标 0 处；配套 `_probe_layout.py` 打印每个标注的**数据坐标 bbox**，用来挑落点（改标注前先跑它，别用眼睛估）。
+- **标注不许贴曲线放（长期遵守，2026-09-24 用户指出「遮挡还挺厉害的」后定）**：带白底 `bbox` 的标注一旦压在曲线上，等于把曲线咬掉一块。落点优先级：① 该曲线**够不到的空区**（如相频 < −90° 以下的世界、Bode 幅频上方的留白）；② 三条曲线挤在一起时，**改用图例**（图例框放空白区，颜色对号）；③ 曲线斜穿整个象限时，把标注**下移/上抬到曲线之外**再拉一条细引线（`arrowstyle="-"`）连回目标点。竖线（`axvline`）上的刻度标签要摆在**竖线旁边**（`ha="left"` 且 `x = kc*1.08`），不要骑在线上。
 - **825 真题材料是本地专用，不进 git**：`.git/info/exclude` 里已有两条规则（`/控制理论/青岛大学825真题/`、`/附件/青大825-*.png`），它们**从未被 git 跟踪过任何文件**，全靠 remotely-save 多端同步。因此：
   - 对 825 的笔记改动**不要 `git add`**（会被拒；`-f` 强制入库是错的，会把本地专用材料泄漏到版本库）；
   - 出现「只改了 825 笔记」的会话，正常收尾就是**没有 git 提交**（改动由云同步带走），不要为了"有提交"而强行入库；

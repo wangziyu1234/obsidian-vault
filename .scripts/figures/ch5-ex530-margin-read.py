@@ -65,11 +65,11 @@ def draw():
     ax.set_ylabel(r"$\mathrm{Im}\,G(\mathrm{j}\omega)$")
     ax.spines[["top", "right"]].set_visible(False)
 
-    # 单位圆
+    # 单位圆（标注挪到右上角：曲线的弧斜穿第一象限，贴弧放必被压）
     th = np.linspace(0.0, 2.0 * np.pi, 721)
     ax.plot(np.cos(th), np.sin(th), color=fs.SUB, lw=1.0, ls=(0, (5, 4)), zorder=2)
-    ax.text(0.48, 0.62, "单位圆  |G| = 1", color=fs.SUB, fontsize=11,
-            ha="left", va="center", zorder=8)
+    ax.text(1.02, 0.95, "单位圆  |G| = 1", color=fs.SUB, fontsize=11,
+            ha="right", va="center", zorder=8)
 
     # 曲线（示意，K = 5）
     x, y = ec.curve()
@@ -89,12 +89,14 @@ def draw():
     ax.add_patch(Arc((0.0, 0.0), 2.0, 2.0, theta1=180.0, theta2=180.0 + GAMMA,
                      color=fs.PHA, lw=3.2, zorder=6))
     mid = np.radians(180.0 + 0.5 * GAMMA)
-    ax.text(1.22 * np.cos(mid), 1.22 * np.sin(mid), f"γ = {GAMMA:.2f}°",
+    # 半径 1.27（原 1.22）：让白框整体退到圆弧外侧，别让虚线圆擦过框角
+    ax.text(1.27 * np.cos(mid), 1.27 * np.sin(mid), f"γ = {GAMMA:.2f}°",
             color=fs.PHA, fontsize=12, ha="center", va="center",
             bbox=dict(facecolor="white", edgecolor="none", pad=1.5), zorder=10)
     ax.plot([UNIT_HIT[0]], [UNIT_HIT[1]], "o", ms=6, color=fs.PHA, zorder=8)
+    # 下移到 −1.03：白框顶边让开单位圆下半弧（圆在 y=−0.93 处已到 x=−0.37）
     ax.annotate("(−0.8, −0.6) 恰在单位圆上\n（0.8² + 0.6² = 1）", UNIT_HIT,
-                xytext=(-1.42, -0.98), textcoords="data", ha="left", va="center",
+                xytext=(-1.42, -1.03), textcoords="data", ha="left", va="center",
                 fontsize=11, color=fs.INK,
                 bbox=dict(facecolor="white", edgecolor="none", pad=2.0), zorder=10,
                 arrowprops=dict(arrowstyle="-", color=fs.SUB, lw=0.8,
@@ -105,14 +107,17 @@ def draw():
             solid_capstyle="butt")
     ax.plot([W_CROSS, -1.0], [0.0, 0.0], color=fs.PHA, lw=1.6, ls=(0, (4, 3)), zorder=7)
     ax.plot([W_CROSS, W_CROSS], [-0.06, 0.06], color=fs.PHA, lw=1.4, zorder=7)
-    ax.annotate(f"h = 1/0.2 = {H_RATIO:.0f}（约 {20 * np.log10(H_RATIO):.0f} dB）",
-                (-0.60, 0.0), xytext=(-0.88, 0.15), textcoords="data",
-                ha="left", va="center", fontsize=11, color=fs.PHA,
+    # 抬到 y=0.30 并拆两行：曲线在原点左侧有个小钩（最高到 y≈0.11），原位置被白框盖住；
+    # 拆行后框宽 0.6 < 0.66，右端才收在 y 轴竖线（x=0）左边、左端让开单位圆上弧
+    ax.annotate(f"h = 1/0.2 = {H_RATIO:.0f}\n（约 {20 * np.log10(H_RATIO):.0f} dB）",
+                (-0.60, 0.0), xytext=(-0.66, 0.30), textcoords="data",
+                ha="left", va="center", fontsize=11, color=fs.PHA, linespacing=1.5,
                 bbox=dict(facecolor="white", edgecolor="none", pad=1.5), zorder=10,
                 arrowprops=dict(arrowstyle="-", color=fs.SUB, lw=0.8,
                                 shrinkA=2.0, shrinkB=2.0))
-    ax.annotate("交点 −0.2（唯一在 −1 右侧）",
-                (W_CROSS, 0.0), xytext=(0.02, -0.32), textcoords="data",
+    # 拆两行、落在单位圆**内侧**（|G|<1 那片空区）：单行太长会捅出右侧坐标轴、且斜穿圆弧
+    ax.annotate("交点 −0.2\n（唯一在 −1 右侧）",
+                (W_CROSS, 0.0), xytext=(0.04, -0.19), textcoords="data",
                 ha="left", va="center", fontsize=11, color=fs.INK,
                 bbox=dict(facecolor="white", edgecolor="none", pad=1.5), zorder=10,
                 arrowprops=dict(arrowstyle="-", color=fs.SUB, lw=0.8,

@@ -39,6 +39,13 @@ BANDS = [(K_INF, 0.5, STABLE, "稳定", 0),
          (1.0, 25.0, STABLE, "稳定", 2),
          (25.0, K_SUP, UNSTABLE, "不稳定", 3)]
 
+# 标注横坐标默认取区间几何中点；个别地方中点会撞上竖线，按区间编号覆盖。
+#   面板 (a)：稳定区 (1,25) 的中点是 5，正好压在「题给 K = 5」的竖线上 ⟹ 让开
+TAG_X = {2: 8.0}
+#   面板 (b)：「1 个」的标签框宽 0.6 个十倍频程、比 (0.5,1) 这段区间还宽，
+#   居中会横跨 K = 1 的竖跳（y: 1→2）⟹ 往左挪，只让开右边那条竖跳
+CNT_X = {1: 0.615}
+
 
 def verify() -> None:
     """三处硬核对：临界增益、各区间的交点计数、奇偶与稳定性的对应。"""
@@ -76,21 +83,25 @@ def main() -> None:
 
     for kc in CRIT:
         ax.axvline(kc, color=fs.SUB, lw=1.0, ls=(0, (2, 2)), zorder=3)
-        ax.text(kc, 1080.0, f"K = {kc:g}", ha="center", va="center", fontsize=11,
+        # 标签摆在竖线**右侧**：白底标签压在自己的参考线上，等于把线咬断一截
+        ax.text(kc * 1.08, 250.0, f"K = {kc:g}", ha="left", va="center", fontsize=11,
                 color=fs.INK, zorder=9,
                 bbox=dict(facecolor="white", edgecolor="none", pad=1.4))
-    for lo, hi, _, tag, _ in BANDS:
-        ax.text(np.sqrt(lo * hi), 590.0, tag, ha="center", va="center", fontsize=12,
-                color=GREEN if tag == "稳定" else fs.PHA, zorder=9,
+    for lo, hi, _, tag, n in BANDS:
+        # 贴到条带顶部：三条轨迹都还在它下面（(25,300) 那条红轨迹也只到 y≈109）
+        ax.text(TAG_X.get(n, np.sqrt(lo * hi)), 1000.0, tag, ha="center", va="center",
+                fontsize=12, color=GREEN if tag == "稳定" else fs.PHA, zorder=9,
                 bbox=dict(facecolor="white", edgecolor="none", pad=1.4))
 
     ax.axvline(5.0, color=fs.INK, lw=1.2, ls=(0, (1, 2.4)), zorder=6)
-    ax.text(5.0, 250.0, "题给 K = 5", ha="center", va="center", fontsize=11,
+    ax.text(5.4, 250.0, "题给 K = 5", ha="left", va="center", fontsize=11,
             color=fs.INK, zorder=9,
             bbox=dict(facecolor="white", edgecolor="none", pad=1.6))
-    ax.text(0.135, 1.62, "|x| = 1 即 −1 点\n线段落在它上方 → 交点在 −1 左侧、计入穿越",
-            ha="left", va="bottom", fontsize=10.5, color=fs.INK, zorder=9,
-            linespacing=1.6,
+    # 说明必须挤进 (0.12, 0.5) 这段空档：左侧不越轴、右端不碰 K = 0.5 竖线，
+    # 所以拆成三行短句（框宽 ~1.3 in ≈ 0.5 个十倍频程）
+    ax.text(0.135, 1.35, "虚线 |x| = 1 即 −1 点\n线段在它上方\n→ 交点在 −1 左侧",
+            ha="left", va="bottom", fontsize=10, color=fs.INK, zorder=9,
+            linespacing=1.4,
             bbox=dict(facecolor="white", edgecolor="none", pad=1.8))
 
     handles = [plt.Line2D([], [], color=c, lw=2.4, label=lb) for lb, _, c, _ in TRACKS]
@@ -118,7 +129,7 @@ def main() -> None:
     for lo, hi, _, tag, n in BANDS:
         col = GREEN if tag == "稳定" else fs.PHA
         ax2.plot([np.sqrt(lo * hi)], [n], "o", ms=7, color=col, zorder=6)
-        ax2.text(np.sqrt(lo * hi), n + 0.34, f"{n} 个 → {tag}", ha="center",
+        ax2.text(CNT_X.get(n, np.sqrt(lo * hi)), n + 0.34, f"{n} 个 → {tag}", ha="center",
                  va="bottom", fontsize=11, color=col, zorder=8,
                  bbox=dict(facecolor="white", edgecolor="none", pad=1.4))
     ax2.set_ylim(-0.35, 4.15)

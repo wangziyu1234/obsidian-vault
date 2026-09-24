@@ -59,8 +59,10 @@ def draw(wc, gamma, wx, h, zc, zx):
     th = np.linspace(0.0, 2.0 * np.pi, 721)
     ax.plot(np.cos(th), np.sin(th), color=fs.SUB, lw=1.0, ls=(0, (5, 4)),
             zorder=2)
-    ax.text(-0.28, 0.62, "单位圆  |G| = 1", color=fs.SUB, fontsize=11,
-            ha="left", va="center", zorder=8)
+    # 标注移到左上角外侧：原位置横跨 y 轴竖线，而虚线圈的弧又斜穿左上角，
+    # 所以右端对齐到 x = −0.60（弧在 y≈0.95 处只到 x≈−0.31）
+    ax.text(-0.60, 0.95, "单位圆  |G| = 1", color=fs.SUB, fontsize=11,
+            ha="right", va="center", zorder=8)
 
     # 幅相曲线（正频率支）+ 临界点
     ns.curve(ax, SYS, np.geomspace(0.70, 40.0, 3000), arrows=(1.05, 2.4))
@@ -94,10 +96,11 @@ def draw(wc, gamma, wx, h, zc, zx):
     ax.plot([zx.real, zx.real], [-0.06, 0.06], color=fs.PHA, lw=1.4, zorder=7)
     ax.plot([zx.real], [0.0], "o", ms=5.5, color=fs.PHA, zorder=8)
 
-    # ωx、|G(jωx)|、h 三个数成块放在右下空区，引线连回负实轴上的交点
+    # ωx、|G(jωx)|、h 三个数成块放在**第一象限**（曲线只走左半平面、ω>0 时 y>0 那侧全空），
+    # 引线斜下连到负实轴上的交点；原先放右下 → 块角贴着单位圆弧（弧在 y=−0.66 处鼓到 x≈0.75）
     ax.annotate(f"ωx = {wx:.2f}\n|G(jωx)| = {abs(zx):.3f}\n"
                 f"h = {h:.1f}（{20 * np.log10(h):.1f} dB）", (zx.real, -0.06),
-                xytext=(0.06, -0.30), textcoords="data", ha="left", va="top",
+                xytext=(0.06, 0.42), textcoords="data", ha="left", va="top",
                 fontsize=11, color=fs.INK, bbox=ns.BOX, zorder=10,
                 arrowprops=dict(arrowstyle="-", color=fs.SUB, lw=0.8,
                                 shrinkA=2.0, shrinkB=2.0))

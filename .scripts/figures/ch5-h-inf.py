@@ -19,6 +19,13 @@
 
 图内文字一律「纯文本 + Unicode 数学」，不与 $…$ 混排（mathtext 接管整串会掉汉字字形）。
 
+**标注位置**（2026-09-24 重排）：三条曲线在中频段（ω≈0.5~3）挤在一起，原来贴着曲线放的
+三块白底标注全被曲线穿过（用户指出「遮挡还挺厉害的」）。现在改成：
+  * (a) 三条曲线的说明收进**左下角图例**——那片区域（y < −190）没有任何曲线；
+  * (b) 两块说明上移到 **φ > −90° 的空带**——两条曲线都从 −90° 往下走，永远不会进这条带；
+  * 「−180° 线」标签放 (a) 栏左端线上方，(a) 栏左端只剩它，与图例上下错开。
+改标注位置后务必跑 `_check_fig_layout.py`（已能查 [压线]）。
+
 Build: ..\\build.ps1 -File .\\ch5-h-inf.py
 """
 from __future__ import annotations
@@ -93,18 +100,21 @@ def draw():
         a.set_ylabel("相角 φ / °")
 
     # ---------- (a) 够不到 −180° ----------
-    items = [("一阶  G = 5/(0.5s+1)：只到 −90°", 5 / (0.5 * s + 1), fs.MAG, (1.15, -56), "top"),
-             ("I 型二阶  G = 5/[s(0.5s+1)]：只逼近 −180°", 5 / (s * (0.5 * s + 1)), fs.PHA,
-              (1.15, -122), "top"),
-             ("0 型二阶  G = 5/(s²+0.6s+1)：只逼近 −180°", 5 / (s ** 2 + 0.6 * s + 1),
-              GREEN, (1.15, -158), "top")]
-    for lb, sys, col, pos, va in items:
+    # 三条曲线在中频段挤成一团，标注不能贴曲线放：统一收进左下角图例（y < −190 无曲线）
+    items = [("一阶  G = 5/(0.5s+1)：只到 −90°", 5 / (0.5 * s + 1), fs.MAG),
+             ("I 型二阶  G = 5/[s(0.5s+1)]：只逼近 −180°", 5 / (s * (0.5 * s + 1)), fs.PHA),
+             ("0 型二阶  G = 5/(s²+0.6s+1)：只逼近 −180°", 5 / (s ** 2 + 0.6 * s + 1), GREEN)]
+    for lb, sys, col in items:
         om, ph = phase_of(sys)
-        ax.plot(om, ph, color=col, lw=2.3, zorder=5)
-        ax.text(pos[0], pos[1], lb, color=col, fontsize=10.5, ha="left", va=va,
-                zorder=9, bbox=dict(facecolor="white", edgecolor="none", pad=1.4))
+        ax.plot(om, ph, color=col, lw=2.3, zorder=5, label=lb)
+    ax.legend(loc="lower left", bbox_to_anchor=(0.012, 0.010), fontsize=10.5,
+              handlelength=1.5, borderpad=0.6, labelspacing=0.55, borderaxespad=0.35,
+              frameon=True, facecolor="white", edgecolor="none", framealpha=0.95)
     ax.set_title("(a) 相角够不到 −180°：无 ωx，h = ∞（一阶、二阶最小相位系统都是这样）",
                  fontsize=12.5, pad=7)
+    ax.text(0.00075, -170, "−180° 线", color=fs.INK, fontsize=10.5, ha="left",
+            va="bottom", zorder=9,
+            bbox=dict(facecolor="white", edgecolor="none", pad=1.4))
 
     # ---------- (b) 反例：零点 / 延迟 ----------
     om0, ph0 = phase_of((s + 1) ** 2 / (s * (s + 0.01) ** 2))
@@ -115,15 +125,14 @@ def draw():
     xd = crosses(W, delay_phase(W))
     ax2.plot([xd[0]], [LEVEL], "o", ms=6.5, color=fs.PHA, zorder=8, clip_on=False)
 
-    ax2.text(0.0012, -68, "含延迟  G = e^(−0.5s)/[s(s+1)]：相角无下界，交点无穷多个",
+    # 两条曲线都从 −90° 往下走 ⟹ φ > −90° 的带子里没有曲线，标注放这里最稳
+    ax2.text(0.00075, -30, "含延迟  G = e^(−0.5s)/[s(s+1)]：相角无下界，交点无穷多个",
              color=fs.PHA, fontsize=10.5, ha="left", va="center", zorder=9,
              bbox=dict(facecolor="white", edgecolor="none", pad=1.4))
-    ax2.text(0.0012, -255,
-             "最小相位带零点  G = (s+1)²/[s(s+0.01)²]（ν=1、n−m=1）：\n"
-             "极点靠低频、零点靠高频，相角被凹到 −247°，出现两个交点",
+    ax2.text(0.00075, -66,
+             "最小相位带零点  G = (s+1)²/[s(s+0.01)²]：相角被凹到 −247°，出现两个交点",
              color=ORANGE, fontsize=10.5, ha="left", va="center", zorder=9,
-             linespacing=1.6,
-             bbox=dict(facecolor="white", edgecolor="none", pad=1.6))
+             bbox=dict(facecolor="white", edgecolor="none", pad=1.4))
     ax2.annotate("首次穿过 −180°", (xd[0], LEVEL), xytext=(2.6, -215.0),
                  textcoords="data", ha="left", va="center", fontsize=10.5,
                  color=fs.INK, zorder=9,
@@ -132,10 +141,6 @@ def draw():
                                  shrinkA=3.0, shrinkB=3.0))
     ax2.set_title("(b) 反例：带零点或延迟后相角不再单调 —— 穿过 −180°，h 变有限",
                   fontsize=12.5, pad=7)
-
-    ax.text(0.00075, -196, "−180° 线", color=fs.INK, fontsize=10.5, ha="left",
-            va="top", zorder=9,
-            bbox=dict(facecolor="white", edgecolor="none", pad=1.4))
 
     fig.suptitle("相频够不到 −180° ⟺ 无穿越频率 ⟺ h = ∞", fontsize=14, y=0.972)
     fig.text(0.5, 0.030, "判据只对「积分＋一阶惯性」这类相角单调的形式成立；"
