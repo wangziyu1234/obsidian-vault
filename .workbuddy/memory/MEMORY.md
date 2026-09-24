@@ -60,7 +60,7 @@
 - 根目录 `C:\Users\23720\OneDrive\按章节-原视频和PPT\`（第5章 = 控制88-17~28）、`Word-补充自O-God\`。
 - 旧 `.doc` 用 Word COM `SaveAs(...,2)` 转文本（公式是图片）；`.ppt` 的 PowerPoint COM 本机必失败，改**文本框记录头法**：`data.find(b'\x00\x00\xa0\x0f')` 后按 4 字节小端长度切片解 UTF-16LE（`\xa8\x0f` 按 GBK）。PPT 里的公式多为图片，文本抽取拿不到式子，**要数值时直接看课件截图或用 control 库重算**。
 - 自绘图走 `.scripts\figures\` 工具链：源码 ASCII 名＋首行 `# figure: 中文名.png`，`figures_style.py` 统一风格，成图入 `附件\`，**成图必须自己看图确认**；图内中文与 `$…$` 混排会字体回退失败（汉字写纯文本或 `\mathrm{}`）。
-- **本机 `Read` 读 JPG 正常、读 PNG 一律报 "current model does not support images"**（2026-09-24 核实）：用户拍的**照片（.jpg）能读出内容**，要整理成例题可直接读；自己出的图是 PNG，**读不了**，只能靠脚本自检。
+- ⚠️ **能否看到图取决于会话模型，不可靠**（2026-09-24 晚核实）：Hy4 会话里 Read 图片（JPG/PNG）一律只返回 "[Image from unknown...]" / "current model does not support images" 占位，**内容根本没进上下文**，模型会脑补出看似合理的转录（777 第5章初录即翻车）。凡要转录扫描页/截图：先跑 `.workbuddy/_ocr_page.py`（RapidOCR，按 y 带合并行）拿文字为准；公式靠数值验证反推。裁图用 _crop_fig.py，成图核验靠预览 jpg 的 OCR + 墨点断言。
 - **成图核验三件套**（`.scripts\figures\`，2026-09-24 升级）：
   - `_check_fig_layout.py` 查三类：`[压字]` 白框两两重叠（legend 框包自己文字已豁免）、`[越界]` 跑出画布、**`[压线]` 白框/图例框压住曲线或参考线**（把 Line2D 数据点投到像素看是否落框内）。用法 `D:\miniconda3\python.exe _check_fig_layout.py <脚本.py> [...]`（spec 名必须取 `__main__`；同时拦 `figures_style.save` 与 `Figure.savefig`**两个出口**，否则 `_nyquist_style.finish` 那批图捕获不到）。**改完标注位置必跑，目标 0 处**。
   - `[压线]` 三个实现坑：① `axhline/axvline` 只有 2 个端点，必须按 2px **加密采样**，否则横穿白框查不出；② `ax.step` 的数据点不是折线本身，要按 `get_drawstyle()` 展开成台阶，否则插值出对角线全是假象；③ 框按「半个线宽」外扩再内缩 1px 防擦边误报。
@@ -74,6 +74,12 @@
 - **别靠肉眼看图判断"等比被破坏"**（2026-09-24 误判过一次，白改一版）：要验证单位圆是否被拉扁，量 `ax.transData.transform((1,0))` 与 `(0,1)` 的像素长度。实测 `_nyquist_style.canvas` 的 `set_aspect('equal')` 与 `finish()` 的 `tight_layout` **不冲突**，等比本来就成立；**不要**再补 `ax.set_box_aspect(1)`——它把方框钉死，日后改 xlim 反而会把圆拉扁。
 - 标注位置有讲究：奈氏图第三象限被曲线斜穿，文字块要么走轴上方、要么走右下空区，再用细引线连回交点；引线尽量别横穿负实轴上的尺寸线。
 - 825 真题材料本地专用不进 git（`.git/info/exclude` 已有规则）。
+
+## 777 勘误与腾讯文档读法
+- 勘误已读通并摘录成篇：`控制理论/777习题集/777习题集官方勘误摘录.md`（基础+强化全章条目；「改图」条目提不出图，须回原文档）。录入各章前先查该页，落实处用 ⚠️ 标注。
+- **腾讯文档免登录读法**：`curl https://docs.qq.com/dop-api/opendoc?u=&id=<docId>&normal=1&outformat=1&noEscape=1&commandsFormat=1&doc_chunk_version=3&doc_chunk_flag=1&callback=clientVarsCallback&xsrf=`，从 JSONP 里取 `clientVars.collab_client_vars.initialAttributedText.text[0]`（base64+protobuf），直接 decode utf-8 忽略错码即得全文。WebFetch 拿不到正文（JS 渲染空壳），此路通。
+- 777 已录：第1、5章。第5章答案页多处置入了数值勘误/书错修正（5-10 重推、5-21(2) 恰临界、5-39 12.06dB、5-35 k=√2/4、5-27 舍入）。判稳一律跑 _verify_ch5.py 式的闭环根数值验证。
+- mermaid 反馈框图统一「引出点」画法：`G --> B((•))`，`B --> 输出` + `B --> H --> SUM`；别把输出节点当回路拐点（用户 2026-09-24 指出看着怪）。
 
 ## 拆分与合并套路
 - **留标题、搬内容**：被移走内容的小节标题留在方法篇，外部 `#锚点` 链接就不用改；改完 grep 旧文件#旧锚点 确认 0。
