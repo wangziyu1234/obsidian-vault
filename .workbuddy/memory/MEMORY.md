@@ -14,6 +14,7 @@
 ## 笔记内容分工
 - **方法/知识点必须写在方法篇里自足**（判断标准：这句话拿掉后读者还能不能独立做题）；例题篇只做对照演练。散在例题里的方法要顺手上提。
 - **同型题不重复补例**：与已有例题同型同法同结论（只换数字）的新题，只在既有例题处补一句指引或干脆不加（例：课件§5.5 例4 同型于例5.17，两法对照并入 05-4-3 §5.4.6 未占号）。
+- **由照片/扫描件整理例题时，题图本体必须一起落笔记**（2026-09-24 例5.30 漏过一次被用户指出）：自己画的分析图（读裕度、K 范围）只是辅助，不能顶替原题那个图。做法：从 jpg 按暗像素包围盒定位裁切 → 阈值二值化顺带去水印 → 抹孤立点 → 入 `附件\`，并留一份**参数写死、带断言、可重跑**的裁剪脚本（重跑应与已出图逐字节相同）。图注要交代「原图与题设有出入时以题设数据为准」。
 
 ## 校验与提交
 - 双脚本各管一半：`check-notes.ps1`（结构/链接/篇幅）＋ `check-math-format.py`（渲染级：公式缺反斜杠、表格被打断、全角标点、相邻 `$$` 紧贴、>200 字符长行等）。改完笔记**两个都跑**；口径：渲染级必修、排版按需、风格不批量动。
@@ -49,6 +50,7 @@
 - 根目录 `C:\Users\23720\OneDrive\按章节-原视频和PPT\`（第5章 = 控制88-17~28）、`Word-补充自O-God\`。
 - 旧 `.doc` 用 Word COM `SaveAs(...,2)` 转文本（公式是图片）；`.ppt` 的 PowerPoint COM 本机必失败，改**文本框记录头法**：`data.find(b'\x00\x00\xa0\x0f')` 后按 4 字节小端长度切片解 UTF-16LE（`\xa8\x0f` 按 GBK）。PPT 里的公式多为图片，文本抽取拿不到式子，**要数值时直接看课件截图或用 control 库重算**。
 - 自绘图走 `.scripts\figures\` 工具链：源码 ASCII 名＋首行 `# figure: 中文名.png`，`figures_style.py` 统一风格，成图入 `附件\`，**成图必须自己看图确认**；图内中文与 `$…$` 混排会字体回退失败（汉字写纯文本或 `\mathrm{}`）。
+- **本机 `Read` 读 JPG 正常、读 PNG 一律报 "current model does not support images"**（2026-09-24 核实）：用户拍的**照片（.jpg）能读出内容**，要整理成例题可直接读；自己出的图是 PNG，**读不了**。
 - **本机 `Read` 读 PNG 一律返回 "current model does not support images"** ⟹ 成图无法目视。用 **`.scripts\figures\_check_fig_layout.py`** 代替：monkeypatch `fs.save` 拿 fig，`FigureCanvasAgg` 挂画布后量所有文字 artist 的 bbox，报「压字」与「越出画布」。用法 `D:\miniconda3\python.exe _check_fig_layout.py <脚本.py> [...]`（spec 名必须取 `__main__`，否则脚本不执行）。已排除 4 类误报：Annotation 的 window extent 含箭头 patch（改用 `Text.get_window_extent`）、`fig.texts[i]` 与 `fig._suptitle` 同一对象、legend frame 天然包住自己的文字、落在坐标范围外被裁掉的刻度标签。**它抓出过真 bug**：只设了 x 轴 log（"双对数"一半没生效）、共享横轴的面板没隐藏刻度标签、`tight_layout` 静默失效。
 - **两个会静默失效的坑**（2026-09-24）：① `tight_layout()` 遇到 GridSpec 双面板会**直接拒绝执行**（只打 UserWarning"not compatible"），图级文字照样压住轴标签 ⟹ 多面板图用 `fig.subplots_adjust(left/right/top/bottom)` 显式排版，别指望 tight_layout；② `add_subplot(sharex=...)` **不会**自动隐藏上面板的刻度标签，要 `ax.tick_params(labelbottom=False)`。
 - **mathtext 写法**：`$\mathrm j\omega$`（`\mathrm` 后带空格）在 matplotlib 3.11 上 `ParseFatalException: Unknown symbol: \mathrm`，必须写 `$\mathrm{j}\omega$`；mathtext 也不认 `\lvert`。图内文字优先「纯文本 + Unicode 数学」（γ、−180°、(−1, j0)、0.1）。
