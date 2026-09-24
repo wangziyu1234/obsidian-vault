@@ -54,9 +54,6 @@ def draw(wc, gamma, wx, h, zc, zx):
     fig, ax = ns.canvas("奈氏图上的稳定裕度（与伯德图同一系统）",
                         r"$G(s)=\frac{2}{s(s+1)(0.1s+1)}$",
                         (-1.55, 1.0), (-1.55, 1.0), figsize=(7.0, 6.9))
-    # 必须再钉一次方框：finish() 里的 tight_layout 会覆盖
-    # set_aspect('equal', adjustable='box') 的盒宽，单位圆会被拉成椭圆。
-    ax.set_box_aspect(1.0)
 
     # 单位圆：曲线上 |G| = 1 的那个点就是 ωc
     th = np.linspace(0.0, 2.0 * np.pi, 721)
