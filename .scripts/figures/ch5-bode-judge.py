@@ -65,11 +65,13 @@ def draw(sys):
     ax1.axhline(0, color=fs.INK, lw=0.9, zorder=2)
     ax1.semilogx(w, mag_db, color=fs.MAG, lw=2.2, zorder=3)
     ax1.axvline(W_CROSS, color=fs.SUB, lw=0.9, ls=(0, (4, 3)), zorder=1)
-    ax1.set_ylim(-40, 40)
+    # 顶部留到 52 dB：低频端曲线已经贴到 34 dB，两条说明只能叠在它上面
+    ax1.set_ylim(-40, 52)
     ax1.set_ylabel(r"$L(\omega)$ / dB")
-    ax1.text(0.12, 33, "L > 0：相频穿越计数的有效段", fontsize=11, color=fs.INK)
-    ax1.annotate("0 dB 交越  ωc = 1.80", xy=(W_CROSS, 0), xytext=(-6, 30),
-                 textcoords="offset points", fontsize=11, color=fs.SUB, ha="right",
+    ax1.text(0.12, 44, "L > 0：相频穿越计数的有效段", fontsize=11, color=fs.INK)
+    # 原来放在交越点左上，正好压在 0 dB 以上的下降段上（74 点）；抬到曲线之上
+    ax1.annotate("0 dB 交越  ωc = 1.80", xy=(W_CROSS, 0), xytext=(0.18, 33),
+                 fontsize=11, color=fs.SUB, ha="left", va="bottom",
                  arrowprops=dict(arrowstyle="-", color=fs.SUB, lw=0.8))
 
     # --- 相频 ---
@@ -82,11 +84,17 @@ def draw(sys):
     ax2.set_yticks([-90, -135, -180, -225, -270])
     ax2.set_xlabel(r"$\omega$ / (rad/s)")
     ax2.set_ylabel(r"$\varphi(\omega)$ / $^\circ$")
-    ax2.text(0.12, -103, "相角减小：自上而下穿 −180° ⇒ 负穿越", fontsize=11, color=fs.PHA)
-    ax2.text(1.9, -196, "负穿越 1 次\nN = 0 − 1", fontsize=11, color=fs.INK)
+    # 相频曲线从 -100° 一路降到 -270°，左侧上方根本没有空地放长句：
+    # 两条说明分别挪到右上（-110° 一带，曲线在那里已降到 -200° 以下）和
+    # 右下（-245° 一带，在曲线之下又低于 -180° 线），再用细引线连回穿越点。
+    ax2.annotate("相角减小：自上而下穿 −180°" "\n" "⇒ 负穿越 1 次，N = 0 − 1",
+                 xy=(W_PHASE, -180), xytext=(2.6, -130), fontsize=11,
+                 color=fs.PHA, ha="left", va="bottom",
+                 arrowprops=dict(arrowstyle="-", color=fs.PHA, lw=0.8))
     ax2.annotate("", xy=(W_PHASE, -180), xytext=(W_PHASE, -161.6),
                  arrowprops=dict(arrowstyle="-|>", color=fs.SUB, lw=1.2))
-    ax2.text(0.13, -262, "相角取连续分支：-161.6° 降到 -198.4°",
+    # 缩短到不横跨 ω=√2 那条竖虚线（原来正好骑上去）
+    ax2.text(0.13, -262, "连续分支：−161.6° → −198.4°",
              fontsize=11, color=fs.SUB)
 
     fs.tidy(ax1, which="both")
