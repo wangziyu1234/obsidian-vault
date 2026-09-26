@@ -1,0 +1,23 @@
+OK ch2ex 第二章例02.doc
+OK ch3sum 第三章小结.doc
+OK ch3s1 第三章小结01.doc
+OK ch4sum 第四章小结.doc
+OK ch5sum 第五章小结.doc
+OK ch5s1 第五章小结1.doc
+OK ch5ex 第五章例题01.DOC
+OK ch5ex4 第五章小结例4.doc
+OK t123 自动控制原理1～3章测验题.doc
+OK comp 控制系统元件.doc
+OK tlink 典型环节及其传递函数.doc
+OK sfdr 结构图等效变换规则.doc
+OK sfde 结构图等效变换举例.doc
+OK sec2d 二阶欠阻尼动态性能.doc
+OK sec2i 二阶系统性能改善及稳定性.doc
+OK hstep 高阶系统的阶跃响应及动态性能.doc
+OK hoc0 高阶系统性能计算0.doc
+OK hoc1 高阶系统性能计算1.doc
+OK sol2 解2：.doc
+OK disc 离散系统的稳定性.doc
+OK sampex 例3 采样系统结构图.doc
+OK df01 典型非线性特性的描述函数01.doc
+OK dg 自控大纲.doc

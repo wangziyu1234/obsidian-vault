@@ -60,4 +60,5 @@
 
 ## OneDrive 课件与 825
 - 根目录 `C:\Users\23720\OneDrive\按章节-原视频和PPT\`、`Word-补充自O-God\`；旧 .doc 用 Word COM SaveAs；.ppt 用文本框记录头法（`data.find(b'\x00\x00\xa0\x0f')`）。
+- **Word-补充 38 份已全部核完（2026-09-26）**：结论逐份标注在 `12 资料索引（OneDrive）.md`，新增内容已入库（06-1-b §6.14 / 03-4 表3-7 / 02-3 化简5例 / 07-2-b 例3 / 05-5-b-1 题4题5），不需要再翻原 Word。同源异版组：ch3sum≈ch3s1、ch5sum≈ch5s1、hoc1≈sec2i。
 - 825 真题材料与 `数学\考研数学二\_题卡LaTeX源\` 本地专用不进 git。
