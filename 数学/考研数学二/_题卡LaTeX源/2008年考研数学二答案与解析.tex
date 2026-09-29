@@ -1,0 +1,1189 @@
+
+\documentclass[UTF8,11pt,fontset=windows]{ctexart}
+\usepackage[paperwidth=240mm,paperheight=200mm,margin=14mm,top=12mm,bottom=12mm]{geometry}
+\usepackage{amsmath,amssymb,mathtools,bm}
+\usepackage{xcolor,needspace}
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\linespread{1.08}
+\setlength{\emergencystretch}{3em}
+\allowdisplaybreaks[2]
+\xeCJKDeclareCharClass{CJK}{"2460 -> "24FF}
+\xeCJKDeclareCharClass{CJK}{"2160 -> "2188}
+\ctexset{section={format=\Large\bfseries,beforeskip=12pt,afterskip=7pt}}
+\begin{document}
+{\LARGE\bfseries 2008年考研数学二答案与解析\par}\vspace{6pt}
+
+\begingroup\color{gray}我的解答，未与官方核对。\par\endgroup
+
+\section*{答案速查}
+
+\begingroup\color{gray}选择题：1.D　2.C　3.D　4.A　5.B　6.A　7.C　8.D。\par\endgroup
+
+\begingroup\color{gray}填空题：9.$2$；10.$y=Cx-x\mathrm e^{-x}$；11.$y=x+1$；12.$(-1,-6)$；13.$(\ln2-1)/\sqrt2$；14.$-1$。\par\endgroup
+
+15. 极限为 $1/6$。
+
+16. $y''=(x+1)\mathrm e^x$。
+
+17. 积分为 $\pi^2/16+1/4$。
+
+18. 积分为 $19/4+\ln2$。
+
+19. $f(x)=(\mathrm e^x+\mathrm e^{-x})/2$。
+
+20. 中值定理及二阶导数结论的证明见正文。
+
+21. 最小值为6，最大值为72。
+
+22. 行列式为 $(n+1)a^n$；唯一解时 $x_1=n/[(n+1)a]$；奇异情形的通解见正文。
+
+23. $P^{-1}AP=\begin{pmatrix}-1&0&0\\0&1&1\\0&0&1\end{pmatrix}$。
+
+\clearpage
+
+\section*{一、选择题（1～8）}
+
+\Needspace{5\baselineskip}\textbf{1.（2008.1）答案：D，3个零点。}
+
+\Needspace{6\baselineskip}\textbf{第一步：展开多项式，求导并提取公因子。}
+
+$$
+f(x)=x^4-3x^3+2x^2,
+\qquad f'(x)=4x^3-9x^2+4x=x(4x^2-9x+4).
+$$
+
+所以导函数的零点分为 $x=0$ 和二次方程 $4x^2-9x+4=0$ 的根。
+
+\Needspace{6\baselineskip}\textbf{第二步：判断二次方程有几个不同实根。}
+
+判别式为 $\Delta=(-9)^2-4\cdot4\cdot4=17>0$，故有两个不同实根
+
+$$
+x=\frac{9-\sqrt{17}}8,\qquad x=\frac{9+\sqrt{17}}8.
+$$
+
+两根均不为0，因此连同前面的零点 $x=0$，$f'$ 共有3个不同零点，选D。
+
+\Needspace{6\baselineskip}\textbf{也可用罗尔定理判断个数。}
+
+$f(0)=f(1)=f(2)=0$，在 $[0,1]$ 与 $[1,2]$ 上分别使用罗尔定理，得到两个互不相同的导函数零点；又因 $x^2$ 是 $f$ 的因子，有 $f'(0)=0$。三阶多项式 $f'$ 至多有3个不同实根，所以恰有3个。
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{2.（2008.2）答案：C，曲边三角形 $ACD$ 的面积。}
+
+\Needspace{6\baselineskip}\textbf{第一步：用分部积分消去导数。}
+
+$f$ 有连续导数，可以取 $u=x$、$\mathrm dv=f'(x)\,\mathrm dx$。于是
+
+$$
+\begin{aligned}
+\int_0^a x f'(x)\,\mathrm dx
+&=[xf(x)]_0^a-\int_0^a f(x)\,\mathrm dx\\
+&=af(a)-\int_0^a f(x)\,\mathrm dx\\
+&=\int_0^a[f(a)-f(x)]\,\mathrm dx.
+\end{aligned}
+$$
+
+注意下限处的边界项为 $0\cdot f(0)=0$，即使图中 $D$ 不在原点，这一项仍为零。
+
+\Needspace{6\baselineskip}\textbf{第二步：把两个积分解释为图形面积。}
+
+图中 $A=(a,f(a))$、$B=(a,0)$、$C=(0,f(a))$，$D=(0,f(0))$。
+
+$af(a)$ 是矩形 $ABOC$ 的面积；$\int_0^a f(x)\,\mathrm dx$ 是曲边梯形 $ABOD$ 的面积。两者相减，留下由水平线段 $CA$、竖直线段 $CD$ 和曲线段 $DA$ 围成的区域。
+
+等价地，每一条竖直窄条的高度都是 $f(a)-f(x)\ge0$，积分正好累加这些窄条的面积。因此所求是曲边三角形 $ACD$ 的面积，选C。
+
+图中的直线弦 $AD$ 没有出现在积分边界中，不能将曲线段 $DA$ 换成该弦而选普通三角形。
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{3.（2008.3）答案：D。}
+
+\Needspace{6\baselineskip}\textbf{第一步：从通解中的基本解识别特征根。}
+
+对实系数常系数齐次微分方程，实特征根 $r=1$ 对应基本解 $\mathrm e^x$；共轭复根 $r=\pm2\mathrm i$ 对应基本解 $\cos2x,\sin2x$。
+
+因此题给三个任意常数对应三个互不相同的特征根
+
+$$
+1,\quad 2\mathrm i,\quad-2\mathrm i.
+$$
+
+\Needspace{6\baselineskip}\textbf{第二步：构造特征多项式。}
+
+$$
+\begin{aligned}
+p(r)&=(r-1)(r-2\mathrm i)(r+2\mathrm i)\\
+&=(r-1)(r^2+4)\\
+&=r^3-r^2+4r-4.
+\end{aligned}
+$$
+
+将 $r^3,r^2,r,1$ 的系数依次作为 $y''',y'',y',y$ 的系数，得到
+
+$$
+\boxed{y'''-y''+4y'-4y=0}.
+$$
+
+这就是D。它是三阶方程，三个基本解线性无关，所以题给含三个独立任意常数的表达式确为通解。
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{4.（2008.4）答案：A，1个可去间断点、1个跳跃间断点。}
+
+\Needspace{6\baselineskip}\textbf{第一步：确定需要检查的点。}
+
+$\ln|x|$ 要求 $x\ne0$，分母 $|x-1|$ 要求 $x\ne1$。其余各点均由连续函数通过乘除构成，且分母非零，故只需检查0和1。
+
+\Needspace{6\baselineskip}\textbf{第二步：判断零点处的极限。}
+
+将表达式写成
+
+$$
+f(x)=\frac{\sin x}{x}\cdot
+\frac{x\ln|x|}{|x-1|}.
+$$
+
+当 $x\to0$ 时，$\sin x/x\to1$、$|x-1|\to1$。令 $t=|x|\to0^+$，有
+
+$$
+|x\ln|x||=-t\ln t\longrightarrow0.
+$$
+
+故两侧极限均为0，而原函数在0处没有定义，所以0是可去间断点。单看对数趋于负无穷不能判断整个乘积的极限。
+
+\Needspace{6\baselineskip}\textbf{第三步：分别求1处的左右极限。}
+
+在1附近 $x>0$，所以 $\ln|x|=\ln x$。利用 $\ln x/(x-1)\to1$，写成
+
+$$
+f(x)=\frac{\ln x}{x-1}\cdot\frac{x-1}{|x-1|}\cdot\sin x.
+$$
+
+中间因子在左侧为 $-1$、右侧为1，因此
+
+$$
+\lim_{x\to1^-}f(x)=-\sin1,
+\qquad\lim_{x\to1^+}f(x)=\sin1.
+$$
+
+$\sin1\ne0$，两侧极限有限但不相等，故1是跳跃间断点。综上选A。
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{5.（2008.5）答案：B。}
+
+\Needspace{6\baselineskip}\textbf{第一步：证明B对所有题设情形成立。}
+
+若数列 $x_n$ 单调，将其代入单调函数 $f$ 后，$f(x_n)$ 仍是单调数列。具体而言，若函数与数列的单调方向相同，复合数列单调增加；若方向相反，复合数列单调减少。
+
+又因为 $f$ 在整个实轴有界，存在常数 $M>0$，使任意 $x$ 都满足 $|f(x)|\le M$。因此对所有 $n$ 都有 $|f(x_n)|\le M$。
+
+由单调有界数列的收敛定理，$\{f(x_n)\}$ 必收敛，B正确。这里无须假设 $x_n$ 本身有界，也不要求 $f$ 连续。
+
+\Needspace{6\baselineskip}\textbf{第二步：用跳跃函数排除A。}
+
+单调函数不一定连续。取严格增加且有界的函数
+
+$$
+f(x)=\begin{cases}
+\arctan x,&x\le0,\\
+1+\arctan x,&x>0.
+\end{cases}
+$$
+
+再取收敛数列 $x_n=(-1)^n/n\to0$。偶数项为正、奇数项为负，所以
+
+$$
+f(x_{2n})\longrightarrow1,
+\qquad f(x_{2n-1})\longrightarrow0.
+$$
+
+函数值数列存在两个不同的子列极限，因而不收敛，A不成立。不能在没有连续性的条件下把数列极限直接送入函数。
+
+\Needspace{6\baselineskip}\textbf{第三步：用同一个反例排除C和D。}
+
+取 $f(x)=\arctan x$、$x_n=n$。函数在实轴严格增加且有界，而
+
+$$
+f(x_n)=\arctan n\nearrow\frac\pi2.
+$$
+
+函数值数列既单调又收敛，但原数列 $n$ 没有有限极限，故C、D都不成立。
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{6.（2008.6）答案：A，$vf(u^2)$。}
+
+\Needspace{6\baselineskip}\textbf{第一步：从图中读取极坐标边界。}
+
+内圆为 $x^2+y^2=1$，外圆为 $x^2+y^2=u^2$，阴影从正 $x$ 轴扫至角度 $v$。因此这是圆环扇形，其范围为
+
+$$
+1\le r\le u,\qquad0\le\theta\le v.
+$$
+
+图中 $u$ 表示外半径，$v$ 表示圆心角，两者在偏导时应分别视为独立参数。
+
+\Needspace{6\baselineskip}\textbf{第二步：连同面积元一起换成极坐标。}
+
+由 $x^2+y^2=r^2$、$\sqrt{x^2+y^2}=r$，以及 $\mathrm dx\,\mathrm dy=r\,\mathrm dr\,\mathrm d\theta$，得
+
+$$
+\begin{aligned}
+F(u,v)&=\int_0^v\int_1^u\frac{f(r^2)}r\,r\,\mathrm dr\,\mathrm d\theta\\
+&=\int_0^v\mathrm d\theta\int_1^u f(r^2)\,\mathrm dr
+=v\int_1^u f(r^2)\,\mathrm dr.
+\end{aligned}
+$$
+
+\Needspace{6\baselineskip}\textbf{第三步：保持 $v$ 不变，对积分上限 $u$ 求导。}
+
+$f$ 连续，变上限积分求导公式适用，因此
+
+$$
+\boxed{\frac{\partial F}{\partial u}=vf(u^2)}.
+$$
+
+这是把被积函数 $f(r^2)$ 在上限 $r=u$ 处取值，并没有再对 $f(u^2)$ 求导，所以不应多乘一个 $2u$。分母中的 $r$ 已与面积元抵消，也不再出现 $1/u$。
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{7.（2008.7）答案：C，两者都可逆。}
+
+\Needspace{6\baselineskip}\textbf{第一步：用有限等比式构造 $I-A$ 的逆。}
+
+由 $A^3=O$，按矩阵乘法展开：
+
+$$
+\begin{aligned}
+(I-A)(I+A+A^2)
+&=I+A+A^2-A-A^2-A^3\\
+&=I-A^3=I.
+\end{aligned}
+$$
+
+同理，交换两个因子的次序仍得 $I$，因为每一项都是 $A$ 的幂。因此
+
+$$
+\boxed{(I-A)^{-1}=I+A+A^2}.
+$$
+
+\Needspace{6\baselineskip}\textbf{第二步：构造 $I+A$ 的逆。}
+
+同样计算
+
+$$
+\begin{aligned}
+(I+A)(I-A+A^2)
+&=I-A+A^2+A-A^2+A^3\\
+&=I+A^3=I.
+\end{aligned}
+$$
+
+反向相乘也等于 $I$，故
+
+$$
+\boxed{(I+A)^{-1}=I-A+A^2}.
+$$
+
+题中的单位矩阵 $E$ 在这里记为 $I$。两个逆矩阵都已直接构造出来，所以选C。
+
+还可从特征值理解：若 $A\alpha=\lambda\alpha$ 且 $\alpha\ne0$，则 $A^3\alpha=\lambda^3\alpha=0$，故 $\lambda=0$。因此 $I\pm A$ 的特征值都为1，不可能奇异。
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{8.（2008.8）答案：D。}
+
+\Needspace{6\baselineskip}\textbf{第一步：使用合同变换的定义。}
+
+实矩阵 $A$ 与 $B$ 合同，是指存在实可逆矩阵 $P$，使 $B=P^{\mathrm T}AP$。
+
+本题想把两个混合项位置上的2都改成 $-2$，可以把二次型的第二个变量变号。取
+
+$$
+P=\begin{pmatrix}1&0\\0&-1\end{pmatrix},\qquad |P|=-1\ne0.
+$$
+
+\Needspace{6\baselineskip}\textbf{第二步：直接进行矩阵乘法。}
+
+右乘 $P$ 先使第二列变号，再左乘 $P^{\mathrm T}=P$ 使第二行变号：
+
+$$
+\begin{aligned}
+P^{\mathrm T}AP
+&=\begin{pmatrix}1&0\\0&-1\end{pmatrix}
+\begin{pmatrix}1&2\\2&1\end{pmatrix}
+\begin{pmatrix}1&0\\0&-1\end{pmatrix}\\
+&=\begin{pmatrix}1&-2\\-2&1\end{pmatrix}.
+\end{aligned}
+$$
+
+这正是D，所以D与原矩阵合同。
+
+\Needspace{6\baselineskip}\textbf{还可用惯性指数排除其他选项。}
+
+原矩阵的特征值是3和 $-1$，即一个正、一个负。A的特征值为 $-1,-3$，两个均为负；B和C的特征值均为1和3，两个均为正。实对称矩阵合同必须具有相同的正、负惯性指数，因此其余三项都不符合。
+
+\clearpage
+
+\section*{二、填空题（9～14）}
+
+\Needspace{5\baselineskip}\textbf{9.（2008.9）答案：$f(0)=2$。}
+
+\Needspace{6\baselineskip}\textbf{第一步：说明复合自变量也趋于零。}
+
+$f$ 在0处连续，所以 $f(x)\to f(0)$，在零点附近有界。因此 $xf(x)\to0$，可以对 $1-\cos[xf(x)]$ 使用零点处的基本极限。
+
+\Needspace{6\baselineskip}\textbf{第二步：将题给比值拆成三个有极限的因子。}
+
+在原比值有定义的点上，
+
+$$
+\begin{aligned}
+&\frac{1-\cos[xf(x)]}{(\mathrm e^{x^2}-1)f(x)}\\
+&\qquad=\frac{1-\cos[xf(x)]}{[xf(x)]^2}
+\cdot\frac{x^2}{\mathrm e^{x^2}-1}\cdot f(x).
+\end{aligned}
+$$
+
+利用 $\lim_{t\to0}(1-\cos t)/t^2=1/2$ 和 $\lim_{s\to0}s/(\mathrm e^s-1)=1$，三个因子的极限依次为 $1/2,1,f(0)$。于是
+
+$$
+1=\frac12\cdot1\cdot f(0)
+\Longrightarrow\boxed{f(0)=2}.
+$$
+
+这里没有预先假设 $f(0)\ne0$：若 $f(0)=0$，同样的连续延拓极限会给出原比值趋于0，与题设矛盾。所得 $f(0)=2$ 又保证 $f(x)$ 在足够小的零点邻域内非零。
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{10.（2008.10）答案：$y=Cx-x\mathrm e^{-x}$。}
+
+\Needspace{6\baselineskip}\textbf{第一步：整理成关于 $y(x)$ 的方程。}
+
+将原微分形式除以 $\mathrm dx$，得到
+
+$$
+y+x^2\mathrm e^{-x}-xy'=0,
+\qquad xy'-y=x^2\mathrm e^{-x}.
+$$
+
+在不跨越零点的 $x\ne0$ 区间内，除以 $x^2$，左边正好是 $y/x$ 的导数：
+
+$$
+\left(\frac yx\right)'=\frac{xy'-y}{x^2}=\mathrm e^{-x}.
+$$
+
+\Needspace{6\baselineskip}\textbf{第二步：积分并还原 $y$。}
+
+$$
+\frac yx=\int\mathrm e^{-x}\,\mathrm dx
+=-\mathrm e^{-x}+C.
+$$
+
+所以
+
+$$
+\boxed{y=Cx-x\mathrm e^{-x}}.
+$$
+
+\Needspace{6\baselineskip}\textbf{第三步：代回检查符号。}
+
+此时 $y'=C-\mathrm e^{-x}+x\mathrm e^{-x}$，从而
+
+$$
+xy'-y=x(C-\mathrm e^{-x}+x\mathrm e^{-x})
+-(Cx-x\mathrm e^{-x})=x^2\mathrm e^{-x}.
+$$
+
+满足原方程。所得表达式也可光滑延拓到 $x=0$，并有 $y(0)=0$，符合原微分形式在零点的要求。
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{11.（2008.11）答案：$y=x+1$。}
+
+\Needspace{6\baselineskip}\textbf{第一步：核实题给点及隐函数条件。}
+
+在 $(0,1)$ 处，$\sin(xy)+\ln(y-x)=0=x$，该点在曲线上，且 $y-x=1>0$，对数有定义。
+
+令 $F(x,y)=\sin(xy)+\ln(y-x)-x$，则
+
+$$
+F_y=x\cos(xy)+\frac1{y-x},
+\qquad F_y(0,1)=1\ne0.
+$$
+
+所以曲线在该点附近确定可导的隐函数 $y=y(x)$。
+
+\Needspace{6\baselineskip}\textbf{第二步：对整个方程求导。}
+
+$xy$ 的导数为 $y+xy'$，$y-x$ 的导数为 $y'-1$，故
+
+$$
+\cos(xy)(y+xy')+\frac{y'-1}{y-x}=1.
+$$
+
+在 $(0,1)$ 处代入，得到
+
+$$
+1\cdot(1+0\cdot y')+(y'-1)=1,
+\qquad y'=1.
+$$
+
+\Needspace{6\baselineskip}\textbf{第三步：用点斜式写出切线。}
+
+切线经过 $(0,1)$、斜率为1，因此 $y-1=x-0$，即 $\boxed{y=x+1}$。
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{12.（2008.12）答案：$(-1,-6)$。}
+
+\Needspace{6\baselineskip}\textbf{第一步：按实数立方根的含义计算导数。}
+
+本题 $x^{2/3}=(\sqrt[3]x)^2$，对负数 $x$ 也有定义。在 $x\ne0$ 时，
+
+$$
+\begin{aligned}
+y'&=x^{2/3}+\frac23(x-5)x^{-1/3}\\
+&=\frac53(x-2)x^{-1/3},
+\end{aligned}
+$$
+
+继而
+
+$$
+\begin{aligned}
+y''&=\frac53\left[x^{-1/3}-\frac13(x-2)x^{-4/3}\right]\\
+&=\frac{10(x+1)}{9x^{4/3}}.
+\end{aligned}
+$$
+
+\Needspace{6\baselineskip}\textbf{第二步：检查二阶导数变号的点。}
+
+分母 $9x^{4/3}>0$，因此 $y''$ 的符号只由 $x+1$ 决定。在 $(-\infty,-1)$ 上 $y''<0$，在 $(-1,0)$ 和 $(0,+\infty)$ 上 $y''>0$。
+
+$x=-1$ 处函数光滑，且左右凹凸性发生改变，故为拐点横坐标。代入原函数，
+
+$$
+y(-1)=(-1-5)(\sqrt[3]{-1})^2=-6.
+$$
+
+所以拐点为 $\boxed{(-1,-6)}$。
+
+\Needspace{6\baselineskip}\textbf{第三步：检查导数不存在的候选点0。}
+
+$x=0$ 处虽然函数连续、导数不存在，但其左右相邻区间的二阶导数都为正，凹凸性没有改变，因此0不产生另一个拐点。判断拐点要检查凹凸性改变，不能仅以 $y''=0$ 或 $y''$ 不存在作为充分条件。
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{13.（2008.13）答案：$(\ln2-1)/\sqrt2$。}
+
+\Needspace{6\baselineskip}\textbf{第一步：取对数，处理底数和指数都含 $x$ 的情形。}
+
+在 $(1,2)$ 附近，$y/x>0$，可以写成
+
+$$
+\ln z=\frac xy\ln\frac yx
+=\frac xy(\ln y-\ln x).
+$$
+
+\Needspace{6\baselineskip}\textbf{第二步：把 $y$ 当作常数，对 $x$ 求偏导。}
+
+右边使用乘积求导，得到
+
+$$
+\frac{z_x}{z}
+=\frac1y(\ln y-\ln x)+\frac xy\left(-\frac1x\right)
+=\frac1y\left(\ln\frac yx-1\right).
+$$
+
+因此
+
+$$
+z_x=\frac zy\left(\ln\frac yx-1\right).
+$$
+
+\Needspace{6\baselineskip}\textbf{第三步：代入点的坐标和函数值。}
+
+在 $(1,2)$ 处，$z=2^{1/2}=\sqrt2$，所以
+
+$$
+\boxed{z_x(1,2)=\frac{\sqrt2}{2}(\ln2-1)
+=\frac{\ln2-1}{\sqrt2}}.
+$$
+
+其中 $-1$ 这一项来自底数 $y/x$ 随 $x$ 的变化，不能只对指数 $x/y$ 求导。
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{14.（2008.14）答案：$\lambda=-1$。}
+
+\Needspace{6\baselineskip}\textbf{第一步：由特征值求行列式。}
+
+矩阵的行列式等于全部特征值的乘积，所以
+
+$$
+|A|=2\cdot3\cdot\lambda=6\lambda.
+$$
+
+\Needspace{6\baselineskip}\textbf{第二步：注意矩阵整体乘常数时的阶数。}
+
+$A$ 是三阶矩阵，$2A$ 相当于三行都乘2。由行列式对每一行的线性性，
+
+$$
+|2A|=2^3|A|=8\cdot6\lambda=48\lambda.
+$$
+
+结合题设 $|2A|=-48$，得到 $\boxed{\lambda=-1}$。
+
+也可检查 $2A$ 的三个特征值为 $4,6,2\lambda$，乘积同样是 $48\lambda$。矩阵整体乘2并不意味着行列式只乘2。
+
+\clearpage
+
+\section*{三、解答题（15～23）}
+
+\Needspace{5\baselineskip}\textbf{15.（2008.15）答案：$1/6$。}
+
+\Needspace{6\baselineskip}\textbf{第一步：把嵌套的正弦差式看成 $t-\sin t$。}
+
+令 $t=\sin x$。当 $x\to0$ 时，$t\to0$，且
+
+$$
+\sin x-\sin(\sin x)=t-\sin t.
+$$
+
+由泰勒展开 $\sin t=t-t^3/6+O(t^5)$，可得
+
+$$
+\lim_{t\to0}\frac{t-\sin t}{t^3}=\frac16.
+$$
+
+\Needspace{6\baselineskip}\textbf{第二步：拆出基本极限 $\sin x/x$。}
+
+在足够小的去心邻域内，$\sin x\ne0$，原式可写成
+
+$$
+\frac{\sin x-\sin(\sin x)}{\sin^3x}
+\left(\frac{\sin x}{x}\right)^4.
+$$
+
+第一个因子的极限由第一步得到 $1/6$，第二个因子的极限为1，因此
+
+$$
+\boxed{\lim_{x\to0}\frac{[\sin x-\sin(\sin x)]\sin x}{x^4}
+=\frac16}.
+$$
+
+\Needspace{6\baselineskip}\textbf{不用泰勒展开时，也可单独计算差式的基本极限。}
+
+对 $0/0$ 型比值使用一次洛必达法则：
+
+$$
+\lim_{t\to0}\frac{t-\sin t}{t^3}
+=\lim_{t\to0}\frac{1-\cos t}{3t^2}
+=\frac16.
+$$
+
+不能把差式中的 $\sin(\sin x)$ 直接等价替换为 $\sin x$ 后相减；一阶项的抵消正是需要保留三阶项的原因。
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{16.（2008.16）答案：$\dfrac{\mathrm d^2y}{\mathrm dx^2}=(x+1)\mathrm e^x$。}
+
+\Needspace{6\baselineskip}\textbf{第一步：先解 $x(t)$ 满足的初值问题。}
+
+由 $x'=2t\mathrm e^{-x}$，两边乘 $\mathrm e^x$，得到
+
+$$
+\mathrm e^x x'=2t,
+\qquad\frac{\mathrm d}{\mathrm dt}\mathrm e^{x(t)}=2t.
+$$
+
+积分得 $\mathrm e^x=t^2+C$。利用 $x(0)=0$，有 $C=1$，所以
+
+$$
+\boxed{x=\ln(1+t^2)},\qquad t^2=\mathrm e^x-1,
+\qquad x\ge0.
+$$
+
+\Needspace{6\baselineskip}\textbf{第二步：计算 $y$ 的积分并消去参数。}
+
+由分部积分，$\int\ln(1+u)\,\mathrm du=(1+u)\ln(1+u)-u+C$，因此
+
+$$
+y=(1+t^2)\ln(1+t^2)-t^2.
+$$
+
+代入 $1+t^2=\mathrm e^x$、$\ln(1+t^2)=x$，得到
+
+$$
+y=x\mathrm e^x-(\mathrm e^x-1)
+=(x-1)\mathrm e^x+1.
+$$
+
+\Needspace{6\baselineskip}\textbf{第三步：对显式表达式求两次导数。}
+
+$$
+y'=\mathrm e^x+(x-1)\mathrm e^x=x\mathrm e^x,
+$$
+
+$$
+\boxed{y''=\mathrm e^x+x\mathrm e^x=(x+1)\mathrm e^x}.
+$$
+
+\Needspace{6\baselineskip}\textbf{用参数求导公式核对。}
+
+当 $t\ne0$ 时，
+
+$$
+x'(t)=\frac{2t}{1+t^2},
+\qquad y'(t)=2t\ln(1+t^2),
+$$
+
+于是
+
+$$
+\frac{\mathrm dy}{\mathrm dx}=(1+t^2)\ln(1+t^2).
+$$
+
+再次对 $t$ 求导后除以 $x'(t)$，有
+
+$$
+\begin{aligned}
+\frac{\mathrm d^2y}{\mathrm dx^2}
+&=\frac{2t[\ln(1+t^2)+1]}{2t/(1+t^2)}\\
+&=(1+t^2)[\ln(1+t^2)+1]=(x+1)\mathrm e^x.
+\end{aligned}
+$$
+
+$t=0$ 时，$x'(t)$ 和 $y'(t)$ 都为零，不能直接用比值代入。前面的消参表达式说明曲线作为 $x\ge0$ 上的函数仍光滑，零点处的右侧二阶导数为1。
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{17.（2008.17）答案：$\pi^2/16+1/4$。}
+
+\Needspace{6\baselineskip}\textbf{第一步：用反正弦换元，消去根式分母。}
+
+令 $t=\arcsin x$，则 $x=\sin t$，$\mathrm dx=\cos t\,\mathrm dt$。当 $0\le x\le1$ 时，$0\le t\le\pi/2$，且
+
+$$
+\sqrt{1-x^2}=\cos t.
+$$
+
+因此原积分化为
+
+$$
+I=\int_0^{\pi/2}t\sin^2t\,\mathrm dt.
+$$
+
+原被积函数在 $x=1$ 处分母为零，可以先在 $[0,b]$（$b<1$）换元，再令 $b\to1^-$；换元后的函数在闭区间连续，也说明该反常积分收敛。
+
+\Needspace{6\baselineskip}\textbf{第二步：降幂，把积分拆成两部分。}
+
+由 $\sin^2t=(1-\cos2t)/2$，
+
+$$
+I=\frac12\int_0^{\pi/2}t\,\mathrm dt
+-\frac12\int_0^{\pi/2}t\cos2t\,\mathrm dt.
+$$
+
+第一部分为
+
+$$
+\frac12\int_0^{\pi/2}t\,\mathrm dt
+=\left[\frac{t^2}{4}\right]_0^{\pi/2}
+=\frac{\pi^2}{16}.
+$$
+
+\Needspace{6\baselineskip}\textbf{第三步：对第二部分分部积分。}
+
+取 $u=t$、$\mathrm dv=\cos2t\,\mathrm dt$，得
+
+$$
+\begin{aligned}
+J&=\int_0^{\pi/2}t\cos2t\,\mathrm dt\\
+&=\left[\frac{t\sin2t}{2}\right]_0^{\pi/2}
+-\frac12\int_0^{\pi/2}\sin2t\,\mathrm dt\\
+&=0+\left[\frac{\cos2t}{4}\right]_0^{\pi/2}
+=-\frac12.
+\end{aligned}
+$$
+
+合并两部分，得到
+
+$$
+\boxed{I=\frac{\pi^2}{16}-\frac12\left(-\frac12\right)
+=\frac{\pi^2}{16}+\frac14}.
+$$
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{18.（2008.18）答案：$19/4+\ln2$。}
+
+\Needspace{6\baselineskip}\textbf{第一步：按 $xy$ 与1的大小确定被积函数。}
+
+$$
+\max\{xy,1\}=\begin{cases}
+1,&xy\le1,\\
+xy,&xy>1.
+\end{cases}
+$$
+
+两部分的分界线是双曲线 $xy=1$。在整个正方形上先积分基准值1，再在 $xy>1$ 的部分补上差值 $xy-1$，可写成
+
+$$
+I=4+\iint_{D_+}(xy-1)\,\mathrm dx\,\mathrm dy,
+\qquad D_+=D\cap\{xy>1\}.
+$$
+
+边界 $xy=1$ 上两个表达式相等，是否把它计入 $D_+$ 不影响积分。
+
+\Needspace{6\baselineskip}\textbf{第二步：求补充区域的积分限。}
+
+因为正方形内 $0\le y\le2$，只有 $x\ge1/2$ 才可能满足 $xy\ge1$。双曲线与上边界交于 $(1/2,2)$，与右边界交于 $(2,1/2)$。
+
+固定 $x\in[1/2,2]$ 时，$y$ 从 $1/x$ 到2，所以
+
+$$
+I=4+\int_{1/2}^2\mathrm dx\int_{1/x}^2(xy-1)\,\mathrm dy.
+$$
+
+\Needspace{6\baselineskip}\textbf{第三步：逐层计算积分。}
+
+先把 $x$ 当作常数，对 $y$ 积分：
+
+$$
+\begin{aligned}
+\int_{1/x}^2(xy-1)\,\mathrm dy
+&=\left[\frac{xy^2}{2}-y\right]_{1/x}^2\\
+&=(2x-2)-\left(\frac1{2x}-\frac1x\right)\\
+&=2x-2+\frac1{2x}.
+\end{aligned}
+$$
+
+于是
+
+$$
+\begin{aligned}
+I&=4+\left[x^2-2x+\frac12\ln x\right]_{1/2}^2\\
+&=4+\frac12\ln2-
+\left(-\frac34-\frac12\ln2\right)\\
+&=\boxed{\frac{19}{4}+\ln2}.
+\end{aligned}
+$$
+
+\Needspace{6\baselineskip}\textbf{也可直接分区积分。}
+
+$x\in[0,1/2]$ 时整条竖直截线都取最大值1；$x\in[1/2,2]$ 时在 $y=1/x$ 处分开。因此
+
+$$
+I=\int_0^{1/2}\int_0^2 1\,\mathrm dy\,\mathrm dx
++\int_{1/2}^2\left[\int_0^{1/x}1\,\mathrm dy+
+\int_{1/x}^2xy\,\mathrm dy\right]\mathrm dx.
+$$
+
+化简为 $1+\int_{1/2}^2(2x+1/(2x))\,\mathrm dx$，同样得到 $19/4+\ln2$。
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{19.（2008.19）答案：$f(x)=(\mathrm e^x+\mathrm e^{-x})/2$。}
+
+\Needspace{6\baselineskip}\textbf{第一步：分别写出旋转体的侧面积和体积。}
+
+$f$ 单调增加且 $f(0)=1$，故 $f(x)\ge1>0$，旋转半径始终为正。曲线弧长微元为
+
+$$
+\mathrm ds=\sqrt{1+[f'(x)]^2}\,\mathrm dx.
+$$
+
+绕 $x$ 轴旋转时，侧面积微元为 $2\pi f(x)\,\mathrm ds$；垂直于 $x$ 轴的圆截面面积为 $\pi f(x)^2$。因此
+
+$$
+S(t)=2\pi\int_0^t f(x)\sqrt{1+[f'(x)]^2}\,\mathrm dx,
+$$
+
+$$
+V(t)=\pi\int_0^t f(x)^2\,\mathrm dx.
+$$
+
+侧面积对应曲线旋转形成的曲面，不包含两端的圆面。
+
+\Needspace{6\baselineskip}\textbf{第二步：利用等式对任意上限成立，得到微分方程。}
+
+题设 $S(t)=2V(t)$ 对所有 $t\ge0$ 成立。$f,f'$ 连续，被积函数也连续，所以对上限求导有
+
+$$
+2\pi f(t)\sqrt{1+[f'(t)]^2}=2\pi f(t)^2.
+$$
+
+约去正因子 $2\pi f(t)$，并把自变量改记为 $x$：
+
+$$
+\sqrt{1+[f'(x)]^2}=f(x),
+\qquad [f'(x)]^2=f(x)^2-1.
+$$
+
+\Needspace{6\baselineskip}\textbf{第三步：由增加性选择正号并分离变量。}
+
+可导的单调增加函数满足 $f'\ge0$，故应取
+
+$$
+f'=\sqrt{f^2-1}.
+$$
+
+又由题设的增加性及初值，$x>0$ 时 $f(x)>1$，可在正半轴分离变量。固定 $0<\varepsilon<x$，积分得
+
+$$
+\int_{f(\varepsilon)}^{f(x)}\frac{\mathrm du}{\sqrt{u^2-1}}
+=x-\varepsilon.
+$$
+
+利用原函数 $\ln(u+\sqrt{u^2-1})$，再令 $\varepsilon\to0^+$。由 $f(\varepsilon)\to1$，得到
+
+$$
+\ln\bigl(f(x)+\sqrt{f(x)^2-1}\bigr)=x.
+$$
+
+先在正半轴积分、再取端点极限，避免了直接在 $f=1$ 处除以零。
+
+\Needspace{6\baselineskip}\textbf{第四步：由隐式关系解出 $f$。}
+
+指数化得到
+
+$$
+f+\sqrt{f^2-1}=\mathrm e^x.
+$$
+
+两共轭式的乘积为1，所以
+
+$$
+f-\sqrt{f^2-1}=\mathrm e^{-x}.
+$$
+
+两式相加，得
+
+$$
+\boxed{f(x)=\frac{\mathrm e^x+\mathrm e^{-x}}2,\qquad x\ge0}.
+$$
+
+\Needspace{6\baselineskip}\textbf{第五步：回到原面积条件核验。}
+
+所得函数满足 $f(0)=1$，且 $f'(x)=(\mathrm e^x-\mathrm e^{-x})/2>0$（$x>0$）。同时
+
+$$
+f(x)^2-f'(x)^2=1,
+\qquad f(x)>0.
+$$
+
+因此 $\sqrt{1+f'^2}=f$，代入面积公式即有 $S(t)=2\pi\int_0^t f(x)^2\,\mathrm dx=2V(t)$，所有条件均满足。
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{20.（2008.20）积分中值定理与二阶导数结论。}
+
+\Needspace{6\baselineskip}\textbf{（Ⅰ）第一步：用连续函数的最值夹住积分平均值。}
+
+$f$ 在闭区间 $[a,b]$ 连续，所以取得最小值 $m$ 和最大值 $M$。对所有 $x\in[a,b]$，有 $m\le f(x)\le M$。
+
+两边在 $[a,b]$ 积分，并利用 $b-a>0$，得到
+
+$$
+m(b-a)\le\int_a^b f(x)\,\mathrm dx\le M(b-a),
+$$
+
+$$
+m\le\frac1{b-a}\int_a^b f(x)\,\mathrm dx\le M.
+$$
+
+\Needspace{6\baselineskip}\textbf{第二步：由介值定理找到取得平均值的点。}
+
+积分平均值位于 $m,M$ 之间，而连续函数取得最小值与最大值之间的每一个数。因此存在 $\eta\in[a,b]$，使
+
+$$
+f(\eta)=\frac1{b-a}\int_a^b f(x)\,\mathrm dx.
+$$
+
+整理得到
+
+$$
+\boxed{\int_a^b f(x)\,\mathrm dx=f(\eta)(b-a)}.
+$$
+
+若 $m=M$，函数为常数，区间内任一点都可作为 $\eta$；若平均值恰好等于某个端点最值，取相应最值点即可。
+
+\Needspace{6\baselineskip}\textbf{（Ⅱ）第一步：由左边的函数值增加找到正的一阶导数。}
+
+在 $[1,2]$ 上使用拉格朗日中值定理，存在 $u\in(1,2)$，使
+
+$$
+\varphi'(u)=\frac{\varphi(2)-\varphi(1)}{2-1}>0.
+$$
+
+\Needspace{6\baselineskip}\textbf{第二步：由右边的积分条件找到负的一阶导数。}
+
+$\varphi$ 二阶可导，特别地连续。对 $[2,3]$ 使用第一问的积分中值定理，存在 $c\in[2,3]$，使
+
+$$
+\varphi(c)=\int_2^3\varphi(x)\,\mathrm dx<\varphi(2).
+$$
+
+这里区间长度为1，因此平均值正好等于积分值。由严格不等式可知 $c\ne2$，故 $2<c\le3$。
+
+再在 $[2,c]$ 上用拉格朗日中值定理，存在 $v\in(2,c)$，使
+
+$$
+\varphi'(v)=\frac{\varphi(c)-\varphi(2)}{c-2}<0.
+$$
+
+至此得到 $1<u<2<v<3$，以及 $\varphi'(u)>0>\varphi'(v)$。
+
+\Needspace{6\baselineskip}\textbf{第三步：对导函数应用一次中值定理。}
+
+$\varphi$ 具有二阶导数，所以 $\varphi'$ 可导，因而连续。这保证 $\varphi'$ 在 $[u,v]$ 连续、在 $(u,v)$ 可导。
+
+故存在 $\xi\in(u,v)\subset(1,3)$，使
+
+$$
+\boxed{\varphi''(\xi)
+=\frac{\varphi'(v)-\varphi'(u)}{v-u}<0}.
+$$
+
+分母为正、分子为负，严格不等式由此成立。证明不需要假定二阶导数本身连续。
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{21.（2008.21）答案：最小值6，最大值72。}
+
+\Needspace{6\baselineskip}\textbf{第一步：利用两个约束，把问题化为一个变量。}
+
+由 $z=x^2+y^2$，有 $z\ge0$；另一条件给出 $x+y=4-z$。由恒等式
+
+$$
+2(x^2+y^2)-(x+y)^2=(x-y)^2\ge0,
+$$
+
+可得
+
+$$
+(4-z)^2\le2z.
+$$
+
+展开并因式分解：
+
+$$
+z^2-10z+16\le0,
+\qquad(z-2)(z-8)\le0.
+$$
+
+所以任何满足约束的点都必须有 $\boxed{2\le z\le8}$。
+
+\Needspace{6\baselineskip}\textbf{第二步：说明这个范围可以达到。}
+
+若给定 $z\in[2,8]$，由两个约束可得
+
+$$
+(x-y)^2=2z-(4-z)^2=(z-2)(8-z)\ge0.
+$$
+
+因此可以取
+
+$$
+x=\frac{4-z+\sqrt{(z-2)(8-z)}}2,
+\qquad
+y=\frac{4-z-\sqrt{(z-2)(8-z)}}2,
+$$
+
+它们满足 $x+y=4-z$、$x^2+y^2=z$。所以 $[2,8]$ 正是可行的 $z$ 范围，而不只是一个估计范围。
+
+\Needspace{6\baselineskip}\textbf{第三步：在这个区间上求目标函数的最值。}
+
+目标函数化为
+
+$$
+u=x^2+y^2+z^2=z+z^2.
+$$
+
+令 $g(z)=z+z^2$，则 $g'(z)=1+2z>0$（$2\le z\le8$），故 $g$ 严格递增。
+
+于是
+
+$$
+\boxed{u_{\min}=g(2)=6},
+\qquad\boxed{u_{\max}=g(8)=72}.
+$$
+
+\Needspace{6\baselineskip}\textbf{第四步：给出实际取得最值的点。}
+
+在区间两个端点，$(x-y)^2=0$，所以 $x=y$。
+
+当 $z=2$ 时，$x+y=2$，得到 $(x,y,z)=(1,1,2)$，最小值为6。
+
+当 $z=8$ 时，$x+y=-4$，得到 $(x,y,z)=(-2,-2,8)$，最大值为72。两个点均满足原约束，因此这两个界确实是全局最值。
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{22.（2008.22）三对角方程组。}
+
+\Needspace{6\baselineskip}\textbf{（Ⅰ）第一步：建立行列式的阶数递推关系。}
+
+记题给 $n$ 阶三对角矩阵的行列式为 $D_n$。前两阶为
+
+$$
+D_1=2a,\qquad D_2=\begin{vmatrix}2a&1\\a^2&2a\end{vmatrix}=3a^2.
+$$
+
+对 $D_n$ 按第一行展开，只有前两个元素有贡献。第一个元素 $2a$ 的余子式正是 $D_{n-1}$；第二个元素1的代数余子式带负号。
+
+删去第一行、第二列后，剩余矩阵的第一列只有首元素 $a^2$ 非零，再按这列展开，就得到 $a^2D_{n-2}$。所以
+
+$$
+\boxed{D_n=2aD_{n-1}-a^2D_{n-2}},\qquad n\ge3.
+$$
+
+若约定空行列式 $D_0=1$，这一递推也适用于 $n=2$。
+
+\Needspace{6\baselineskip}\textbf{第二步：用数学归纳法证明闭式。}
+
+$n=1,2$ 时，$D_n=(n+1)a^n$ 已由直接计算验证。假设前两阶满足
+
+$$
+D_{n-1}=na^{n-1},\qquad D_{n-2}=(n-1)a^{n-2},
+$$
+
+代入递推式，得
+
+$$
+\begin{aligned}
+D_n&=2a\cdot na^{n-1}-a^2\cdot(n-1)a^{n-2}\\
+&=[2n-(n-1)]a^n=(n+1)a^n.
+\end{aligned}
+$$
+
+归纳完成。因此 $\boxed{|A|=(n+1)a^n}$。证明没有除以 $a$，所以 $a=0$ 时公式也成立。
+
+\Needspace{6\baselineskip}\textbf{（Ⅱ）第一步：判断唯一解条件。}
+
+方阵线性方程组对给定右端具有唯一解，当且仅当系数矩阵可逆。由第一问，
+
+$$
+|A|\ne0\Longleftrightarrow(n+1)a^n\ne0
+\Longleftrightarrow\boxed{a\ne0}.
+$$
+
+\Needspace{6\baselineskip}\textbf{第二步：用克拉默法则求 $x_1$。}
+
+把 $A$ 的第一列替换为 $b=(1,0,\ldots,0)^{\mathrm T}$，所得行列式记为 $\Delta_1$。按新的第一列展开，只剩首元素1对应的余子式，恰为原三对角结构的 $n-1$ 阶行列式。因此
+
+$$
+\Delta_1=D_{n-1}=na^{n-1}.
+$$
+
+在 $a\ne0$ 时，由克拉默法则，
+
+$$
+\boxed{x_1=\frac{\Delta_1}{D_n}
+=\frac{na^{n-1}}{(n+1)a^n}
+=\frac{n}{(n+1)a}}.
+$$
+
+\Needspace{6\baselineskip}\textbf{（Ⅲ）第一步：代入奇异参数，判断是否相容。}
+
+无穷多解必须发生在 $a=0$，但行列式为零本身并不能区分无解与无穷多解，还要看右端是否相容。
+
+当 $a=0$、$n\ge2$ 时，主对角线和下副对角线全部为零，只剩上副对角线的1。方程组逐行变为
+
+$$
+x_2=1,\quad x_3=0,\quad\ldots,\quad x_n=0,
+\qquad 0=0.
+$$
+
+这些条件相容，且没有方程限制 $x_1$，所以系数矩阵与增广矩阵的秩均为 $n-1<n$。
+
+\Needspace{6\baselineskip}\textbf{第二步：写出全部解。}
+
+令 $x_1=t$，得到
+
+$$
+\boxed{x=\begin{pmatrix}t\\1\\0\\\vdots\\0\end{pmatrix}
+=\begin{pmatrix}0\\1\\0\\\vdots\\0\end{pmatrix}
++t\begin{pmatrix}1\\0\\0\\\vdots\\0\end{pmatrix},
+\quad t\in\mathbb R.}
+$$
+
+因此在题示的多元情形下，$a=0$ 时有无穷多解，上式为通解。若将阶数另取为退化的一元情形 $n=1$，则 $a=0$ 时方程变成 $0=1$，此时无解；$a\ne0$ 时的公式仍适用。
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{23.（2008.23）线性无关与相似变换矩阵。}
+
+\Needspace{6\baselineskip}\textbf{（Ⅰ）第一步：写出三个向量受到 $A-I$ 作用后的关系。}
+
+由特征向量条件和题给等式，
+
+$$
+A\alpha_1=-\alpha_1,\qquad
+A\alpha_2=\alpha_2,\qquad
+A\alpha_3=\alpha_2+\alpha_3.
+$$
+
+所以
+
+$$
+(A-I)\alpha_1=-2\alpha_1,\quad
+(A-I)\alpha_2=0,\quad
+(A-I)\alpha_3=\alpha_2.
+$$
+
+其中 $\alpha_1,\alpha_2$ 是特征向量，按照定义均非零；又属于不同特征值，故两者线性无关。
+
+\Needspace{6\baselineskip}\textbf{第二步：对任意线性关系使用上述算子。}
+
+设
+
+$$
+c_1\alpha_1+c_2\alpha_2+c_3\alpha_3=0.
+$$
+
+两边左乘 $A-I$，得到
+
+$$
+-2c_1\alpha_1+c_3\alpha_2=0.
+$$
+
+由 $\alpha_1,\alpha_2$ 线性无关，得 $-2c_1=0,c_3=0$，即 $c_1=c_3=0$。代回原关系，$c_2\alpha_2=0$，又因 $\alpha_2\ne0$，所以 $c_2=0$。
+
+三个系数只能全为零，故 $\boxed{\alpha_1,\alpha_2,\alpha_3\text{ 线性无关}}$。因此以三者为列的三阶矩阵 $P$ 可逆。
+
+\Needspace{6\baselineskip}\textbf{（Ⅱ）第一步：把 $A\alpha_i$ 写成新基底下的坐标。}
+
+按第一问的向量关系，三个像向量在基底 $(\alpha_1,\alpha_2,\alpha_3)$ 下的坐标分别为
+
+$$
+\begin{pmatrix}-1\\0\\0\end{pmatrix},\qquad
+\begin{pmatrix}0\\1\\0\end{pmatrix},\qquad
+\begin{pmatrix}0\\1\\1\end{pmatrix}.
+$$
+
+这些坐标应依次作为表示矩阵的列，而不是行。因此
+
+$$
+\begin{aligned}
+AP&=(A\alpha_1,A\alpha_2,A\alpha_3)\\
+&=(-\alpha_1,\alpha_2,\alpha_2+\alpha_3)\\
+&=P\begin{pmatrix}-1&0&0\\0&1&1\\0&0&1\end{pmatrix}.
+\end{aligned}
+$$
+
+\Needspace{6\baselineskip}\textbf{第二步：左乘 $P^{-1}$，得到所求矩阵。}
+
+$$
+\boxed{P^{-1}AP=\begin{pmatrix}-1&0&0\\0&1&1\\0&0&1\end{pmatrix}}.
+$$
+
+第三列中第二个分量为1，来自 $A\alpha_3$ 中额外出现的 $\alpha_2$。所以 $\alpha_3$ 并不是特征值1对应的普通特征向量，所得表示矩阵也不是对角矩阵。
+\end{document}

@@ -1,0 +1,1388 @@
+
+\documentclass[UTF8,11pt,fontset=windows]{ctexart}
+\usepackage[paperwidth=240mm,paperheight=200mm,margin=14mm,top=12mm,bottom=12mm]{geometry}
+\usepackage{amsmath,amssymb,mathtools,bm}
+\usepackage{xcolor,needspace}
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\linespread{1.08}
+\setlength{\emergencystretch}{3em}
+\allowdisplaybreaks[2]
+\xeCJKDeclareCharClass{CJK}{"2460 -> "24FF}
+\xeCJKDeclareCharClass{CJK}{"2160 -> "2188}
+\ctexset{section={format=\Large\bfseries,beforeskip=12pt,afterskip=7pt}}
+\begin{document}
+{\LARGE\bfseries 2022年考研数学二答案与解析\par}\vspace{6pt}
+
+\begingroup\color{gray}我的解答，未与官方核对。\par\endgroup
+
+\section*{答案速查}
+
+\begingroup\color{gray}选择题：1.C　2.D　3.B　4.C　5.A　6.D　7.A　8.B　9.D　10.C。\par\endgroup
+
+\begingroup\color{gray}填空题：11.$\sqrt{\mathrm e}$；12.$-\dfrac{31}{32}$；13.$\dfrac{8\pi}{3\sqrt3}$；14.$C_1+\mathrm e^x(C_2\cos2x+C_3\sin2x)$；15.$\dfrac{\pi}{12}$；16.$-1$。\par\endgroup
+
+17. $f'(1)=-1$。
+
+18. $y=\dfrac{x^2}{4}-\dfrac12\ln x$，弧长为 $\dfrac{\mathrm e^2+1}{4}$。
+
+19. $I=2\pi-2$。
+
+20. $g_x=2(2x-y)\mathrm e^{-y}$；$f(u,v)=(u^2+v^2)\mathrm e^{-(u+v)}$，在 $(0,0)$ 处取得极小值 $0$，无极大值。
+
+21. 充要条件的证明见正文。
+
+22. 标准形为 $2y_1^2+4y_2^2+4y_3^2$；所求最小值为 $2$，正交矩阵见正文。
+
+\clearpage
+
+\section*{一、选择题（1～10）}
+
+\Needspace{5\baselineskip}\textbf{1.（2022.1）答案：C。①③④正确。}
+
+\Needspace{6\baselineskip}\textbf{判断①。} 等价无穷小的定义为
+
+$$
+\frac{\alpha(x)}{\beta(x)}\longrightarrow1.
+$$
+
+两边平方可得
+
+$$
+\frac{\alpha^2(x)}{\beta^2(x)}
+=\left(\frac{\alpha(x)}{\beta(x)}\right)^2\longrightarrow1,
+$$
+
+所以①成立。
+
+\Needspace{6\baselineskip}\textbf{判断②。} 平方会丢失正负号。取 $\alpha(x)=x$、$\beta(x)=-x$，则平方之比恒为 $1$，但原来的比值恒为 $-1$，不等价。因此②不成立。
+
+\Needspace{6\baselineskip}\textbf{判断③。} 若 $\alpha\sim\beta$，则 $\beta/\alpha\to1$，从而
+
+$$
+\frac{\alpha-\beta}{\alpha}=1-\frac{\beta}{\alpha}\longrightarrow0.
+$$
+
+这正是 $\alpha-\beta=o(\alpha)$，所以③成立。
+
+\Needspace{6\baselineskip}\textbf{判断④。} 若 $(\alpha-\beta)/\alpha\to0$，则 $\beta/\alpha\to1$，再取倒数得 $\alpha/\beta\to1$，故④成立。
+
+综上，正确命题是①③④，选 C。
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{2.（2022.2）答案：D，$\dfrac23$。}
+
+\Needspace{6\baselineskip}\textbf{第一步：写出积分区域。}
+
+原积分区域为
+
+$$
+D=\{(x,y):0\le y\le2,\ y\le x\le2\}.
+$$
+
+将它改写为先对 $y$ 积分的形式：
+
+$$
+0\le x\le2,\qquad0\le y\le x.
+$$
+
+\Needspace{6\baselineskip}\textbf{第二步：换序，消去分子中的 $y$。}
+
+$$
+\begin{aligned}
+I&=\int_0^2\frac1{\sqrt{1+x^3}}\left(\int_0^x y\,\mathrm dy\right)\mathrm dx\\
+&=\frac12\int_0^2\frac{x^2}{\sqrt{1+x^3}}\,\mathrm dx.
+\end{aligned}
+$$
+
+\Needspace{6\baselineskip}\textbf{第三步：换元。} 令 $u=1+x^3$，则 $\mathrm du=3x^2\mathrm dx$，上下限依次为 $1,9$。
+
+$$
+I=\frac16\int_1^9u^{-1/2}\,\mathrm du
+=\frac13\bigl(\sqrt9-\sqrt1\bigr)=\frac23.
+$$
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{3.（2022.3）答案：B。}
+
+\Needspace{6\baselineskip}\textbf{第一步：由二阶导数存在，得到一阶导数连续。}
+
+题设表示 $f'$ 在 $x_0$ 处可导。因此 $f'$ 在 $x_0$ 处连续；这里能够使用的是 $f'$ 的连续性。
+
+若 $f'(x_0)>0$，取 $\varepsilon=f'(x_0)/2$。存在 $\delta>0$，使
+
+$$
+|x-x_0|<\delta\quad\Longrightarrow\quad
+|f'(x)-f'(x_0)|<\frac12f'(x_0),
+$$
+
+从而在整个邻域内都有 $f'(x)>f'(x_0)/2>0$。
+
+任取该邻域中的 $u<v$，由拉格朗日中值定理，存在 $\xi\in(u,v)$，使
+
+$$
+f(v)-f(u)=f'(\xi)(v-u)>0.
+$$
+
+故 $f$ 在 $x_0$ 的某邻域内严格单调增加，B 成立。
+
+\Needspace{6\baselineskip}\textbf{第二步：分别排除 A、C。}
+
+对 A，取 $f(x)=(x-x_0)^3$。该函数严格增加，但 $f'(x_0)=0$，所以单调增加不能推出该点导数严格为正。
+
+对 C，取 $f(x)=(x-x_0)^4$。它满足
+
+$$
+f''(x)=12(x-x_0)^2\ge0,
+$$
+
+图形向上弯曲，是本题所说的凹函数，但 $f''(x_0)=0$。因此 C 中的严格不等号也不成立。
+
+\Needspace{6\baselineskip}\textbf{第三步：构造反例排除 D。}
+
+D 试图由 $f''(x_0)>0$ 推出整个邻域内的凹性。题设没有保证 $f''$ 在 $x_0$ 处连续，因此需要检查它在附近能否变号。
+
+取 $x_0=0$，令
+
+$$
+f(x)=\begin{cases}x^2+3x^4\sin(1/x),&x\ne0,\\0,&x=0.\end{cases}
+$$
+
+由导数定义，
+$$
+f'(0)=\lim_{h\to0}\frac{h^2+3h^4\sin(1/h)}h=0.
+$$
+
+当 $x\ne0$ 时，逐项求导得到
+
+$$
+f'(x)=2x+12x^3\sin(1/x)-3x^2\cos(1/x).
+$$
+
+因此
+
+$$
+\begin{aligned}
+f''(0)
+&=\lim_{x\to0}\frac{f'(x)-f'(0)}x\\
+&=\lim_{x\to0}\left[2+12x^2\sin(1/x)-3x\cos(1/x)\right]=2>0.
+\end{aligned}
+$$
+
+但在 $x\ne0$ 处，继续求导有
+
+$$
+f''(x)=2+36x^2\sin(1/x)-18x\cos(1/x)-3\sin(1/x).
+$$
+
+取 $x_n=(\pi/2+2n\pi)^{-1}$，则 $x_n\to0$，且 $\sin(1/x_n)=1$、$\cos(1/x_n)=0$。于是
+
+$$
+f''(x_n)=-1+36x_n^2<0
+$$
+
+对充分大的 $n$ 成立。在零点的任何邻域内都存在二阶导数为负的点，故该函数在任何这样的邻域内都不是凹函数，D 不成立。
+
+因此只有 B 正确。
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{4.（2022.4）答案：C。}
+
+\Needspace{6\baselineskip}\textbf{第一步：把二元函数写成一元函数的复合。}
+
+令 $u=x-y$，并记
+
+$$
+H(u)=\int_0^u(u-t)f(t)\,\mathrm dt,
+\qquad F(x,y)=H(x-y).
+$$
+
+把 $u$ 提到积分号外，得到
+
+$$
+H(u)=u\int_0^u f(t)\,\mathrm dt-\int_0^u t f(t)\,\mathrm dt.
+$$
+
+$f$ 连续，可使用微积分基本定理。由乘积法则，
+
+$$
+H'(u)=\int_0^u f(t)\,\mathrm dt+uf(u)-uf(u)
+=\int_0^u f(t)\,\mathrm dt,
+\qquad H''(u)=f(u).
+$$
+
+这种写法只用到 $f$ 的连续性，不需要 $f'$ 存在。
+
+\Needspace{6\baselineskip}\textbf{第二步：应用链式法则，分别记录符号。}
+
+由于 $u_x=1$、$u_y=-1$，有
+
+$$
+F_x=H'(x-y),\qquad F_y=-H'(x-y),
+$$
+
+所以 $F_x=-F_y$。继续对相应变量求导：
+
+$$
+\begin{aligned}
+F_{xx}&=H''(x-y)\cdot1=f(x-y),\\
+F_{yy}&=-H''(x-y)\cdot(-1)=f(x-y).
+\end{aligned}
+$$
+
+故 $F_{xx}=F_{yy}$，选 C。对 $y$ 连续求两次偏导时，两个负号相乘为正。
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{5.（2022.5）答案：A，$-1<p<1$。}
+
+\Needspace{6\baselineskip}\textbf{第一步：分开考察两个端点。} 把积分在 $x=1/2$ 处分成两段。被积函数在 $(0,1)$ 内连续且恒为负，原反常积分收敛，要求两端分别收敛。
+
+\Needspace{6\baselineskip}\textbf{第二步：判断 $x=0$ 附近的收敛条件。}
+
+因为 $(1-x)^{1-p}\to1$，绝对值被积函数与 $|\ln x|/x^p$ 的比值趋于 $1$，所以只需判断
+
+$$
+\int_0^{1/2}\frac{|\ln x|}{x^p}\,\mathrm dx.
+$$
+
+令 $x=\mathrm e^{-t}$，则 $|\ln x|=t$、$\mathrm dx=-\mathrm e^{-t}\mathrm dt$。相应上下限为 $+\infty,\ln2$，故上式等于
+
+$$
+\int_{\ln2}^{+\infty}t\,\mathrm e^{-(1-p)t}\,\mathrm dt.
+$$
+
+当 $p<1$ 时，记 $c=1-p>0$，其原函数为
+
+$$
+-\left(\frac tc+\frac1{c^2}\right)\mathrm e^{-ct}.
+$$
+
+由于 $t\mathrm e^{-ct}\to0$，该端点收敛。若 $p=1$，被积函数成为 $t$；若 $p>1$，成为 $t\mathrm e^{(p-1)t}$，两者的无穷积分都发散。因此左端的充要条件是 $p<1$。
+
+\Needspace{6\baselineskip}\textbf{第三步：判断 $x=1$ 附近的收敛条件。}
+
+利用 $\ln x\sim-(1-x)$ 及 $x^p\to1$，可得
+
+$$
+\frac{|\ln x|}{x^p(1-x)^{1-p}}\sim(1-x)^p.
+$$
+
+令 $s=1-x$，比较积分变为 $\int_0^{1/2}s^p\,\mathrm ds$。当 $p\ne-1$ 时，原函数为 $s^{p+1}/(p+1)$；当 $p=-1$ 时，原函数为 $\ln s$。
+
+故右端当且仅当 $p>-1$ 时收敛，边界 $p=-1$ 也必须排除。
+
+合并两端的条件 $p<1$ 与 $p>-1$，得到 $\boxed{-1<p<1}$。
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{6.（2022.6）答案：D。}
+
+\Needspace{6\baselineskip}\textbf{先证明 D 的前半句。} 由 $-\pi/2\le x_n\le\pi/2$，可知 $0\le\cos x_n\le1$。
+
+正弦函数在 $[0,1]$ 上连续、严格增加，其反函数在对应值域上连续。若
+
+$$
+\sin(\cos x_n)\longrightarrow L,
+$$
+
+则
+
+$$
+\cos x_n=\arcsin\bigl(\sin(\cos x_n)\bigr)
+\longrightarrow\arcsin L.
+$$
+
+因此 $\cos x_n$ 的极限存在。
+
+\Needspace{6\baselineskip}\textbf{再说明不能推出 $x_n$ 收敛。} 取任意 $0<c<\pi/2$，令 $x_n=(-1)^nc$。此时
+
+$$
+\cos x_n=\cos c,
+\qquad\sin(\cos x_n)=\sin(\cos c),
+$$
+
+均为常数数列，但 $x_n$ 在 $c,-c$ 之间交替，不收敛。
+
+同一个例子也排除了 A、B、C：$\cos(\sin x_n)$ 恒为 $\cos(\sin c)$，而 $\sin x_n=(-1)^n\sin c$ 不收敛。故选 D。
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{7.（2022.7）答案：A，$I_1<I_2<I_3$。}
+
+对 $0<x\le1$，由
+
+$$
+\ln(1+x)=\int_0^x\frac1{1+t}\,\mathrm dt
+$$
+
+可得
+
+$$
+\frac{x}{2}<\ln(1+x)<x.
+$$
+
+左边的严格性来自区间内部 $1/(1+t)>1/2$。同除以正数 $1+\cos x$，得到
+
+$$
+\frac{x}{2(1+\cos x)}
+<\frac{\ln(1+x)}{1+\cos x}.
+$$
+
+积分后为 $I_1<I_2$。
+
+又因为 $\cos x>0$、$\sin x<1$，所以
+
+$$
+\frac{\ln(1+x)}{1+\cos x}<x
+<\frac{2x}{1+\sin x}.
+$$
+
+在 $[0,1]$ 上积分，得到 $I_2<I_3$。合并即选 A。
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{8.（2022.8）答案：B。}
+
+\Needspace{6\baselineskip}\textbf{第一步：证明 B 的必要性。} 若 $A$ 的特征值为 $1,-1,0$，它们互不相同。分别取非零特征向量 $p_1,p_2,p_3$，则这三个向量线性无关。
+
+以它们为列，按题给对角阵的顺序组成 $P=(p_1,p_2,p_3)$，可得
+
+$$
+AP=(Ap_1,Ap_2,Ap_3)=(p_1,-p_2,0)=P\Lambda.
+$$
+
+$P$ 可逆，故 $P^{-1}AP=\Lambda$，即 $A=P\Lambda P^{-1}$。
+
+\Needspace{6\baselineskip}\textbf{第二步：证明 B 的充分性。} 反过来，若 $A=P\Lambda P^{-1}$，则
+
+$$
+\begin{aligned}
+\det(tI-A)
+&=\det\bigl[P(tI-\Lambda)P^{-1}\bigr]\\
+&=\det(tI-\Lambda)=t(t-1)(t+1).
+\end{aligned}
+$$
+
+因此 $A$ 的三个特征值恰为 $1,-1,0$，B 是充分必要条件。
+
+\Needspace{6\baselineskip}\textbf{第三步：用具体矩阵辨别其余选项。}
+
+A 的左右乘子可以独立选取，它只要求矩阵等价。例如取 $P=\operatorname{diag}(2,-3,1)$、$Q=I$，则
+$$
+P\Lambda Q=\operatorname{diag}(2,3,0).
+$$
+
+该矩阵满足选项 A，却没有题设的特征值，故 A 不充分。
+
+C 要求正交对角化。若 $Q$ 正交，则 $Q^{-1}=Q^{\mathrm T}$，矩阵 $Q\Lambda Q^{\mathrm T}$ 必对称。但
+$$
+A_0=\begin{pmatrix}1&1&0\\0&-1&0\\0&0&0\end{pmatrix}
+$$
+
+是具有特征值 $1,-1,0$ 的上三角矩阵，却不对称，所以不可能满足 C。故 C 不必要。
+
+D 是合同关系。例如取 $P=\operatorname{diag}(\sqrt2,\sqrt3,1)$，则
+$$
+P\Lambda P^{\mathrm T}=\operatorname{diag}(2,-3,0).
+$$
+
+这个矩阵满足 D，但特征值也与题设不同。因此 D 不充分，选 B。
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{9.（2022.9）答案：D，有唯一解或无解。}
+
+\Needspace{6\baselineskip}\textbf{第一步：计算系数行列式。}
+
+用第二、第三行分别减去第一行，沿第一列展开：
+
+$$
+\begin{aligned}
+\det A
+&=\begin{vmatrix}1&1&1\\0&a-1&a^2-1\\0&b-1&b^2-1\end{vmatrix}\\
+&=(a-1)(b^2-1)-(b-1)(a^2-1)\\
+&=(a-1)(b-1)\bigl[(b+1)-(a+1)\bigr]\\
+&=(a-1)(b-1)(b-a).
+\end{aligned}
+$$
+
+因此当 $1,a,b$ 两两不同时，$\det A\ne0$，系数矩阵可逆，方程组有唯一解。
+
+\Needspace{6\baselineskip}\textbf{第二步：逐一检查行列式为零的情形。}
+
+$\det A=0$ 表示至少发生以下一种情况。
+
+① 若 $a=1$，第一、第二个方程左边完全相同，右边分别为 $1,2$。两式相减得到 $0=1$，无解。
+
+② 若 $b=1$，第一、第三个方程左边完全相同，右边分别为 $1,4$。两式相减得到 $0=3$，无解。
+
+③ 若 $a=b$，第二、第三个方程左边完全相同，右边分别为 $2,4$。两式相减得到 $0=2$，无解。
+
+上述情形即使同时发生，矛盾仍然存在。因此只要系数行列式为零，方程组就无解。
+
+综上，本题只能出现唯一解或无解，不会出现无穷多解，选 D。
+
+也可把未知量看作二次多项式 $p(t)=x_1+x_2t+x_3t^2$ 的系数。题设要求 $p(1)=1,p(a)=2,p(b)=4$；一旦两个插值节点重合，就要求同一点有两个不同的函数值，因而矛盾。
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{10.（2022.10）答案：C，$\lambda\ne-1,-2$。}
+
+\Needspace{6\baselineskip}\textbf{第一步：写出两组向量组成的矩阵。}
+$$
+U=(\alpha_1,\alpha_2,\alpha_3)
+=\begin{pmatrix}\lambda&1&1\\1&\lambda&1\\1&1&\lambda\end{pmatrix},
+\qquad
+V=(\alpha_1,\alpha_2,\alpha_4)
+=\begin{pmatrix}\lambda&1&1\\1&\lambda&\lambda\\1&1&\lambda^2\end{pmatrix}.
+$$
+
+两组向量等价，表示它们张成同一个子空间。先考察两组都能张成 $\mathbb R^3$ 的参数，再单独检查行列式为零的值。
+
+\Needspace{6\baselineskip}\textbf{第二步：详细计算两个行列式。} 对 $U$，作 $R_2\leftarrow R_2-R_1$、$R_3\leftarrow R_3-R_1$，从第二、第三行各提取一个 $\lambda-1$，得到
+
+$$
+\begin{aligned}
+\det U
+&=(\lambda-1)^2\begin{vmatrix}\lambda&1&1\\-1&1&0\\-1&0&1\end{vmatrix}\\
+&=(\lambda-1)^2(\lambda+2).
+\end{aligned}
+$$
+
+对 $V$，作 $C_3\leftarrow C_3-C_2$，第三列变为 $(0,0,\lambda^2-1)^{\mathrm T}$。沿该列展开：
+
+$$
+\det V=(\lambda^2-1)\begin{vmatrix}\lambda&1\\1&\lambda\end{vmatrix}
+=(\lambda^2-1)^2=(\lambda-1)^2(\lambda+1)^2.
+$$
+
+\Needspace{6\baselineskip}\textbf{第三步：按特殊参数分类。} 若 $\lambda\notin\{1,-1,-2\}$，两行列式均非零，两组向量都是 $\mathbb R^3$ 的一组基，因此等价。
+
+若 $\lambda=1$，四个向量都等于 $(1,1,1)^{\mathrm T}$，两组都张成直线
+
+$$
+\{t(1,1,1)^{\mathrm T}:t\in\mathbb R\}.
+$$
+
+故 $\lambda=1$ 也符合要求，不能因行列式为零就排除它。
+
+若 $\lambda=-1$，有 $\det U=4\ne0$，而 $V$ 中 $\alpha_4=\alpha_2$、$\alpha_1,\alpha_2$ 线性无关。因此两组的秩分别为 $3,2$，不等价。
+
+若 $\lambda=-2$，有 $\det U=0$，但 $U$ 的左上角二阶子式为 $(-2)^2-1=3\ne0$，所以 $r(U)=2$。同时 $\det V=9\ne0$，故 $r(V)=3$，仍不等价。
+
+因此排除且只排除 $-1,-2$，所求范围为 $\boxed{\lambda\in\mathbb R\setminus\{-1,-2\}}$。
+
+\clearpage
+
+\section*{二、填空题（11～16）}
+
+\Needspace{5\baselineskip}\textbf{11.（2022.11）答案：$\sqrt{\mathrm e}$。}
+
+\Needspace{6\baselineskip}\textbf{第一步：先取对数。}
+
+在零点附近，底数 $(1+\mathrm e^x)/2$ 恒正，可以定义
+
+$$
+Y(x)=\left(\frac{1+\mathrm e^x}{2}\right)^{\cot x}.
+$$
+
+取自然对数，并把乘积改写成两个有有限极限的因子：
+
+$$
+\ln Y(x)
+=\cot x\cdot\ln\left(\frac{1+\mathrm e^x}{2}\right)
+=(x\cot x)\,\frac{\ln((1+\mathrm e^x)/2)}x.
+$$
+
+\Needspace{6\baselineskip}\textbf{第二步：分别计算两个因子的极限。}
+
+由 $\sin x/x\to1$、$\cos x\to1$，有
+
+$$
+x\cot x=\frac{x\cos x}{\sin x}\longrightarrow1.
+$$
+
+令 $h(x)=\ln((1+\mathrm e^x)/2)$。因为 $h(0)=0$，由导数定义，
+
+$$
+\lim_{x\to0}\frac{h(x)}x=h'(0),
+\qquad h'(x)=\frac{\mathrm e^x}{1+\mathrm e^x},
+\qquad h'(0)=\frac12.
+$$
+
+故 $\ln Y(x)\to1/2$，再由指数函数的连续性，得到
+
+$$
+\boxed{\lim_{x\to0}Y(x)=\mathrm e^{1/2}=\sqrt{\mathrm e}}.
+$$
+
+也可用 $\mathrm e^x=1+x+o(x)$ 得到 $h(x)=x/2+o(x)$。正、负两侧的展开都成立，以上计算给出的是双侧极限。
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{12.（2022.12）答案：$-\dfrac{31}{32}$。}
+
+\Needspace{6\baselineskip}\textbf{第一步：确定 $y(1)$。} 代入 $x=1$ 得 $y^3+y-2=0$。因 $y^3+y$ 严格增加，唯一实根为 $y=1$。
+
+\Needspace{6\baselineskip}\textbf{第二步：确认可求导，再计算一阶导数。} 记 $F(x,y)=x^2+xy+y^3-3$，则 $F_y(1,1)=1+3=4\ne0$。隐函数定理保证 $(1,1)$ 附近存在光滑函数 $y=y(x)$。
+
+对隐式方程求导：
+
+$$
+2x+y+(x+3y^2)y'=0.
+$$
+
+代入 $(x,y)=(1,1)$，得到
+
+$$
+y'(1)=-\frac{2+1}{1+3}=-\frac34.
+$$
+
+\Needspace{6\baselineskip}\textbf{第三步：再求导。} 注意 $xy'$ 和 $3y^2y'$ 都要使用乘积法则：
+
+$$
+2+2y'+6y(y')^2+(x+3y^2)y''=0.
+$$
+
+于是
+
+$$
+\begin{aligned}
+y''(1)
+&=-\frac{2+2(-3/4)+6\cdot1\cdot(9/16)}{4}\\
+&=-\frac{2-3/2+27/8}{4}
+=-\frac{31/8}{4}=-\frac{31}{32}.
+\end{aligned}
+$$
+
+用隐函数的二阶导数公式也能核验：
+
+$$
+y''=-\frac{F_{xx}+2F_{xy}y'+F_{yy}(y')^2}{F_y}.
+$$
+
+这里 $F_{xx}=2$、$F_{xy}=1$、$F_{yy}=6y$，代入 $(1,1)$ 和 $y'(1)=-3/4$，得到相同结果。
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{13.（2022.13）答案：$\dfrac{8\pi}{3\sqrt3}$。}
+
+分子的线性项可以拆为分母导数加常数：
+
+$$
+2x+3=(2x-1)+4.
+$$
+
+所以
+
+$$
+I=\left[\ln(x^2-x+1)\right]_0^1
++4\int_0^1\frac{\mathrm dx}{(x-1/2)^2+3/4}.
+$$
+
+前面的对数项为零。后面的积分为
+
+$$
+\begin{aligned}
+I&=\frac8{\sqrt3}\left[\arctan\frac{2x-1}{\sqrt3}\right]_0^1\\
+&=\frac8{\sqrt3}\left(\frac\pi6+\frac\pi6\right)
+=\frac{8\pi}{3\sqrt3}.
+\end{aligned}
+$$
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{14.（2022.14）答案：$C_1+\mathrm e^x(C_2\cos2x+C_3\sin2x)$。}
+
+\Needspace{6\baselineskip}\textbf{第一步：求特征根。}
+
+设指数型解为 $y=\mathrm e^{rx}$，代入方程并除去非零因子 $\mathrm e^{rx}$，得到特征方程
+
+$$
+r^3-2r^2+5r=r(r^2-2r+5)=r\bigl[(r-1)^2+4\bigr]=0.
+$$
+
+因此三个特征根为
+
+$$
+r_1=0,\qquad r_{2,3}=1\pm2\mathrm i.
+$$
+
+\Needspace{6\baselineskip}\textbf{第二步：把特征根对应为实函数解。}
+
+单实根 $0$ 给出 $\mathrm e^{0x}=1$；共轭复根 $1\pm2\mathrm i$ 给出一对实解 $\mathrm e^x\cos2x$、$\mathrm e^x\sin2x$。
+
+所以通解为
+
+$$
+\boxed{y(x)=C_1+\mathrm e^x(C_2\cos2x+C_3\sin2x)},
+$$
+
+其中 $C_1,C_2,C_3$ 是相互独立的任意实常数。
+
+\Needspace{6\baselineskip}\textbf{第三步：确认三个解线性无关。}
+
+三个解在 $x=0$ 处的函数值、一阶导数和二阶导数组成的行列式为
+
+$$
+\begin{vmatrix}1&1&0\\0&1&2\\0&-3&4\end{vmatrix}=10\ne0.
+$$
+
+故三者线性无关。三阶齐次线性方程的解空间维数为 $3$，上述线性组合已包含全部解。
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{15.（2022.15）答案：$\dfrac{\pi}{12}$。}
+
+在 $0\le\theta\le\pi/3$ 上，$r=\sin3\theta\ge0$，起点和终点都回到原点，这段参数描述一片完整花瓣。
+
+在每个角度 $\theta$ 上，区域内的径向变量满足 $0\le\rho\le\sin3\theta$。极坐标面积元是 $\rho\,\mathrm d\rho\,\mathrm d\theta$，所以
+
+$$
+S=\int_0^{\pi/3}\int_0^{\sin3\theta}\rho\,\mathrm d\rho\,\mathrm d\theta
+=\frac12\int_0^{\pi/3}\sin^23\theta\,\mathrm d\theta.
+$$
+
+再用降幂公式计算：
+
+$$
+\begin{aligned}
+S&=\frac12\int_0^{\pi/3}r^2\,\mathrm d\theta
+=\frac12\int_0^{\pi/3}\sin^23\theta\,\mathrm d\theta\\
+&=\frac14\int_0^{\pi/3}(1-\cos6\theta)\,\mathrm d\theta\\
+&=\frac14\left[\theta-\frac{\sin6\theta}{6}\right]_0^{\pi/3}
+=\frac\pi{12}.
+\end{aligned}
+$$
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{16.（2022.16）答案：$-1$。}
+
+\Needspace{6\baselineskip}\textbf{第一步：恢复原矩阵。} 从变换结果恢复 $A$ 时，先撤销最后进行的列变换，再撤销行交换。
+
+原列变换是 $C_1\leftarrow C_1-C_2$，故现在作 $C_1\leftarrow C_1+C_2$，得到
+
+$$
+\begin{pmatrix}-2&1&-1\\1&-1&0\\-1&0&0\end{pmatrix}
+\longrightarrow
+\begin{pmatrix}-1&1&-1\\0&-1&0\\-1&0&0\end{pmatrix}.
+$$
+
+然后交换第二、第三行，得
+
+$$
+A=\begin{pmatrix}-1&1&-1\\-1&0&0\\0&-1&0\end{pmatrix}.
+$$
+
+\Needspace{6\baselineskip}\textbf{第二步：利用方程组求逆矩阵。} 设 $A\boldsymbol x=\boldsymbol b$，则
+$$
+-x_1+x_2-x_3=b_1,\qquad -x_1=b_2,\qquad -x_2=b_3.
+$$
+
+由后两式得到 $x_1=-b_2$、$x_2=-b_3$，代回第一式：
+
+$$
+x_3=-b_1+b_2-b_3.
+$$
+
+按 $b_1,b_2,b_3$ 的系数写成 $\boldsymbol x=A^{-1}\boldsymbol b$，可得
+$$
+A^{-1}=\begin{pmatrix}0&-1&0\\0&0&-1\\-1&1&-1\end{pmatrix}.
+$$
+
+于是 $\boxed{\operatorname{tr}(A^{-1})=0+0-1=-1}$。
+
+用对角代数余子式也能核验：沿第三列展开得 $\det A=-1$，而 $A_{11}=0,A_{22}=0,A_{33}=1$，所以 $\operatorname{tr}(A^{-1})=(A_{11}+A_{22}+A_{33})/\det A=-1$。
+
+\clearpage
+
+\section*{三、解答题（17～22）}
+
+\Needspace{5\baselineskip}\textbf{17.（2022.17）答案：$f'(1)=-1$。}
+
+\Needspace{6\baselineskip}\textbf{第一步：由有限极限求出 $f(1)$。}
+
+题设的商有有限极限 $2$，而分母 $x^2\to0$，因此分子必须趋于零。具体地，把分子写成
+
+$$
+f(\mathrm e^{x^2})-3f(1+\sin^2x)
+=x^2\cdot\frac{f(\mathrm e^{x^2})-3f(1+\sin^2x)}{x^2},
+$$
+
+右端趋于 $0\cdot2=0$。
+
+$f$ 在 $1$ 处可导，故在该点连续；又有 $\mathrm e^{x^2}\to1$、$1+\sin^2x\to1$，所以
+
+$$
+0=\lim_{x\to0}\bigl[f(\mathrm e^{x^2})-3f(1+\sin^2x)\bigr]
+=f(1)-3f(1)=-2f(1).
+$$
+
+因此 $f(1)=0$。
+
+\Needspace{6\baselineskip}\textbf{第二步：把已知极限拆成导数定义的形式。}
+
+记
+
+$$
+h_1=\mathrm e^{x^2}-1,\qquad h_2=\sin^2x.
+$$
+
+当非零的 $x$ 充分接近 $0$ 时，两者都非零，且
+
+$$
+\frac{h_1}{x^2}=\frac{\mathrm e^{x^2}-1}{x^2}\longrightarrow1,
+\qquad
+\frac{h_2}{x^2}=\left(\frac{\sin x}{x}\right)^2\longrightarrow1.
+$$
+
+利用 $f(1)=0$，把原商精确写为
+
+$$
+\begin{aligned}
+\frac{f(\mathrm e^{x^2})-3f(1+\sin^2x)}{x^2}
+={}&\frac{f(1+h_1)-f(1)}{h_1}\frac{h_1}{x^2}\\
+&-3\frac{f(1+h_2)-f(1)}{h_2}\frac{h_2}{x^2}.
+\end{aligned}
+$$
+
+$h_1,h_2$ 都趋于零。由 $f'(1)$ 存在，上式右端的两个差商均趋于 $f'(1)$。于是
+
+$$
+2=f'(1)\cdot1-3f'(1)\cdot1=-2f'(1),
+\qquad \boxed{f'(1)=-1}.
+$$
+
+\Needspace{6\baselineskip}\textbf{等价写法：用一点可导的局部展开。}
+
+可导性给出 $f(1+h)=f(1)+f'(1)h+o(h)$。再由 $h_1=x^2+o(x^2)$、$h_2=x^2+o(x^2)$，得到
+
+$$
+f(\mathrm e^{x^2})=f'(1)x^2+o(x^2),
+\qquad
+f(1+\sin^2x)=f'(1)x^2+o(x^2).
+$$
+
+这里 $o(h_i)=o(x^2)$，因为 $o(h_i)/x^2=[o(h_i)/h_i](h_i/x^2)\to0$。两式相减并除以 $x^2$，仍得极限为 $-2f'(1)$。
+
+这两种写法都只使用 $f$ 在 $1$ 处可导，无需假设其二阶导数存在，也无需假设 $f'$ 在附近连续。
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{18.（2022.18）答案：$y=\dfrac{x^2}{4}-\dfrac12\ln x$；弧长为 $\dfrac{\mathrm e^2+1}{4}$。}
+
+\Needspace{6\baselineskip}\textbf{第一步：解一阶线性微分方程。}
+
+原方程中的 $\ln x$ 要求 $x>0$。两端除以 $2x$，得到
+
+$$
+y'-\frac2x y=\frac{\ln x}{x}-\frac1{2x}.
+$$
+
+积分因子为
+
+$$
+\mu(x)=\exp\left(\int-\frac2x\,\mathrm dx\right)
+=\mathrm e^{-2\ln x}=x^{-2}.
+$$
+
+将方程两边乘以 $x^{-2}$，左端正好是乘积的导数：
+
+$$
+\frac{y'}{x^2}-\frac{2y}{x^3}
+=\left(\frac y{x^2}\right)'
+=\frac{\ln x-1/2}{x^3}.
+$$
+
+\Needspace{6\baselineskip}\textbf{第二步：算出原函数并使用初始条件。}
+
+对 $\int x^{-3}\ln x\,\mathrm dx$ 分部积分，取 $u=\ln x$、$\mathrm dv=x^{-3}\mathrm dx$，则 $\mathrm du=\mathrm dx/x$、$v=-1/(2x^2)$。故
+
+$$
+\begin{aligned}
+\int\frac{\ln x-1/2}{x^3}\,\mathrm dx
+&=-\frac{\ln x}{2x^2}
++\frac12\int x^{-3}\,\mathrm dx
+-\frac12\int x^{-3}\,\mathrm dx\\
+&=-\frac{\ln x}{2x^2}+C.
+\end{aligned}
+$$
+
+所以
+
+$$
+\frac y{x^2}=-\frac{\ln x}{2x^2}+C,
+\qquad y=Cx^2-\frac12\ln x.
+$$
+
+代入 $y(1)=1/4$，得 $C=1/4$，因此
+
+$$
+\boxed{y(x)=\frac{x^2}{4}-\frac12\ln x},
+\qquad y'(x)=\frac x2-\frac1{2x}.
+$$
+
+代回原方程，左端为
+
+$$
+2x\left(\frac x2-\frac1{2x}\right)
+-4\left(\frac{x^2}{4}-\frac12\ln x\right)
+=2\ln x-1,
+$$
+
+同时 $y(1)=1/4$，两项条件均满足。
+
+\Needspace{6\baselineskip}\textbf{第三步：化简弧长根式。}
+
+曲线在 $[1,\mathrm e]$ 上光滑，弧长公式为
+
+$$
+L=\int_1^{\mathrm e}\sqrt{1+[y'(x)]^2}\,\mathrm dx.
+$$
+
+代入导数，逐项通分并配成完全平方：
+
+$$
+\begin{aligned}
+1+[y'(x)]^2
+&=1+\frac{(x^2-1)^2}{4x^2}\\
+&=\frac{x^4+2x^2+1}{4x^2}
+=\frac{(x^2+1)^2}{4x^2}.
+\end{aligned}
+$$
+
+由于积分区间上 $x>0$，开平方得到
+
+$$
+\sqrt{1+[y'(x)]^2}
+=\frac{x^2+1}{2x}=\frac x2+\frac1{2x}.
+$$
+
+\Needspace{6\baselineskip}\textbf{第四步：代入上下限计算。}
+
+$$
+\begin{aligned}
+L&=\int_1^{\mathrm e}\left(\frac x2+\frac1{2x}\right)\mathrm dx\\
+&=\left[\frac{x^2}{4}+\frac12\ln x\right]_1^{\mathrm e}\\
+&=\left(\frac{\mathrm e^2}{4}+\frac12\right)-\left(\frac14+0\right)\\
+&=\boxed{\frac{\mathrm e^2+1}{4}}.
+\end{aligned}
+$$
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{19.（2022.19）答案：$I=2\pi-2$。}
+
+\Needspace{6\baselineskip}\textbf{第一步：准确拆分积分区域。}
+
+题设按 $y$ 的水平截线描述区域，左边界是 $x=y-2$，右边界是 $x=\sqrt{4-y^2}$，且 $0\le y\le2$。
+
+对每个这样的 $y$，左边界非正、右边界非负，因此可在 $x=0$ 处分成两块：
+
+$$
+D_+=\{(x,y):x\ge0,\ y\ge0,\ x^2+y^2\le4\},
+$$
+
+$$
+D_-=\{(x,y):x\le0,\ y\ge0,\ y-x\le2\}.
+$$
+
+$D_+$ 是半径为 $2$ 的第一象限四分之一圆盘；$D_-$ 是顶点为 $(-2,0),(0,0),(0,2)$ 的三角形。两块仅在边界重叠，故 $I=I_++I_-$。
+
+此外，对 $(x,y)\ne(0,0)$，
+
+$$
+0\le\frac{(x-y)^2}{x^2+y^2}\le2,
+$$
+
+因为 $(x-y)^2\le2(x^2+y^2)$。原点处可任意补一个函数值，不影响积分；这里没有不可积的奇点。
+
+\Needspace{6\baselineskip}\textbf{第二步：用极坐标计算圆盘部分。}
+
+令 $x=r\cos\theta$、$y=r\sin\theta$。注意面积元为 $r\,\mathrm dr\,\mathrm d\theta$，被积函数化为
+
+$$
+\frac{(x-y)^2}{x^2+y^2}
+=(\cos\theta-\sin\theta)^2=1-\sin2\theta.
+$$
+
+在 $D_+$ 上，$0\le\theta\le\pi/2$、$0\le r\le2$，所以
+$$
+\begin{aligned}
+I_+
+&=\int_0^{\pi/2}\int_0^2(1-\sin2\theta)r\,\mathrm dr\,\mathrm d\theta\\
+&=2\int_0^{\pi/2}(1-\sin2\theta)\,\mathrm d\theta\\
+&=2\left[\theta+\frac12\cos2\theta\right]_0^{\pi/2}\\
+&=2\left(\frac\pi2-1\right)=\pi-2.
+\end{aligned}
+$$
+
+\Needspace{6\baselineskip}\textbf{第三步：用极坐标计算三角形部分。}
+
+$D_-$ 位于第二象限，故 $\pi/2\le\theta\le\pi$。直线边界 $y-x=2$ 化为
+
+$$
+r(\sin\theta-\cos\theta)=2.
+$$
+
+这个角度范围内 $\sin\theta-\cos\theta>0$，且每条射线都从原点出发到达该直线，所以径向范围为
+
+$$
+0\le r\le\frac2{\sin\theta-\cos\theta}.
+$$
+
+于是径向积分与被积函数中的平方因子相消：
+
+$$
+\begin{aligned}
+I_-
+&=\int_{\pi/2}^{\pi}\int_0^{2/(\sin\theta-\cos\theta)}
+(\sin\theta-\cos\theta)^2r\,\mathrm dr\,\mathrm d\theta\\
+&=\int_{\pi/2}^{\pi}(\sin\theta-\cos\theta)^2
+\cdot\frac12\frac4{(\sin\theta-\cos\theta)^2}\,\mathrm d\theta\\
+&=\int_{\pi/2}^{\pi}2\,\mathrm d\theta=\pi.
+\end{aligned}
+$$
+
+合并两部分，得 $\boxed{I=I_++I_-=(\pi-2)+\pi=2\pi-2}$。
+
+\Needspace{6\baselineskip}\textbf{另一种核验：三角形部分作线性换元。}
+
+令 $s=y-x$、$t=x+y$，则 $x=(t-s)/2$、$y=(t+s)/2$，雅可比绝对值为 $1/2$。三角形变为
+
+$$
+0\le s\le2,\qquad -s\le t\le s.
+$$
+
+此时被积函数为 $2s^2/(s^2+t^2)$，乘上面积元中的 $1/2$ 后，得到
+
+$$
+\begin{aligned}
+I_-
+&=\int_0^2\mathrm ds\int_{-s}^{s}\frac{s^2}{s^2+t^2}\,\mathrm dt\\
+&=\int_0^2s\left[\arctan\frac ts\right]_{-s}^{s}\mathrm ds
+=\int_0^2\frac\pi2s\,\mathrm ds=\pi.
+\end{aligned}
+$$
+
+它与极坐标计算一致，也验证了三角形部分的边界和面积因子。
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{20.（2022.20）答案：$g_x=2(2x-y)\mathrm e^{-y}$；$f(u,v)=(u^2+v^2)\mathrm e^{-(u+v)}$。}
+
+\Needspace{6\baselineskip}\textbf{（Ⅰ）利用复合函数链式法则求 $g_x$。}
+
+在 $g(x,y)=f(x,y-x)$ 中，令 $u=x$、$v=y-x$。对 $x$ 求偏导时，$y$ 保持不变，因此
+
+$$
+u_x=1,\qquad v_x=-1,
+$$
+
+$$
+g_x=f_u(x,y-x)u_x+f_v(x,y-x)v_x
+=f_u(x,y-x)-f_v(x,y-x).
+$$
+
+题给关系的右端满足 $u-v=2x-y$、$u+v=y$，故
+
+$$
+\boxed{g_x(x,y)=2(2x-y)\mathrm e^{-y}}.
+$$
+
+\Needspace{6\baselineskip}\textbf{（Ⅱ）第一步：由 $g_x$ 求出 $g$。}
+
+固定 $y$，对 $x$ 积分：
+
+$$
+g(x,y)=(2x^2-2xy)\mathrm e^{-y}+h(y).
+$$
+
+这里的积分常数可以随着 $y$ 改变，所以要写成函数 $h(y)$。
+
+边界条件 $f(u,0)=u^2\mathrm e^{-u}$ 在新变量中对应 $x=u,y=u$。因而
+
+$$
+g(u,u)=f(u,0)=u^2\mathrm e^{-u}.
+$$
+
+另一方面，通式给出 $g(u,u)=h(u)$，故 $h(u)=u^2\mathrm e^{-u}$。由于 $u$ 任意，得到
+
+$$
+g(x,y)=(2x^2-2xy+y^2)\mathrm e^{-y}.
+$$
+
+\Needspace{6\baselineskip}\textbf{第二步：换回原来的自变量。}
+
+从 $u=x,v=y-x$ 解得 $x=u,y=u+v$，所以
+
+$$
+\begin{aligned}
+f(u,v)&=g(u,u+v)\\
+&=\bigl[2u^2-2u(u+v)+(u+v)^2\bigr]\mathrm e^{-(u+v)}\\
+&=\boxed{(u^2+v^2)\mathrm e^{-(u+v)}}.
+\end{aligned}
+$$
+
+代回核验：
+
+$$
+f_u-f_v=2(u-v)\mathrm e^{-(u+v)},\qquad
+f(u,0)=u^2\mathrm e^{-u},
+$$
+
+同时满足题给微分关系和边界条件。
+
+\Needspace{6\baselineskip}\textbf{第三步：求出全部驻点。}
+
+由乘积法则，
+
+$$
+\begin{aligned}
+f_u&=(2u-u^2-v^2)\mathrm e^{-(u+v)},\\
+f_v&=(2v-u^2-v^2)\mathrm e^{-(u+v)}.
+\end{aligned}
+$$
+
+指数因子恒正，故驻点方程等价于
+
+$$
+\begin{cases}2u-u^2-v^2=0,\\2v-u^2-v^2=0.\end{cases}
+$$
+
+两式相减得到 $u=v$。令 $u=v=t$，则 $2t-2t^2=0$，所以 $t=0$ 或 $t=1$。全部驻点为 $(0,0)$ 与 $(1,1)$。
+
+\Needspace{6\baselineskip}\textbf{第四步：计算二阶偏导并判别驻点。}
+
+再次使用乘积法则，得到
+
+$$
+\begin{aligned}
+f_{uu}&=(2-4u+u^2+v^2)\mathrm e^{-(u+v)},\\
+f_{vv}&=(2-4v+u^2+v^2)\mathrm e^{-(u+v)},\\
+f_{uv}&=(u^2+v^2-2u-2v)\mathrm e^{-(u+v)}.
+\end{aligned}
+$$
+
+在 $(0,0)$ 处，二阶偏导矩阵为
+
+$$
+H_f(0,0)=\begin{pmatrix}2&0\\0&2\end{pmatrix}.
+$$
+
+其行列式为 $4>0$，且 $f_{uu}(0,0)=2>0$，故该点是严格极小值点，极小值为 $f(0,0)=0$。
+
+事实上，
+
+$$
+f(u,v)=(u^2+v^2)\mathrm e^{-(u+v)}\ge0,
+$$
+
+且等号仅在 $(u,v)=(0,0)$ 成立。因此它也是唯一的全局最小值点。
+
+在 $(1,1)$ 处，二阶偏导矩阵为
+
+$$
+H_f(1,1)=\begin{pmatrix}0&-2\mathrm e^{-2}\\-2\mathrm e^{-2}&0\end{pmatrix},
+\qquad \det H_f(1,1)=-4\mathrm e^{-4}<0.
+$$
+
+所以 $(1,1)$ 为鞍点，不是极值点。函数在整个平面上光滑，极值点必须是驻点；两个驻点均已检查，因此无极大值。
+
+\Needspace{6\baselineskip}\textbf{用两条路径直接理解鞍点。}
+
+沿 $u=1+t,v=1-t$，有
+
+$$
+f(1+t,1-t)=(2+2t^2)\mathrm e^{-2}>2\mathrm e^{-2}=f(1,1)
+\qquad(t\ne0).
+$$
+
+沿 $u=v=1+t$，当 $0<|t|<1$ 时，利用 $\ln(1+t)<t$，得到
+
+$$
+\frac{f(1+t,1+t)}{f(1,1)}
+=(1+t)^2\mathrm e^{-2t}
+=\mathrm e^{\,2\ln(1+t)-2t}<1.
+$$
+
+任意靠近 $(1,1)$ 的地方，都有比它大和比它小的函数值，故鞍点判别与直接比较一致。
+
+综上，$f$ 在 $(0,0)$ 处取得极小值 $0$，无极大值。另由 $f(t,-t)=2t^2\to+\infty$，也可知该函数没有全局最大值。
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{21.（2022.21）充要条件证明。}
+
+交换 $a,b$ 后，积分方向和分母同时变号，积分平均值不变。因此以下只需讨论 $a<b$。
+
+\Needspace{6\baselineskip}\textbf{充分性：由 $f''(x)\ge0$ 推出积分不等式。} 记区间中点和半长分别为
+
+$$
+m=\frac{a+b}{2},\qquad h=\frac{b-a}{2}>0.
+$$
+
+由 $f''\ge0$ 及微积分基本定理，对任意 $u<v$，
+
+$$
+f'(v)-f'(u)=\int_u^v f''(s)\,\mathrm ds\ge0.
+$$
+
+所以 $f'$ 单调不减。对 $0\le t\le h$，构造关于中点对称的函数
+
+$$
+H(t)=f(m+t)+f(m-t)-2f(m).
+$$
+
+由链式法则及 $f'$ 的单调性，
+
+$$
+H'(t)=f'(m+t)-f'(m-t)\ge0.
+$$
+
+又 $H(0)=0$，所以 $H(t)\ge0$，即 $f(m+t)+f(m-t)\ge2f(m)$。
+
+在 $[0,h]$ 上对 $t$ 积分，得到
+
+$$
+\int_0^h f(m+t)\,\mathrm dt+\int_0^h f(m-t)\,\mathrm dt
+\ge2h f(m).
+$$
+
+第一项令 $x=m+t$，第二项令 $x=m-t$，分别化为
+$$
+\int_m^b f(x)\,\mathrm dx,
+\qquad \int_a^m f(x)\,\mathrm dx.
+$$
+
+二者相加正好是 $\int_a^b f(x)\,\mathrm dx$。再除以正数 $2h=b-a$，得
+$$
+\boxed{f\left(\frac{a+b}{2}\right)
+\le\frac1{b-a}\int_a^b f(x)\,\mathrm dx}.
+$$
+
+\Needspace{6\baselineskip}\textbf{必要性：由任意短对称区间的平均值提取 $f''$。}
+
+假设题给不等式对所有 $a\ne b$ 成立。固定任意 $x_0\in\mathbb R$，取 $a=x_0-h,b=x_0+h$，其中 $h>0$。此时中点为 $x_0$，假设给出
+
+$$
+\Delta(h):=\frac1{2h}\int_{-h}^{h}f(x_0+t)\,\mathrm dt-f(x_0)\ge0.
+$$
+
+$f$ 具有二阶连续导数，故在 $x_0$ 处可写二阶泰勒展开
+
+$$
+f(x_0+t)=f(x_0)+f'(x_0)t+\frac12f''(x_0)t^2+r(t),
+\qquad r(t)=o(t^2).
+$$
+
+在对称区间 $[-h,h]$ 上，常数项与 $f(x_0)$ 抵消，一次项积分为零，而
+
+$$
+\frac1{2h}\int_{-h}^{h}\frac12f''(x_0)t^2\,\mathrm dt
+=\frac{f''(x_0)}{4h}\cdot\frac{2h^3}{3}
+=\frac{h^2}{6}f''(x_0).
+$$
+
+于是
+
+$$
+\Delta(h)=\frac{h^2}{6}f''(x_0)+\frac1{2h}\int_{-h}^{h}r(t)\,\mathrm dt.
+$$
+
+\Needspace{6\baselineskip}\textbf{说明余项积分确为 $o(h^2)$。} 由 $r(t)=o(t^2)$，对任意 $\varepsilon>0$，存在 $\delta>0$，使 $|t|<\delta$ 时 $|r(t)|\le\varepsilon t^2$。当 $0<h<\delta$ 时，这个估计在整个积分区间同时成立，因而
+
+$$
+\left|\frac1{2h}\int_{-h}^{h}r(t)\,\mathrm dt\right|
+\le\frac{\varepsilon}{2h}\int_{-h}^{h}t^2\,\mathrm dt
+=\frac{\varepsilon h^2}{3}.
+$$
+
+所以
+$$
+0\le\frac{\Delta(h)}{h^2}
+=\frac16f''(x_0)+o(1).
+$$
+
+令 $h\to0^+$，得到 $f''(x_0)\ge0$。由于 $x_0$ 任意，故 $f''(x)\ge0$ 在整个实轴上成立。
+
+\Needspace{6\baselineskip}\textbf{必要性的另一种证明：反证法。}
+
+若存在 $x_0$ 使 $f''(x_0)<0$，由连续性，可取 $h>0$，使 $f''<0$ 在 $[x_0-h,x_0+h]$ 上成立。于是 $f'$ 在这个区间严格递减。
+
+令 $H(t)=f(x_0+t)+f(x_0-t)-2f(x_0)$。对 $0<t\le h$，有
+
+$$
+H'(t)=f'(x_0+t)-f'(x_0-t)<0.
+$$
+
+结合 $H(0)=0$，得到 $H(t)<0$。积分后，
+
+$$
+\frac1{2h}\int_{x_0-h}^{x_0+h}f(x)\,\mathrm dx-f(x_0)
+=\frac1{2h}\int_0^h H(t)\,\mathrm dt<0,
+$$
+
+与题设不等式矛盾。因此不存在 $f''(x_0)<0$ 的点。
+
+充分性与必要性均已证明，所述条件等价。
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{22.（2022.22）标准形为 $2y_1^2+4y_2^2+4y_3^2$；最小值为 $2$。}
+
+\Needspace{6\baselineskip}\textbf{（Ⅰ）第一步：写出实对称矩阵并求特征值。}
+
+交叉项 $2x_1x_3$ 对应 $a_{13}=a_{31}=1$，所以
+
+$$
+f(\boldsymbol x)=\boldsymbol x^{\mathrm T}A\boldsymbol x,
+\qquad A=\begin{pmatrix}3&0&1\\0&4&0\\1&0&3\end{pmatrix}.
+$$
+
+沿第二行展开特征行列式，得到
+
+$$
+\begin{aligned}
+\det(\lambda I-A)
+&=\begin{vmatrix}\lambda-3&0&-1\\0&\lambda-4&0\\-1&0&\lambda-3\end{vmatrix}\\
+&=(\lambda-4)\bigl[(\lambda-3)^2-1\bigr]\\
+&=(\lambda-2)(\lambda-4)^2.
+\end{aligned}
+$$
+
+因此特征值为 $2,4,4$。
+
+\Needspace{6\baselineskip}\textbf{第二步：分别求特征子空间。} 对 $\lambda=2$，方程 $(A-2I)\boldsymbol x=0$ 的第一、三式相同，独立方程为
+$$
+x_1+x_3=0,\qquad 2x_2=0.
+$$
+
+所以 $x_2=0$、$x_3=-x_1$，可取特征向量 $(1,0,-1)^{\mathrm T}$。它的长度为 $\sqrt2$，单位化后得到
+
+$$
+q_1=\frac1{\sqrt2}(1,0,-1)^{\mathrm T}.
+$$
+
+对 $\lambda=4$，方程 $(A-4I)\boldsymbol x=0$ 只有一个独立限制 $x_3=x_1$，其通解为
+$$
+\boldsymbol x=s(1,0,1)^{\mathrm T}+t(0,1,0)^{\mathrm T}.
+$$
+
+这两个基础向量互相垂直，分别单位化可得
+$$
+q_2=\frac1{\sqrt2}(1,0,1)^{\mathrm T},\qquad
+q_3=(0,1,0)^{\mathrm T}.
+$$
+
+\Needspace{6\baselineskip}\textbf{第三步：组成正交矩阵并写出变量变换。}
+
+三个向量长度均为 $1$。其中
+
+$$
+q_1^{\mathrm T}q_2=\frac{1-1}{2}=0,
+\qquad q_1^{\mathrm T}q_3=q_2^{\mathrm T}q_3=0.
+$$
+
+所以
+
+$$
+Q=(q_1,q_2,q_3)
+=\begin{pmatrix}
+1/\sqrt2&1/\sqrt2&0\\
+0&0&1\\
+-1/\sqrt2&1/\sqrt2&0
+\end{pmatrix},
+\qquad Q^{\mathrm T}Q=I.
+$$
+
+又因为 $Aq_1=2q_1,Aq_2=4q_2,Aq_3=4q_3$，有
+
+$$
+AQ=Q\operatorname{diag}(2,4,4),
+\qquad Q^{\mathrm T}AQ=\operatorname{diag}(2,4,4).
+$$
+
+所求正交变换 $\boldsymbol x=Q\boldsymbol y$ 可写成
+
+$$
+\begin{cases}
+x_1=(y_1+y_2)/\sqrt2,\\
+x_2=y_3,\\
+x_3=(-y_1+y_2)/\sqrt2.
+\end{cases}
+$$
+
+代入二次型，得到标准形
+
+$$
+f=\boldsymbol y^{\mathrm T}(Q^{\mathrm T}AQ)\boldsymbol y
+=\boxed{2y_1^2+4y_2^2+4y_3^2}.
+$$
+
+因为 $Q^{-1}=Q^{\mathrm T}$，对应的逆变换为
+
+$$
+\begin{cases}
+y_1=(x_1-x_3)/\sqrt2,\\
+y_2=(x_1+x_3)/\sqrt2,\\
+y_3=x_2.
+\end{cases}
+$$
+
+这些关系也可由上面的正变换直接相加、相减得到。
+
+\Needspace{6\baselineskip}\textbf{（Ⅱ）用正交变换证明最小值并确定等号条件。}
+
+正交矩阵保持向量长度，而且可逆，因此 $\boldsymbol x\ne0$ 等价于 $\boldsymbol y\ne0$，并且
+
+$$
+\boldsymbol x^{\mathrm T}\boldsymbol x
+=\boldsymbol y^{\mathrm T}Q^{\mathrm T}Q\boldsymbol y
+=y_1^2+y_2^2+y_3^2>0.
+$$
+
+于是
+
+$$
+\begin{aligned}
+\frac{f(\boldsymbol x)}{\boldsymbol x^{\mathrm T}\boldsymbol x}
+&=\frac{2y_1^2+4y_2^2+4y_3^2}{y_1^2+y_2^2+y_3^2}\\
+&=2+\frac{2(y_2^2+y_3^2)}{y_1^2+y_2^2+y_3^2}\ge2.
+\end{aligned}
+$$
+
+等号成立当且仅当 $y_2=y_3=0$。由于向量非零，还须 $y_1\ne0$。换回原变量，即
+
+$$
+\boldsymbol x=\frac{y_1}{\sqrt2}(1,0,-1)^{\mathrm T}
+=t(1,0,-1)^{\mathrm T},\qquad t\ne0.
+$$
+
+这样的向量确实存在，例如取 $\boldsymbol x=(1,0,-1)^{\mathrm T}$，则 $f(\boldsymbol x)=4$、$\boldsymbol x^{\mathrm T}\boldsymbol x=2$，商等于 $2$。所以
+
+$$
+\boxed{\min_{\boldsymbol x\ne\boldsymbol0}
+\frac{f(\boldsymbol x)}{\boldsymbol x^{\mathrm T}\boldsymbol x}=2}.
+$$
+
+\Needspace{6\baselineskip}\textbf{直接代数核验。}
+
+从原二次型中减去 $2\boldsymbol x^{\mathrm T}\boldsymbol x$：
+
+$$
+\begin{aligned}
+f(\boldsymbol x)-2\boldsymbol x^{\mathrm T}\boldsymbol x
+&=x_1^2+2x_2^2+x_3^2+2x_1x_3\\
+&=(x_1+x_3)^2+2x_2^2\ge0.
+\end{aligned}
+$$
+
+等号条件为 $x_3=-x_1$、$x_2=0$，与特征向量法所得完全一致。
+\end{document}

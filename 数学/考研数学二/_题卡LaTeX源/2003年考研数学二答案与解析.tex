@@ -1,0 +1,1019 @@
+
+\documentclass[UTF8,11pt,fontset=windows]{ctexart}
+\usepackage[paperwidth=240mm,paperheight=200mm,margin=14mm,top=12mm,bottom=12mm]{geometry}
+\usepackage{amsmath,amssymb,mathtools,bm}
+\usepackage{xcolor,needspace}
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\linespread{1.08}
+\setlength{\emergencystretch}{3em}
+\allowdisplaybreaks[2]
+\xeCJKDeclareCharClass{CJK}{"2460 -> "24FF}
+\xeCJKDeclareCharClass{CJK}{"2160 -> "2188}
+\ctexset{section={format=\Large\bfseries,beforeskip=12pt,afterskip=7pt}}
+\begin{document}
+{\LARGE\bfseries 2003年考研数学二答案与解析\par}\vspace{6pt}
+
+\begingroup\color{gray}我的解答，未与官方核对。\par\endgroup
+
+\section*{答案速查}
+
+\begingroup\color{gray}填空题（原卷一）：1.$-4$；2.$y=x$；3.$(\ln2)^n/n!$；4.$(\mathrm e^{4\pi a}-1)/(4a)$；5.$3$；6.$1/2$。\par\endgroup
+
+\begingroup\color{gray}选择题（原卷二）：1.D　2.B　3.A　4.C　5.B　6.D。\par\endgroup
+
+三（2003.13）：$a=-1$ 时连续；$a=-2$ 时为可去间断点。
+
+四（2003.14）：$y''(9)=-\mathrm e/[16(1+2\ln2)^2]$。
+
+五（2003.15）：原函数为 $\dfrac{(x-1)\mathrm e^{\arctan x}}{2\sqrt{1+x^2}}+C$。
+
+六（2003.16）：$y''-y=\sin x$，所求解为 $y=\mathrm e^x-\mathrm e^{-x}-\tfrac12\sin x$。
+
+七（2003.17）：$k<4$ 时无交点，$k=4$ 时1个，$k>4$ 时2个。
+
+八（2003.18）：$x^2+2y^2=1$ 的第一象限部分；$s=l/(2\sqrt2)$。
+
+九（2003.19）：$t=\varphi(y)^2-4$，$x=2\mathrm e^{\pi y/6}$。
+
+十（2003.20）：三个证明见正文。
+
+十一（2003.21）：$a=0$，相似变换矩阵见正文。
+
+十二（2003.22）：充要条件为 $a+b+c=0$，三条直线共同经过 $(3,3/2)$。
+
+\clearpage
+
+\section*{一、填空题（原卷一，习题册1～6）}
+
+\Needspace{5\baselineskip}\textbf{1.（2003.1；原卷一·1）答案：$a=-4$。}
+
+“等价无穷小”要求两者之比趋于1，而不只是阶数相同。对固定实数 $a$，当 $x$ 充分接近0时底数 $1-ax^2>0$，可以应用展开式
+
+$$
+(1+u)^{1/4}=1+\frac14u+O(u^2).
+$$
+
+令 $u=-ax^2$，得到
+
+$$
+(1-ax^2)^{1/4}-1=-\frac a4x^2+O(x^4),
+$$
+
+正弦函数用 $\sin x=x+O(x^3)$ 展开，乘上前面的 $x$：
+
+$$
+x\sin x=x\bigl[x+O(x^3)\bigr]=x^2+O(x^4).
+$$
+
+因此
+
+$$
+\lim_{x\to0}\frac{(1-ax^2)^{1/4}-1}{x\sin x}
+=\lim_{x\to0}\frac{-a/4+O(x^2)}{1+O(x^2)}=-\frac a4.
+$$
+
+令此值等于1，得 $\boxed{a=-4}$。代入后分子主项为 $x^2$，与分母一致；$a=0$ 时分子恒为0，也已经被比值条件排除。
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{2.（2003.2；原卷一·2）答案：$y=x$。}
+
+原方程含 $\ln x$，在给定点 $(1,1)$ 附近有 $x>0$。代入点坐标，左右两边均为1，所以该点确在曲线上。
+
+将 $y$ 看作 $x$ 的函数，对方程 $xy+2\ln x=y^4$ 两侧求导：$(xy)'=y+xy'$（乘积法则），$(2\ln x)'=\dfrac2x$，$(y^4)'=4y^3y'$（链式法则，外层 $u^4$、内层 $y$），因此
+
+$$
+y+xy'+\frac2x=4y^3y'.
+$$
+
+把含 $y'$ 的项留在右侧、其余移到左侧：
+
+$$
+y+\frac2x=4y^3y'-xy'=(4y^3-x)y',
+\qquad y'=\frac{y+2/x}{4y^3-x}.
+$$
+
+在 $(1,1)$ 处，分母等于3，不为零，因此隐函数导数存在，切线斜率为
+
+$$
+y'(1)=\frac{1+2}{4-1}=1.
+$$
+
+最后用点斜式，得到
+
+$$
+y-1=1\cdot(x-1),\qquad \boxed{y=x}.
+$$
+
+隐式求导时，$xy$ 不能只求成 $xy'$，还要包括 $y$；$y^4$ 求导后也要乘上 $y'$。
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{3.（2003.3；原卷一·3）答案：$\dfrac{(\ln2)^n}{n!}$。}
+
+麦克劳林公式是在0处展开的泰勒公式，其中 $x^n$ 项为
+
+$$
+\frac{f^{(n)}(0)}{n!}x^n.
+$$
+
+对 $f(x)=2^x$，每次求导都会多乘一个 $\ln2$：
+
+$$
+f'(x)=2^x\ln2,\qquad
+f^{(n)}(x)=2^x(\ln2)^n.
+$$
+
+所以 $f^{(n)}(0)=(\ln2)^n$，所求系数为 $\boxed{(\ln2)^n/n!}$。
+
+也可以将 $2^x=\mathrm e^{x\ln2}$ 代入指数函数的展开式：
+
+$$
+2^x=1+x\ln2+\frac{x^2(\ln2)^2}{2!}+\cdots
++\frac{x^n(\ln2)^n}{n!}+o(x^n).
+$$
+
+题目问的是多项式中 $x^n$ 的系数，因而既不包含 $x^n$ 本身，也不能遗漏阶乘 $n!$。
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{4.（2003.4；原卷一·4）答案：$\dfrac{\mathrm e^{4\pi a}-1}{4a}$。}
+
+曲线上起点为 $(\rho,\theta)=(1,0)$，终点为 $(\mathrm e^{2\pi a},2\pi)$。两点在同一条极轴射线上，曲线转过一周后与这段极轴围成所求图形。
+
+极坐标的面积元是 $d\sigma=\rho\,\mathrm d\rho\,\mathrm d\theta$（$\rho$ 是换元的雅可比，不能丢）。本题区域自极点起、径向从 $0$ 到曲线 $\rho(\theta)$，先把径向积掉：
+
+$$
+\int_0^{\rho(\theta)}\rho\,\mathrm d\rho=\frac12\rho^{2}(\theta),
+$$
+
+于是二重积分只剩对 $\theta$ 的一元积分——\textbf{面积公式就是二重积分被吃掉一层后的样子}：
+
+$$
+S=\frac12\int_0^{2\pi}\rho^2\,\mathrm d\theta
+=\frac12\int_0^{2\pi}\mathrm e^{2a\theta}\,\mathrm d\theta.
+$$
+
+题设 $a>0$，所以 $2a\ne0$。逐步积分得
+
+$$
+S=\frac12\left[\frac{\mathrm e^{2a\theta}}{2a}\right]_0^{2\pi}
+=\boxed{\frac{\mathrm e^{4\pi a}-1}{4a}}.
+$$
+
+面积公式必须使用半径的平方，且含系数 $1/2$。终点指数里的 $4\pi a$ 来自 $(2a)(2\pi)$；下端点的指数值为1，因此分子还要减1。
+
+\textbf{量纲自检}：面积必须是长度²；$\int\rho\,\mathrm d\theta$ 只是长度（圆上就是周长）。快记法则是把薄片当扇形——弧长 $\rho\,\Delta\theta$ 做底、高 $\rho$，即得 $\tfrac12\rho^2\Delta\theta$。
+
+\begingroup\color{gray}错题：2003-4 极坐标面积微元误用ρdθ（面积微元写成了 $\rho\,\mathrm d\theta$：量纲是长度，圆上就是周长）\par\endgroup
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{5.（2003.5；原卷一·5）答案：$3$。}
+
+设 $\alpha=(a_1,a_2,a_3)^{\mathrm T}$。注意两个乘积的形状不同：$\alpha\alpha^{\mathrm T}$ 是三阶矩阵，$\alpha^{\mathrm T}\alpha$ 是一个标量。
+
+将外积展开，得到
+
+$$
+\alpha\alpha^{\mathrm T}
+=\begin{pmatrix}
+a_1^2&a_1a_2&a_1a_3\\
+a_2a_1&a_2^2&a_2a_3\\
+a_3a_1&a_3a_2&a_3^2
+\end{pmatrix}.
+$$
+
+比较题中矩阵的主对角线，得 $a_1^2=a_2^2=a_3^2=1$。所以
+
+$$
+\boxed{\alpha^{\mathrm T}\alpha=a_1^2+a_2^2+a_3^2=3.}
+$$
+
+等价地，它等于 $\alpha\alpha^{\mathrm T}$ 的迹。题中的非对角线还说明 $\alpha$ 可取 $\pm(1,-1,1)^{\mathrm T}$，但整体正负号不影响内积，所以不必先把向量完整求出。
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{6.（2003.6；原卷一·6）答案：$\dfrac12$。}
+
+\Needspace{6\baselineskip}\textbf{第一步：把矩阵方程因式分解。}
+
+把 $-A-B$ 移项，方程 $A^2B-A-B=I$ 成为 $A^2B-B=A+I$。左端两项都在右侧含 $B$，向右提取公因子，并用平方差 $A^2-I=(A+I)(A-I)$：
+
+$$
+(A^2-I)B=A+I,
+\qquad (A+I)(A-I)B=A+I.
+$$
+
+分解成立是因为 $I$ 与 $A$ 可交换；这里没有交换 $A$ 与 $B$。
+
+\Needspace{6\baselineskip}\textbf{第二步：检查能否约去左侧因子。}
+
+$$
+|A+I|=
+\begin{vmatrix}2&0&1\\0&3&0\\-2&0&2\end{vmatrix}
+=3\begin{vmatrix}2&1\\-2&2\end{vmatrix}=3(4+2)=18\ne0.
+$$
+
+因此可在等式 $(A+I)(A-I)B=A+I$ 两边左乘 $(A+I)^{-1}$：左侧变回 $(A-I)B$，右侧变成 $I$，
+
+$$
+(A-I)B=I.
+$$
+
+\Needspace{6\baselineskip}\textbf{第三步：取行列式求答案。}
+
+$$
+|A-I|=
+\begin{vmatrix}0&0&1\\0&1&0\\-2&0&0\end{vmatrix}
+=\begin{vmatrix}0&1\\-2&0\end{vmatrix}=2.
+$$
+
+对 $(A-I)B=I$ 两边取行列式，得 $|A-I|\,|B|=|I|=1$，所以 $\boxed{|B|=1/2}$。矩阵等式中的"约去"必须有可逆性依据，不能只凭两边出现同一矩阵就直接消掉。
+
+\clearpage
+
+\section*{二、选择题（原卷二，习题册7～12）}
+
+\Needspace{5\baselineskip}\textbf{7.（2003.7；原卷二·1）答案：D。}
+
+\Needspace{6\baselineskip}\textbf{证明 $b_nc_n$ 必然发散到正无穷。}
+
+由 $b_n\to1$，存在 $N_1$，使 $n>N_1$ 时 $b_n>1/2$。给定任意 $M>0$，再由 $c_n\to+\infty$，可取 $N_2$，使 $n>N_2$ 时 $c_n>2M$。
+
+于是当 $n>\max\{N_1,N_2\}$ 时，
+
+$$
+b_nc_n>\frac12\cdot2M=M.
+$$
+
+这正是 $b_nc_n\to+\infty$ 的定义，即乘积不存在有限极限，D成立。
+
+\Needspace{6\baselineskip}\textbf{逐项排除其余判断。}
+
+极限只能控制充分靠后的项，不能限制最初有限项。比如令 $b_n\equiv1$，而 $a_1=2,c_1=0$，从 $n\ge2$ 起取 $a_n=1/n,c_n=n$。三个数列仍满足题设，但 $a_1<b_1$ 与 $b_1<c_1$ 都不成立，因此A、B中的“任意 $n$”过强。
+
+对于C，取 $a_n=1/n,c_n=n$，乘积恒为1，有有限极限。事实上 $0\cdot\infty$ 型不能直接确定结果；取 $a_n=1/n^2$、$c_n=n$ 时乘积还会趋于0。
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{8.（2003.8；原卷二·2）答案：B。}
+
+\Needspace{6\baselineskip}\textbf{第一步：先准确计算含参积分。}
+
+被积函数中正好带有 $x^{n-1}\,\mathrm dx$。令 $u=1+x^n$，则 $\mathrm du=nx^{n-1}\mathrm dx$，即 $nx^{n-1}\mathrm dx=\mathrm du$；下限 $x=0$ 对应 $u=1$，上限 $x=\dfrac n{n+1}$ 对应 $u=1+\Bigl(\dfrac n{n+1}\Bigr)^n$。把 $n$ 乘进积分号内再换元：
+
+$$
+\begin{aligned}
+na_n
+&=\frac32\int_0^{n/(n+1)}\sqrt{1+x^n}\,\cdot nx^{n-1}\mathrm dx\\
+&=\frac32\int_1^{1+(n/(n+1))^n}\sqrt u\,\mathrm du\\
+&=\left[u^{3/2}\right]_1^{1+(n/(n+1))^n}\\
+&=\left[1+\left(\frac n{n+1}\right)^n\right]^{3/2}-1.
+\end{aligned}
+$$
+
+\Needspace{6\baselineskip}\textbf{第二步：计算底数中的极限。}
+
+$$
+\left(\frac n{n+1}\right)^n
+=\left(1+\frac1n\right)^{-n}\longrightarrow\mathrm e^{-1}.
+$$
+
+由连续性，最终极限为 $(1+\mathrm e^{-1})^{3/2}-1$，对应 B。
+
+换元也给出了每个 $n$ 的精确值：
+
+$$
+a_n=\frac1n\left\{\left[1+\left(\frac n{n+1}\right)^n\right]^{3/2}-1\right\}.
+$$
+
+原积分上限随 $n$ 变化，且被积函数也含 $n$；先准确积分再取极限，就同时保留了这些依赖关系。注意下限 $x=0$ 对应的是 $u=1$，因此结果中的常数项是减1。
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{9.（2003.9；原卷二·3）答案：A。}
+
+对已知解 $y=x/\ln x$ 求导，得到
+
+$$
+y'=\frac{\ln x-1}{\ln^2x}
+=\frac1{\ln x}-\frac1{\ln^2x}.
+$$
+
+其中 $y/x=1/\ln x$，所以微分方程要求
+
+$$
+\varphi(x/y)=y'-\frac yx=-\frac1{\ln^2x}=-\frac{y^2}{x^2}.
+$$
+
+注意外函数的自变量为 $x/y=\ln x$，因此 $\varphi(u)=-1/u^2$，代回同样得到 A。
+
+已知解的定义域要求 $x>0$ 且 $x\ne1$，所以 $\ln x\ne0$。令 $u=x/y=\ln x$ 后，$1/\ln^2x=1/u^2$，因此应该取 $\varphi(u)=-1/u^2$。再代入 $u=x/y$，有 $-1/(x/y)^2=-y^2/x^2$；倒数关系是区分A与C的关键。
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{10.（2003.10；原卷二·4）答案：C，两个极小值点和两个极大值点。}
+
+\Needspace{6\baselineskip}\textbf{第一步：从导函数图像读取符号。}
+
+将左侧与横轴的两个交点横坐标记为 $x_1<x_2<0$，右侧交点横坐标记为 $x_3>0$。从左到右，导函数的符号依次为
+
+$$
+\begin{array}{c|ccccc}
+\text{区间}&(-\infty,x_1)&(x_1,x_2)&(x_2,0)&(0,x_3)&(x_3,+\infty)\\
+\hline
+f'&+&-&+&-&+
+\end{array}
+$$
+
+因此原函数依次增加、减少、增加、减少、增加。
+
+\Needspace{6\baselineskip}\textbf{第二步：逐个判断转折点。}
+
+在 $x_1$ 处，导数由正变负，$f$ 左增右减，为极大值点；在 $x_2$ 处，导数由负变正，为极小值点。
+
+在0的左侧，导数为正；右侧导数为负。题设又保证 $f$ 在0连续，因此 $f$ 到达0前增加，越过0后减少，0也是极大值点。这里应检查原函数的连续性，不能因为导函数在0没有给出有限值就忽略该点。
+
+在 $x_3$ 处，导数由负变正，再得到一个极小值点。
+
+所以极大值点为 $x_1,0$，极小值点为 $x_2,x_3$，各有两个，选C。关键依据是导数的符号变化，而不是导数为零的点数。
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{11.（2003.11；原卷二·5）答案：B，$1>I_1>I_2$。}
+
+\Needspace{6\baselineskip}\textbf{第一步：比较两个被积函数。}
+
+对 $0<x<\pi/4$，有 $\tan x>x>0$。例如令 $g(x)=\tan x-x$，则 $g(0)=0$、$g'(x)=\tan^2x>0$，故不等式成立。因此
+
+$$
+\frac{\tan x}{x}>1>\frac{x}{\tan x}.
+$$
+
+在区间 $(0,\pi/4)$ 上积分，就有
+
+$$
+I_1>\frac\pi4>I_2.
+$$
+
+\Needspace{6\baselineskip}\textbf{第二步：证明 $I_1<1$。}
+
+在该区间上，$\sec^2t$ 随 $t$ 严格增加，故对 $0\le t\le x$ 都有 $\sec^2t\le\sec^2x$（仅在端点取等）。积分是整段被积函数的"平均"：被积函数处处不超过右端值，积分值就不超过右端值乘以区间长度，因此
+
+$$
+\tan x=\int_0^x\sec^2t\,\mathrm dt
+<x\sec^2x.
+$$
+
+除以 $x>0$ 再积分，得到
+
+$$
+I_1<\int_0^{\pi/4}\sec^2x\,\mathrm dx
+=[\tan x]_0^{\pi/4}=1.
+$$
+
+合并两步，得 $\boxed{1>I_1>I_2}$。两种比值在0处的极限都为1，按这个值补定义后连续，因此端点的形式不定不会影响上述积分比较。
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{12.（2003.12；原卷二·6）答案：D。}
+
+向量组Ⅰ可由向量组Ⅱ线性表示，意味着Ⅰ的每个向量都属于Ⅱ张成的空间。因此
+
+$$
+\operatorname{span}(\mathrm I)\subseteq\operatorname{span}(\mathrm {II}),
+\qquad \operatorname{rank}(\mathrm I)\le\operatorname{rank}(\mathrm {II})\le s.
+$$
+
+如果Ⅰ有 $r>s$ 个向量，则
+
+$$
+\operatorname{rank}(\mathrm I)\le s<r,
+$$
+
+秩小于向量个数，所以Ⅰ必线性相关，D成立。
+
+其余选项可用具体向量组排除。记 $e_1=(1,0)^{\mathrm T},e_2=(0,1)^{\mathrm T}$。
+
+当Ⅰ为 $\{e_1\}$、Ⅱ为 $\{e_1,e_2\}$ 时，Ⅰ可由Ⅱ表示，$r=1<s=2$，但两组都线性无关，所以A、C均非必然。
+
+当Ⅰ为 $\{e_1,e_2,e_1+e_2\}$、Ⅱ为 $\{e_1,e_2\}$ 时，仍然可表示，而且 $r=3>s=2$，但Ⅱ仍线性无关，所以B不成立。
+
+要区分“向量个数”与“秩”：表示关系直接限制的是张成空间的维数，而不直接限制Ⅱ中的向量是否独立。
+
+\clearpage
+
+\section*{三、解答题（原卷三～十二，习题册13～22）}
+
+\Needspace{5\baselineskip}\textbf{13.（2003.13；原卷三）答案：$a=-1$ 时连续，$a=-2$ 时为可去间断点。}
+
+\Needspace{6\baselineskip}\textbf{第一步：分别求两个单侧极限。}
+
+左侧分子、分母都从三次项开始：
+
+$$
+\ln(1+ax^3)=ax^3+O(x^6),
+\qquad x-\arcsin x=-\frac{x^3}{6}+O(x^5).
+$$
+
+分子分母同除以 $x^3$ 后取极限：
+
+$$
+L_-=\lim_{x\to0^-}\frac{ax^3+O(x^6)}{-x^3/6+O(x^5)}
+=\lim_{x\to0^-}\frac{a+O(x^3)}{-1/6+O(x^2)}
+=-6a.
+$$
+
+右侧分子用展开式逐项计算。$\mathrm e^{ax}=1+ax+\dfrac{a^2x^2}{2}+O(x^3)$，代入分子 $\mathrm e^{ax}+x^2-ax-1$：常数项 $1-1$ 抵消，一次项 $ax-ax$ 抵消，只剩
+
+$$
+\mathrm e^{ax}+x^2-ax-1=\left(\frac{a^2}{2}+1\right)x^2+O(x^3).
+$$
+
+又 $x\sin(x/4)=x\left[\dfrac x4+O(x^3)\right]=\dfrac{x^2}4+O(x^4)$，分子分母同除以 $x^2$，右极限为
+
+$$
+L_+=\lim_{x\to0^+}\frac{(a^2/2+1)x^2+O(x^3)}{x^2/4+O(x^4)}
+=4\left(\frac{a^2}{2}+1\right)=2a^2+4.
+$$
+
+\Needspace{6\baselineskip}\textbf{第二步：令两侧极限相等。}
+
+$$
+-6a=2a^2+4
+\quad\Longleftrightarrow\quad
+a^2+3a+2=0
+\quad\Longleftrightarrow\quad
+(a+1)(a+2)=0.
+$$
+
+所以只有 $a=-1$、$a=-2$ 时，双侧有限极限存在。
+
+\Needspace{6\baselineskip}\textbf{第三步：与零点函数值比较。}
+
+$a=-1$ 时，双侧极限为6，等于 $f(0)=6$，因此连续。
+
+$a=-2$ 时，双侧极限为12，与 $f(0)=6$ 不同，因此零点是可去间断点。
+
+其他参数的左右极限不相等，既不连续，也不是可去间断点。
+
+左侧根本条件是比较 $x^3$ 项，右侧则比较 $x^2$ 项，两侧不能共用同一个展开阶数。可去间断点还要求已有函数值与共同极限不同，所以必须在求出 $a=-1,-2$ 后继续与6比较，不能把两者都归为可去间断点。
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{14.（2003.14；原卷四）答案：$-\dfrac{\mathrm e}{16(1+2\ln2)^2}$。}
+
+\Needspace{6\baselineskip}\textbf{第一步：确定参数值及求导条件。}
+
+由 $x=1+2t^2=9$，得 $t^2=4$。结合 $t>1$，取 $t=2$。条件 $t>1$ 还保证积分上限 $1+2\ln t>1$，积分路径不经过被积函数在0处的奇点；$x_t=4t>0$，保证参数求导公式的分母非零。
+
+\Needspace{6\baselineskip}\textbf{第二步：求一阶导数。}
+
+变上限积分求导要乘以上限的导数。指数先化简：$\mathrm e^{1+2\ln t}=\mathrm e^{1}\cdot\mathrm e^{2\ln t}=\mathrm e\,t^2$。于是
+
+$$
+\frac{\mathrm dy}{\mathrm dt}
+=\frac{\mathrm e^{1+2\ln t}}{1+2\ln t}\cdot\frac2t
+=\frac{\mathrm e t^2}{1+2\ln t}\cdot\frac2t
+=\frac{2\mathrm e t}{1+2\ln t}.
+$$
+
+再除以 $x_t=4t$（约去 $2t$）：
+
+$$
+\frac{\mathrm dy}{\mathrm dx}
+=\frac{y_t}{x_t}
+=\frac{2\mathrm e t}{4t\,(1+2\ln t)}
+=\frac{\mathrm e}{2(1+2\ln t)}.
+$$
+
+\Needspace{6\baselineskip}\textbf{第三步：再对参数求导，并除以 $x_t$。}
+
+把 $\dfrac{\mathrm e}{2(1+2\ln t)}$ 写成 $\dfrac{\mathrm e}{2}(1+2\ln t)^{-1}$，用链式法则求导（先对外层 $u^{-1}$ 求导得 $-u^{-2}$，再乘内层导数 $\dfrac2t$）：
+
+$$
+\frac{\mathrm d}{\mathrm dt}\left[\frac{\mathrm e}{2}(1+2\ln t)^{-1}\right]
+=\frac{\mathrm e}{2}\cdot\left(-(1+2\ln t)^{-2}\cdot\frac2t\right)
+=-\frac{\mathrm e}{t(1+2\ln t)^2},
+$$
+
+再除以 $x_t=4t$：
+
+$$
+\frac{\mathrm d^2y}{\mathrm dx^2}
+=\frac1{4t}\frac{\mathrm d}{\mathrm dt}\left(\frac{\mathrm dy}{\mathrm dx}\right)
+=-\frac{\mathrm e}{4t^2(1+2\ln t)^2}.
+$$
+
+代入 $t=2$，即得 $\boxed{y''(9)=-\mathrm e/[16(1+2\ln2)^2]}$。每多求一阶关于 $x$ 的导数，都要在对参数求导后除以 $\mathrm dx/\mathrm dt$。
+
+也可由 $t^2=(x-1)/2$ 消去参数，再直接求导复核：
+
+$$
+\begin{aligned}
+y_x&=\frac{\mathrm e}{2[1+\ln((x-1)/2)]},\\
+y_{xx}&=-\frac{\mathrm e}{2(x-1)[1+\ln((x-1)/2)]^2}.
+\end{aligned}
+$$
+
+取 $x=9$，与参数法的结果一致。
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{15.（2003.15；原卷五）答案：$\dfrac{(x-1)\mathrm e^{\arctan x}}{2\sqrt{1+x^2}}+C$。}
+
+\Needspace{6\baselineskip}\textbf{第一步：用反正切换元同时处理指数与根式。}
+
+令 $t=\arctan x$，则 $x=\tan t$，且 $-\pi/2<t<\pi/2$。因此 $\cos t>0$，有
+
+$$
+\mathrm dx=\sec^2t\,\mathrm dt,
+\qquad (1+x^2)^{3/2}=(\sec^2t)^{3/2}=\sec^3t.
+$$
+
+把所有因子一并换元：
+
+$$
+I=\int\mathrm e^t\frac{\tan t\sec^2t}{\sec^3t}\,\mathrm dt
+=\int\mathrm e^t\sin t\,\mathrm dt.
+$$
+
+\Needspace{6\baselineskip}\textbf{第二步：连续两次分部积分，消去同类积分。}
+
+第一次将 $\sin t$ 求导、$\mathrm e^t$ 积分，得到
+
+$$
+I=\mathrm e^t\sin t-\int\mathrm e^t\cos t\,\mathrm dt.
+$$
+
+再对后一个积分分部积分：
+
+$$
+\int\mathrm e^t\cos t\,\mathrm dt
+=\mathrm e^t\cos t+\int\mathrm e^t\sin t\,\mathrm dt
+=\mathrm e^t\cos t+I.
+$$
+
+代回后有 $I=\mathrm e^t\sin t-\mathrm e^t\cos t-I$，所以
+
+$$
+I=\frac12\mathrm e^t(\sin t-\cos t)+C.
+$$
+
+\Needspace{6\baselineskip}\textbf{第三步：还原原变量。}
+
+由 $\tan t=x$ 且 $\cos t>0$，有 $\sin t=x/\sqrt{1+x^2}$、$\cos t=1/\sqrt{1+x^2}$，因此
+
+$$
+\boxed{I=\frac{(x-1)\mathrm e^{\arctan x}}{2\sqrt{1+x^2}}+C.}
+$$
+
+该表达式在整个实轴有定义；两次分部积分中的任意常数统一吸收进最后的 $C$。
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{16.（2003.16；原卷六）答案：$y''-y=\sin x$，$y=\mathrm e^x-\mathrm e^{-x}-\tfrac12\sin x$。}
+
+\Needspace{6\baselineskip}\textbf{（Ⅰ）将反函数方程改写为关于 $y(x)$ 的方程。}
+
+因为 $y'\ne0$，反函数的一阶导数为 $\mathrm dx/\mathrm dy=1/y'$。再次对 $y$ 求导时，由链式法则有 $\mathrm d/\mathrm dy=(1/y')\mathrm d/\mathrm dx$，于是
+
+$$
+\frac{\mathrm d^2x}{\mathrm dy^2}
+=\frac1{y'}\frac{\mathrm d}{\mathrm dx}\left(\frac1{y'}\right)
+=\frac1{y'}\cdot\left(-\frac{y''}{(y')^2}\right)
+=-\frac{y''}{(y')^3}.
+$$
+
+内层求导用了 $\left[(y')^{-1}\right]'=-(y')^{-2}\,y''$：先对外层 $u^{-1}$ 求导，再乘 $u=y'$ 对 $x$ 的导数。
+
+代回原反函数方程，得到
+
+$$
+-\frac{y''}{(y')^3}+(y+\sin x)\frac1{(y')^3}=0.
+$$
+
+同乘非零的 $(y')^3$，整理得 $\boxed{y''-y=\sin x}$。
+
+\Needspace{6\baselineskip}\textbf{（Ⅱ）求非齐次方程的解，并代入初值。}
+
+齐次方程的特征方程为 $r^2-1=0$，两个根为 $1,-1$。对右端正弦函数，设特解为 $A\sin x+B\cos x$。它的二阶导数为 $-(A\sin x+B\cos x)$，代入方程左端 $y''-y$：
+
+$$
+-(A\sin x+B\cos x)-(A\sin x+B\cos x)
+=-2A\sin x-2B\cos x.
+$$
+
+令其等于右端 $\sin x$，比较 $\sin x$ 与 $\cos x$ 的系数：$-2A=1$、$-2B=0$，即
+
+$$
+A=-\frac12,\qquad B=0.
+$$
+
+因此通解为 $y=C_1\mathrm e^x+C_2\mathrm e^{-x}-\tfrac12\sin x$。代入 $y(0)=0$、$y'(0)=3/2$，得
+
+$$
+C_1+C_2=0,
+\qquad C_1-C_2-\frac12=\frac32.
+$$
+
+解得 $C_1=1,C_2=-1$，所以
+
+$$
+\boxed{y=\mathrm e^x-\mathrm e^{-x}-\frac12\sin x}.
+$$
+
+最后核验反函数条件：由 $\mathrm e^x+\mathrm e^{-x}\ge2$、$\cos x\le1$，有 $y'=\mathrm e^x+\mathrm e^{-x}-\tfrac12\cos x\ge3/2>0$。故该解严格递增，导数处处非零，符合第（Ⅰ）问的变换条件。
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{17.（2003.17；原卷七）交点个数的完整讨论。}
+
+两条曲线的交点满足
+
+$$
+k=4x-4\ln x+\ln^4x,\qquad x>0.
+$$
+
+\Needspace{6\baselineskip}\textbf{第一步：用对数换元化简导数符号。}
+
+令 $t=\ln x$，则 $x=\mathrm e^t$，交点个数等于水平直线 $y=k$ 与函数
+
+$$
+H(t)=4\mathrm e^t-4t+t^4
+$$
+
+图形的交点个数。
+
+\Needspace{6\baselineskip}\textbf{第二步：证明函数先减后增。}
+
+$$
+H'(t)=4(\mathrm e^t-1+t^3).
+$$
+
+当 $t<0$ 时，$\mathrm e^t-1<0$ 且 $t^3<0$，所以 $H'<0$。
+
+当 $t>0$ 时，两项都为正，所以 $H'>0$。因此 $H$ 在0处取得唯一最小值 $H(0)=4$。
+
+\Needspace{6\baselineskip}\textbf{第三步：检查两端行为，确定每段根数。}
+
+当 $t\to+\infty$ 时，指数项趋于无穷，$H(t)\to+\infty$；当 $t\to-\infty$ 时，$t^4-4t\to+\infty$，同样 $H(t)\to+\infty$。
+
+所以 $k<4$ 时无交点；$k=4$ 时只有 $t=0$，对应 $x=1$，只有1个交点；$k>4$ 时，递减段和递增段各有1个根，共2个交点。
+
+因此可以把结论写成
+
+$$
+N(k)=\begin{cases}0,&k<4,\\1,&k=4,\\2,&k>4.\end{cases}
+$$
+
+当 $k=4$ 时唯一交点为 $(1,4)$；当 $k>4$ 时，两个交点的横坐标分别落在 $(0,1)$ 与 $(1,+\infty)$。严格单调性保证每侧至多一个根，两端极限与连续性保证每侧至少一个根，因此“共两个”包含存在性和唯一性两部分依据。
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{18.（2003.18；原卷八）答案：$x^2+2y^2=1$ 的第一象限部分，$s=l/(2\sqrt2)$。}
+
+\Needspace{6\baselineskip}\textbf{（Ⅰ）由法线中点条件求曲线。}
+
+在第一象限中 $x,y>0$。若 $y'=0$，法线竖直且不能与 $y$ 轴相交，故 $y'\ne0$。法线方程为 $Y-y=-(X-x)/y'$，令 $X=0$，得到纵轴交点 $Q$ 的纵坐标为 $y+x/y'$。
+
+$P$ 的纵坐标为 $y$，线段 $PQ$ 的中点纵坐标为 $\dfrac{y+Y_Q}{2}$。"被 $x$ 轴平分"即中点落在 $x$ 轴上：$\dfrac{y+Y_Q}{2}=0$，也就是 $Q$ 的纵坐标 $Y_Q=-y$。于是
+
+$$
+y+\frac{x}{y'}=-y
+\quad\Longrightarrow\quad
+y'=-\frac{x}{2y}
+\quad\Longrightarrow\quad
+2y\,\mathrm dy=-x\,\mathrm dx.
+$$
+
+两边积分（$\int 2y\,\mathrm dy=y^2$，$\int x\,\mathrm dx=\dfrac{x^2}2$），得
+
+$$
+y^2=-\frac{x^2}{2}+C,
+\qquad\text{即}\qquad
+\frac{x^2}{2}+y^2=C.
+$$
+
+代入已知点 $(\sqrt2/2,1/2)$：$y^2=\dfrac14$，$\dfrac{x^2}{2}=\dfrac{1/2}{2}=\dfrac14$，故 $C=\dfrac14+\dfrac14=\dfrac12$，所以
+
+$$
+\boxed{x^2+2y^2=1},
+\qquad y=\sqrt{\frac{1-x^2}{2}},\quad 0<x<1.
+$$
+
+回验几何条件：该曲线的法线斜率为 $2y/x$，令法线中的 $X=0$，得到 $Y_Q=y-(2y/x)x=-y$；中点确为 $(x/2,0)$。
+
+\Needspace{6\baselineskip}\textbf{（Ⅱ）将两条曲线的弧长化成同一个积分。}
+
+椭圆弧取参数 $x=\cos t$、$y=(1/\sqrt2)\sin t$，$0\le t\le\pi/2$。加入两个端点不改变弧长。由参数曲线弧长公式，
+
+$$
+s=\int_0^{\pi/2}\sqrt{\sin^2t+\frac12\cos^2t}\,\mathrm dt
+=\int_0^{\pi/2}\sqrt{\frac12\bigl(1+\sin^2t\bigr)}\,\mathrm dt
+=\frac1{\sqrt2}\int_0^{\pi/2}\sqrt{1+\sin^2t}\,\mathrm dt,
+$$
+
+中间一步的化简：$\sin^2t+\dfrac12\cos^2t=\sin^2t+\dfrac12\bigl(1-\sin^2t\bigr)=\dfrac12\bigl(1+\sin^2t\bigr)$。
+
+正弦曲线 $y=\sin x$ 在给定区间上的导数为 $\cos x$。先利用关于 $\pi/2$ 的对称性，再作 $x=\pi/2-t$ 的换元，得
+
+$$
+l=\int_0^\pi\sqrt{1+\cos^2x}\,\mathrm dx
+=2\int_0^{\pi/2}\sqrt{1+\cos^2x}\,\mathrm dx
+=2\int_0^{\pi/2}\sqrt{1+\sin^2t}\,\mathrm dt.
+$$
+
+记 $J=\displaystyle\int_0^{\pi/2}\sqrt{1+\sin^2t}\,\mathrm dt$，则上面两式给出 $s=\dfrac1{\sqrt2}J$、$l=2J$。由 $J=\dfrac{\sqrt2}{2}l$ 代入第一式，得 $\boxed{s=l/(2\sqrt2)}$，无需求出该积分的初等原函数。
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{19.（2003.19；原卷九）答案：$t=\varphi(y)^2-4$，$x=2\mathrm e^{\pi y/6}$。}
+
+\Needspace{6\baselineskip}\textbf{（Ⅰ）由液面面积的变化率建立关系。}
+
+设液面高度为 $y=y(t)$，水平液面面积为 $S(t)$。初始底面半径为2，所以 $S(0)=4\pi$。
+
+已知 $S'(t)=\pi$，积分后得到
+
+$$
+S(t)=4\pi+\pi t.
+$$
+
+另一方面液面是半径为 $\varphi(y)$ 的圆，面积为 $S(t)=\pi\varphi(y)^2$。两式比较：$4\pi+\pi t=\pi\varphi(y)^2$，约去 $\pi$ 得 $4+t=\varphi(y)^2$，即
+
+$$
+t=\varphi(y)^2-4.
+$$
+
+\Needspace{6\baselineskip}\textbf{（Ⅱ）用体积变化率求高度与时间。}
+
+液体体积的变化率是3。高度增加 $\mathrm dy$ 时，体积增加 $S(t)\mathrm dy$，故
+
+$$
+3=\frac{\mathrm dV}{\mathrm dt}=S(t)\frac{\mathrm dy}{\mathrm dt},
+\qquad \frac{\mathrm dy}{\mathrm dt}=\frac3{\pi(t+4)}.
+$$
+
+由 $y(0)=0$，从 $0$ 到 $t$ 积分：
+
+$$
+y(t)=\int_0^t\frac{3\,\mathrm d\tau}{\pi(\tau+4)}
+=\frac3\pi\Bigl[\ln(\tau+4)\Bigr]_0^t
+=\frac3\pi\ln\frac{t+4}{4}.
+$$
+
+再利用 $t+4=\varphi(y)^2$ 及对数性质 $\ln\dfrac{\varphi^2}{4}=\ln\Bigl(\dfrac{\varphi}2\Bigr)^{2}=2\ln\dfrac{\varphi}2$，得
+
+$$
+y=\frac3\pi\ln\frac{\varphi(y)^2}{4}
+=\frac6\pi\ln\frac{\varphi(y)}2.
+$$
+
+解出侧壁曲线为 $x=\varphi(y)=2\mathrm e^{\pi y/6}$，$y\ge0$。当 $y=0$ 时半径确为2，与底面相符。
+
+可用总体积再次检查两个速率条件。对所得曲线，液面到高度 $y$ 时的体积为
+
+$$
+V(y)=\pi\int_0^y\varphi(u)^2\,\mathrm du
+=4\pi\int_0^y\mathrm e^{\pi u/3}\,\mathrm du
+=12(\mathrm e^{\pi y/3}-1).
+$$
+
+而 $t=\varphi(y)^2-4=4(\mathrm e^{\pi y/3}-1)$，所以 $V=3t$，注液速率为3。又 $S=\pi\varphi(y)^2=\pi(t+4)$，故面积增长率为 $\pi$，两个设计条件同时成立。
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{20.（2003.20；原卷十）三个结论的证明。}
+
+\Needspace{6\baselineskip}\textbf{（Ⅰ）先由端点极限确定 $f(a)$，再证明区间内为正。}
+
+记题设有限极限为 $L$。当 $x\to a^+$ 时，
+
+$$
+f(2x-a)=(x-a)\frac{f(2x-a)}{x-a}\longrightarrow0\cdot L=0.
+$$
+
+又因为 $2x-a\to a^+$，且 $f$ 在 $a$ 处右连续，所以左端同时趋于 $f(a)$。因此
+
+$$
+f(a)=0.
+$$
+
+对任意 $x\in(a,b)$，在 $[a,x]$ 上应用拉格朗日中值定理：存在 $c\in(a,x)$，使
+
+$$
+f(x)-f(a)=f'(c)(x-a)>0.
+$$
+
+这就证明 $\boxed{f(x)>0\ (a<x<b)}$。特别地，连续函数 $f$ 在区间内部严格为正，所以
+
+$$
+I=\int_a^b f(x)\,\mathrm dx>0.
+$$
+
+后续出现的积分分母因此不为零。
+
+\Needspace{6\baselineskip}\textbf{（Ⅱ）为目标比例构造两个辅助函数。}
+
+令
+
+$$
+F(x)=\int_a^x f(t)\,\mathrm dt,
+\qquad G(x)=x^2-a^2.
+$$
+
+由 $f$ 的连续性，$F,G$ 都在 $[a,b]$ 上连续、在 $(a,b)$ 内可导，且
+
+$$
+F'(x)=f(x)>0,\qquad G'(x)=2x.
+$$
+
+所以柯西中值定理可以应用，并因 $F'(x)\ne0$，存在 $\xi\in(a,b)$，使
+
+$$
+\frac{G(b)-G(a)}{F(b)-F(a)}
+=\frac{G'(\xi)}{F'(\xi)}.
+$$
+
+将各量代入：$G(b)-G(a)=b^2-a^2$，$F(b)-F(a)=I$，从而
+
+$$
+\boxed{\frac{b^2-a^2}{\displaystyle\int_a^b f(x)\,\mathrm dx}
+=\frac{2\xi}{f(\xi)}.}
+$$
+
+此处只要求 $f(\xi)>0$，并不要求 $\xi$ 为正或非零。
+
+\Needspace{6\baselineskip}\textbf{（Ⅲ）在 $[a,\xi]$ 上产生第二个中值点。}
+
+函数 $f$ 在这个较小的闭区间连续、内部可导。由拉格朗日中值定理，存在 $\eta\in(a,\xi)$，使
+
+$$
+f'(\eta)=\frac{f(\xi)-f(a)}{\xi-a}
+=\frac{f(\xi)}{\xi-a}.
+$$
+
+将第二问的等式交叉相乘，写成
+
+$$
+f(\xi)(b^2-a^2)=2\xi I.
+$$
+
+因此
+
+$$
+\boxed{f'(\eta)(b^2-a^2)
+=\frac{f(\xi)(b^2-a^2)}{\xi-a}
+=\frac{2\xi}{\xi-a}\int_a^b f(x)\,\mathrm dx.}
+$$
+
+因为 $a<\eta<\xi<b$，两个中值点必然不同。整个结合过程没有除以 $\xi$ 或 $b^2-a^2$，所以即使这些量为零，论证仍成立。
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{21.（2003.21；原卷十一）答案：$a=0$，可逆矩阵如下。}
+
+\Needspace{6\baselineskip}\textbf{第一步：求特征值及其重数。}
+
+矩阵按最后一行分块为上三角块结构，行列式等于对角块行列式的乘积。左上二阶块：
+
+$$
+\begin{vmatrix}\lambda-2&-2\\-8&\lambda-2\end{vmatrix}
+=(\lambda-2)^2-(-2)(-8)
+=(\lambda-2)^2-16,
+$$
+
+右下一块贡献因子 $\lambda-6$，所以
+
+$$
+\det(\lambda I-A)
+=(\lambda-6)\bigl[(\lambda-2)^2-16\bigr].
+$$
+
+再用平方差分解 $(\lambda-2)^2-16=(\lambda-6)(\lambda+2)$，得到
+
+$$
+\det(\lambda I-A)=(\lambda+2)(\lambda-6)^2.
+$$
+
+特征值6为二重根。要可对角化，它对应的特征空间必须为二维，即 $r(A-6I)=1$。
+
+\Needspace{6\baselineskip}\textbf{第二步：用秩条件确定 $a$。}
+
+$$
+A-6I=\begin{pmatrix}-4&2&0\\8&-4&a\\0&0&0\end{pmatrix}.
+$$
+
+对第2行加上第1行的2倍，得到
+
+$$
+A-6I\sim\begin{pmatrix}-4&2&0\\0&0&a\\0&0&0\end{pmatrix}.
+$$
+
+若 $a\ne0$，秩为2，特征值6只有一个独立特征向量，不能对角化；若 $a=0$，秩为1，特征空间才有二维。因此 $a=0$ 是必要条件。
+
+\Needspace{6\baselineskip}\textbf{第三步：构造基，验证充分性。}
+
+当 $a=0$ 时，对于特征值 $-2$：
+
+$$
+A+2I=\begin{pmatrix}4&2&0\\8&4&0\\0&0&8\end{pmatrix}
+\xrightarrow{\;r_2-2r_1\;}
+\begin{pmatrix}4&2&0\\0&0&0\\0&0&8\end{pmatrix},
+$$
+
+即 $8x_3=0$ 与 $4x_1+2x_2=0$，给出 $x_2=-2x_1$、$x_3=0$。对于特征值6：
+
+$$
+A-6I=\begin{pmatrix}-4&2&0\\8&-4&0\\0&0&0\end{pmatrix}
+\xrightarrow{\;r_2+2r_1\;}
+\begin{pmatrix}-4&2&0\\0&0&0\\0&0&0\end{pmatrix},
+$$
+
+只给出 $-4x_1+2x_2=0$，即 $x_2=2x_1$，而 $x_3$ 自由。分别取特征向量 $(1,-2,0)^{\mathrm T}$、$(1,2,0)^{\mathrm T}$、$(0,0,1)^{\mathrm T}$。
+
+所以令
+
+$$
+P=\begin{pmatrix}1&1&0\\-2&2&0\\0&0&1\end{pmatrix},
+\qquad \Lambda=\operatorname{diag}(-2,6,6).
+$$
+
+按第3列展开，$\det P=1\cdot\begin{vmatrix}1&1\\-2&2\end{vmatrix}=2-(-2)=4\ne0$，且 $AP=P\Lambda$，故 $P^{-1}AP=\Lambda$。因此 $a=0$ 也充分。
+
+\clearpage
+
+\Needspace{5\baselineskip}\textbf{22.（2003.22；原卷十二）三条直线共点的充要条件。}
+
+\Needspace{6\baselineskip}\textbf{必要性：由共同解得到行列式为零。}
+
+如果三条直线经过同一点 $(x,y)$，则非零向量 $(x,y,1)^{\mathrm T}$ 满足
+
+$$
+\begin{pmatrix}a&2b&3c\\b&2c&3a\\c&2a&3b\end{pmatrix}
+\begin{pmatrix}x\\y\\1\end{pmatrix}=0.
+$$
+
+所以系数矩阵行列式为零。提出第2、3列的因子2与3：
+
+$$
+\begin{vmatrix}a&2b&3c\\b&2c&3a\\c&2a&3b\end{vmatrix}
+=6\begin{vmatrix}a&b&c\\b&c&a\\c&a&b\end{vmatrix}.
+$$
+
+按第一行展开后一个行列式：
+
+$$
+\begin{aligned}
+\begin{vmatrix}a&b&c\\b&c&a\\c&a&b\end{vmatrix}
+&=a(cb-a^2)-b(b^2-ac)+c(ba-c^2)\\
+&=3abc-a^3-b^3-c^3.
+\end{aligned}
+$$
+
+再用立方和公式
+
+$$
+a^3+b^3+c^3-3abc=(a+b+c)(a^2+b^2+c^2-ab-bc-ca),
+$$
+
+把上式变号代入，得到
+
+$$
+0=6\bigl(3abc-a^3-b^3-c^3\bigr)
+=-6(a+b+c)(a^2+b^2+c^2-ab-bc-ca).
+$$
+
+第二个因子可以写成
+
+$$
+\frac12[(a-b)^2+(b-c)^2+(c-a)^2].
+$$
+
+若这个平方和为零，则 $a=b=c=d$。当 $d\ne0$ 时，三条方程约去 $d$ 后全是 $x+2y+3=0$，表示同一条直线；当 $d=0$ 时，三式全为 $0=0$，不构成直线。两种情况都与题设矛盾。
+
+因此只能 $a+b+c=0$。
+
+\Needspace{6\baselineskip}\textbf{充分性：直接找出共同交点。}
+
+如果 $a+b+c=0$，取 $x=3,y=3/2$。三条直线左端依次为
+
+$$
+3a+3b+3c,
+\qquad3b+3c+3a,
+\qquad3c+3a+3b,
+$$
+
+全部为零，所以三条直线均经过 $(3,3/2)$。为核验交点唯一，由 $c=-a-b$，前两条直线的系数行列式为
+
+$$
+\begin{vmatrix}a&2b\\b&2c\end{vmatrix}
+=2(ac-b^2)=-2(a^2+ab+b^2).
+$$
+
+其中 $a^2+ab+b^2=(a+b/2)^2+3b^2/4>0$：等号会导致 $a=b=c=0$，与有效直线条件矛盾。因此前两条直线的交点唯一，第三条也经过此点，充分性成立。综上，充要条件为 $\boxed{a+b+c=0}$。
+\end{document}
