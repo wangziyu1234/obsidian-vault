@@ -81,7 +81,7 @@ UNICODE_MAP = {
 RE_ITEM = re.compile(r"^\*\*\d+\.\s*[（(]")
 RE_CALLOUT = re.compile(r"^>\s*\[!([A-Za-z]+)\]\s*(.*)$")
 RE_WIKI = re.compile(r"\[\[([^\[\]|]+)(?:\|([^\[\]]+))?\]\]")
-RE_MATH_INLINE = re.compile(r"\$[^$\n]*\$")
+RE_MATH_INLINE = re.compile(r"\$\$[^$\n]*\$\$|\$[^$\n]*\$")
 RE_BOLD = re.compile(r"\*\*(.+?)\*\*")
 RE_ESCAPE = re.compile(r"(?<!\\)([%&#_])")
 RE_PLACEHOLDER = re.compile(r"\x00(\d+)\x00")
@@ -93,7 +93,7 @@ def inline(text):
     """把一行 md 转成 LaTeX 行内形式。
 
     与既有的试题卡生成器 gen.py 共用同一套约定：
-    先切出数学段（`$…$`）并保护，只在非数学段转义 `%&#_`，最后统一 `**…**` → `\\textbf{…}`。
+    先切出数学段（`$…$` 与 `$$…$$`）并保护，只在非数学段转义 `%&#_`，最后统一 `**…**` → `\\textbf{…}`。
     """
     store = []
 
@@ -174,11 +174,20 @@ def convert(md_text):
             if callout is None and first_body.strip():
                 body.append(inline(first_body))
             i += 1
+            disp = False
             while i < n and lines[i].startswith(">"):
                 cont = lines[i][1:]
                 if cont.startswith(" "):
                     cont = cont[1:]
-                if cont.strip():
+                if disp:
+                    # `$$` 块内部原样透传，防止 `_` `%` `&` 被误转义
+                    body.append(cont)
+                    if cont.strip() == "$$":
+                        disp = False
+                elif cont.strip() == "$$":
+                    body.append(cont)
+                    disp = True
+                elif cont.strip():
                     body.append(inline(cont))
                 i += 1
             if callout is not None:
