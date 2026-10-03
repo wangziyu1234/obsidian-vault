@@ -1,0 +1,63 @@
+/* tables-readable.css —— 表格（尤其公式表）字大一点、行松一点
+   启用：设置 → 外观 → CSS 代码片段 → 点「刷新」→ 打开 tables-readable
+   调参：只改下面 :root 里四个变量，保存即生效（不必刷新片段）
+   不想要了：把上面那个开关关掉，或直接删本文件
+
+   分三层，互不干扰：
+   1) 全局（默认生效）：所有表格字号 / 行距 / 内边距放宽，单元格里的公式一起放大
+      —— 不动列宽策略，所以既有多列表格（目录、索引）不会被撑出横向滚动条
+   2) 单页放大：该页 frontmatter 写 cssclasses: [big-table]
+   3) 单页加宽：该页 frontmatter 写 cssclasses: [wide-table]
+      —— 解除「缩减栏宽」限制，并让表格按内容自适应（宁可横向滚动，也不把公式挤成多行）
+*/
+
+:root {
+  --tbl-font: 1.06em;   /* 表格字号，相对正文字号 */
+  --tbl-line: 1.55;     /* 表格行距 */
+  --tbl-pad-y: 8px;     /* 单元格上下内边距 */
+  --tbl-pad-x: 12px;    /* 单元格左右内边距 */
+}
+
+/* ---------- 1) 全局：阅读视图 ---------- */
+.markdown-rendered table {
+  font-size: var(--tbl-font);
+  line-height: var(--tbl-line);
+}
+.markdown-rendered th,
+.markdown-rendered td {
+  padding: var(--tbl-pad-y) var(--tbl-pad-x);
+}
+/* 单元格里的行内公式跟着一起放大 */
+.markdown-rendered th .mjx-container,
+.markdown-rendered td .mjx-container {
+  font-size: 1.03em;
+}
+
+/* ---------- 1) 全局：实时预览（Live Preview） ---------- */
+.markdown-source-view.mod-cm6 .cm-table-widget table {
+  font-size: var(--tbl-font);
+  line-height: var(--tbl-line);
+}
+.markdown-source-view.mod-cm6 .cm-table-widget th,
+.markdown-source-view.mod-cm6 .cm-table-widget td {
+  padding: var(--tbl-pad-y) var(--tbl-pad-x);
+}
+
+/* ---------- 2) 单页放大：frontmatter 加 cssclasses: [big-table] ---------- */
+.big-table table {
+  font-size: 1.16em;
+}
+.big-table th,
+.big-table td {
+  padding: 10px 14px;
+}
+
+/* ---------- 3) 单页加宽：frontmatter 加 cssclasses: [wide-table] ---------- */
+.markdown-preview-view.wide-table .markdown-preview-sizer,
+.markdown-source-view.wide-table .cm-sizer {
+  max-width: 100% !important;
+}
+.wide-table table {
+  width: auto;
+  table-layout: auto;
+}

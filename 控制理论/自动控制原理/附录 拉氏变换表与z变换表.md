@@ -3,6 +3,7 @@ create: 2026-10-03
 modify: 2026-10-03
 tags: [知识点, 自动控制原理, 公式速查]
 type: cheatsheet
+cssclasses: [big-table, wide-table]
 aliases: [拉氏变换表, z变换表, 变换对速查, 变换对表, 常用变换对]
 ---
 

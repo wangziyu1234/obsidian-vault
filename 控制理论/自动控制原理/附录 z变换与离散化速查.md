@@ -3,6 +3,7 @@ create: 2026-09-26
 modify: 2026-10-03
 tags: [知识点, 自动控制原理, 公式速查]
 type: cheatsheet
+cssclasses: [big-table]
 aliases: [z变换速查, 离散化速查, 脉冲传递函数, ZOH, 差分方程]
 ---
 
