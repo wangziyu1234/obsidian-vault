@@ -5,9 +5,11 @@
   "calendar",
   "quickadd",
   "omnisearch",
-  "pdf-plus",
-  "obsidian-linter",
   "obsidian-tasks-plugin",
   "obsidian-latex-suite",
-  "remotely-save"
+  "remotely-save",
+  "table-editor-obsidian",
+  "obsidian-icon-folder",
+  "obsidian-image-toolkit",
+  "obsidian-style-settings"
 ]

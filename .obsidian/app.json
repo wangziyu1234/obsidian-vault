@@ -3,5 +3,13 @@
     "_moved_out/",
     ".venv/",
     ".trash/"
-  ]
+  ],
+  "readableLineLength": true,
+  "strictLineBreaks": false,
+  "rightToLeft": false,
+  "smartIndentList": true,
+  "showLineNumber": false,
+  "defaultViewMode": "preview",
+  "foldIndent": true,
+  "vimMode": false
 }

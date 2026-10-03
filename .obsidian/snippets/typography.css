@@ -1,0 +1,60 @@
+/* typography.css —— 排版微调（阅读视图 + 实时预览）
+   启用：设置 → 外观 → CSS 代码片段 → 点「刷新」→ 打开 typography
+   调参：改下面 :root 里的变量，保存即生效（不必刷新片段）
+   开关：标 [开关] 的段落默认注释掉了，需要时去掉注释
+
+   分工：本页管正文 / 标题 / 图片 / 代码 / 引用；表格归 tables-readable.css。
+*/
+
+:root {
+  --typo-line: 1.75;        /* 正文行距：中文长段落最明显的一项 */
+  --typo-para: 0.55em;      /* 段落之间的间距 */
+  --typo-img-radius: 6px;   /* 图片圆角 */
+  --typo-code-size: 0.94em; /* 行内代码/代码块字号 */
+  --typo-h2-margin: 1.9em;  /* H2 上间距（讲义式笔记分层更清楚） */
+}
+
+/* ---------- 正文 ---------- */
+.markdown-rendered p,
+.markdown-source-view.mod-cm6 .cm-line {
+  line-height: var(--typo-line);
+}
+.markdown-rendered p + p {
+  margin-top: var(--typo-para);
+}
+
+/* ---------- 标题层级 ---------- */
+.markdown-rendered h1 { margin-top: 0.4em; margin-bottom: 0.7em; }
+.markdown-rendered h2 { margin-top: var(--typo-h2-margin); margin-bottom: 0.6em; }
+.markdown-rendered h3 { margin-top: 1.5em; margin-bottom: 0.5em; }
+.markdown-rendered h4 { margin-top: 1.2em; margin-bottom: 0.4em; }
+
+/* ---------- 图片：居中 + 圆角 + 轻阴影 ---------- */
+.markdown-rendered img {
+  display: block;
+  margin: 0.6em auto;
+  border-radius: var(--typo-img-radius);
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.10);
+}
+
+/* ---------- 代码 ---------- */
+.markdown-rendered code { font-size: var(--typo-code-size); }
+.markdown-rendered pre { border-radius: 6px; }
+
+/* ---------- 引用块 ---------- */
+.markdown-rendered blockquote { border-radius: 0 6px 6px 0; }
+
+/* [开关] 中文首行缩进 2 字符（正文段落生效；列表、callout 内部不受影响） */
+/*
+.markdown-rendered p { text-indent: 2em; }
+*/
+
+/* [开关] 表格斑马纹（若同时开了 tables-readable，建议二选一） */
+/*
+.markdown-rendered tbody tr:nth-child(even) { background-color: rgba(127, 127, 127, 0.07); }
+*/
+
+/* [开关] 正文两端对齐（含长公式时可能出现大空隙，慎用） */
+/*
+.markdown-rendered p { text-align: justify; }
+*/

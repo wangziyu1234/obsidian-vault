@@ -2,6 +2,9 @@
   "enabledCssSnippets": [
     "callouts"
   ],
-  "cssTheme": "Things",
-  "theme": "moonstone"
+  "cssTheme": "Minimal",
+  "theme": "moonstone",
+  "nativeMenus": false,
+  "baseFontSizeAction": true,
+  "baseFontSize": 17
 }
