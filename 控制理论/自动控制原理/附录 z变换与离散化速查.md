@@ -24,17 +24,48 @@ $$
 \mathcal Z\bigl[af_1(t)+bf_2(t)\bigr]=aF_1(z)+bF_2(z)
 $$
 
-**实数位移（滞后／超前）**：
+**实数位移（滞后／超前）**：两条都从定义式 $\mathcal Z[f]=\sum\limits_{n=0}^{\infty}f(nT)z^{-n}$ 出发，**差别只在换元后序列从哪一项起**。
+
+**① 滞后 $k$ 拍：$f(t-kT)$，三步**
 
 $$
-\mathcal Z\bigl[f(t-kT)\bigr]=z^{-k}F(z)
+\mathcal Z\bigl[f(t-kT)\bigr]=\sum_{n=0}^{\infty}f\bigl((n-k)T\bigr)z^{-n}
 $$
 
 $$
-\mathcal Z\bigl[f(t+kT)\bigr]=z^{k}\Bigl[F(z)-\sum_{i=0}^{k-1}f(iT)z^{-i}\Bigr]
+\overset{m=n-k}{=}\sum_{m=-k}^{\infty}f(mT)z^{-(m+k)}=z^{-k}\underbrace{\sum_{m=-k}^{\infty}f(mT)z^{-m}}_{\text{负标号项按零延拓全为 }0}
 $$
 
-**一阶（$k=1$）**，取 $f(k)=a^{k}\Rightarrow F(z)=\dfrac{z}{z-a}$：
+$$
+=z^{-k}\sum_{m=0}^{\infty}f(mT)z^{-m}=z^{-k}F(z)
+$$
+
+**② 超前 $k$ 拍：$f(t+kT)$，四步**
+
+$$
+\mathcal Z\bigl[f(t+kT)\bigr]=\sum_{n=0}^{\infty}f\bigl((n+k)T\bigr)z^{-n}
+$$
+
+$$
+\overset{m=n+k}{=}\sum_{m=k}^{\infty}f(mT)z^{-(m-k)}=z^{k}\sum_{m=k}^{\infty}f(mT)z^{-m}
+$$
+
+$$
+=z^{k}\Bigl[\sum_{m=0}^{\infty}f(mT)z^{-m}-\sum_{m=0}^{k-1}f(mT)z^{-m}\Bigr]
+$$
+
+$$
+=z^{k}\Bigl[F(z)-\sum_{i=0}^{k-1}f(iT)z^{-i}\Bigr]
+$$
+
+> [!note] 两条推导的差别只有一处（求和下限）
+> 滞后换元后下限是 $-k$：**因果信号 $t<0$ 零延拓，负标号项直接为零删掉**，于是只剩一个 $z^{-k}$。
+>
+> 超前换元后下限是 $k$：**前 $k$ 项是被换元"换掉"的、不补就丢了**，所以必须加回 $\sum_{m=0}^{\infty}$ 再减去 $\sum_{m=0}^{k-1}$，留下的就是 $\sum_{i=0}^{k-1}f(iT)z^{-i}$（一阶一个 $f(0)$、二阶 $f(0)+f(1)z^{-1}$），零初值时它才消失。
+
+**代 $f(k)=a^{k}$ 各走一遍**（$F(z)=\dfrac{z}{z-a}$，$f(0)=1$、$f(1)=a$）：
+
+**一阶（$k=1$）**：
 
 $$
 \mathcal Z\bigl[a^{k-1}\bigr]=z^{-1}\cdot\frac{z}{z-a}=\frac{1}{z-a}
@@ -44,7 +75,7 @@ $$
 \mathcal Z\bigl[a^{k+1}\bigr]=z\Bigl[\frac{z}{z-a}-f(0)\Bigr]=z\Bigl[\frac{z}{z-a}-1\Bigr]=\frac{az}{z-a}
 $$
 
-**二阶（$k=2$）**，同一个 $f$（$f(0)=1$、$f(1)=a$）：
+**二阶（$k=2$）**，同一个 $f$：
 
 $$
 \mathcal Z\bigl[a^{k-2}\bigr]=z^{-2}\cdot\frac{z}{z-a}=\frac{1}{z(z-a)}
@@ -54,10 +85,8 @@ $$
 \mathcal Z\bigl[a^{k+2}\bigr]=z^{2}\Bigl[\frac{z}{z-a}-f(0)-f(1)z^{-1}\Bigr]=z^{2}\Bigl[\frac{z}{z-a}-1-\frac{a}{z}\Bigr]=\frac{a^{2}z}{z-a}
 $$
 
-> [!tip] 从例子里看那条"超前的初值不能丢"
-> 滞后式只需乘 $z^{-k}$；**超前式里被减掉的正是 $f(0)$（一阶）与 $f(0)+f(1)z^{-1}$（二阶）**——零初值时这两块才消失。
->
-> 代 $a=1$ 自检：超前式给出 $\frac{z}{z-1}$（$1(k+1)=1(k)$，与查表一致）；滞后式给出 $\frac{1}{z-1}=z^{-1}\cdot\frac{z}{z-1}$（延迟一拍，正是位移式的含义）。
+> [!tip] 代 $a=1$ 自检两条
+> 超前式给出 $\frac{z}{z-1}$（$1(k+1)=1(k)$，与查表一致）；滞后式给出 $\frac{1}{z-1}=z^{-1}\cdot\frac{z}{z-1}$（延迟一拍，正是位移式的含义）。
 
 **考场上的用法（由差分方程写脉冲传函）**：一阶 $y(k)-ay(k-1)=bu(k)$，把 $y(k-1)$ 换成 $z^{-1}Y(z)$：
 
