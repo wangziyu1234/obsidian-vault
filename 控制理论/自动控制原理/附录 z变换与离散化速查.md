@@ -12,7 +12,7 @@ aliases: [z变换速查, 离散化速查, 脉冲传递函数, ZOH, 差分方程]
 # 附录 z 变换与离散化速查
 
 > [!abstract] 附录定位
-> 第7章离散部分的**纯公式速查**，一页查完：**基本定理**（线性·位移·复位移·初值·终值·卷积）、**由 $F(s)$ 求 $F(z)$ 九行表**（部分分式／留数）、**带 ZOH 的 $G(s)\to G_d(z)$ 四行表**、差分方程与脉冲传函互化、控制器离散化的替换公式、$z$ 反变换三法，末节附判稳、稳态误差与易错点。
+> 第7章离散部分的**纯公式速查**，一页查完：**基本定理**（线性·位移·复位移·初值·终值·卷积）、**由 $F(s)$ 求 $F(z)$ 换算表 20 行**（部分分式／留数）、**带 ZOH 的 $G(s)\to G_d(z)$ 四行表**、差分方程与脉冲传函互化、控制器离散化的替换公式、$z$ 反变换三法，末节附判稳、稳态误差与易错点。
 >
 > **变换对表（$f(t)\leftrightarrow F(z)$）与拉氏表并列在本库 [[附录 拉氏变换表与z变换表]]**；推导与例题见 [[07-1-b z变换计算与反变换例题]]、[[07-1-c 采样与z变换综合例题]]。所有含 $T$ 的式子都以**采样周期 $T$ 为已知常数**处理。
 
@@ -104,22 +104,35 @@ $$
 
 ## 🧮 (2) 由 $F(s)$ 求 $F(z)$：两条路
 
-**部分分式法（首选）**：把 $F(s)$ 拆成 $\frac{A}{s+a}$、$\frac{A}{(s+a)^2}$、$\frac{Bs+C}{s^2+\omega^2}$ 这类项，逐项查下表相加（注意别漏掉除以 $s$ 的积分项）。
+**部分分式法（首选）**：把 $F(s)$ 拆成 $\frac{A}{s+a}$、$\frac{A}{(s+a)^2}$、$\frac{Bs+C}{s^2+\omega^2}$ 这类项，逐项查下表相加（注意别漏掉除以 $s$ 的积分项；三极点及以上的现成结果在下表第 17—20 行）。
 
 | $F(s)$ | $F(z)$ |
 | :-- | :-- |
 | $\dfrac{1}{s}$ | $\dfrac{z}{z-1}$ |
 | $\dfrac{1}{s^2}$ | $\dfrac{Tz}{(z-1)^2}$ |
+| $\dfrac{1}{s^3}$ | $\dfrac{T^2z(z+1)}{2(z-1)^3}$ |
 | $\dfrac{1}{s+a}$ | $\dfrac{z}{z-e^{-aT}}$ |
 | $\dfrac{1}{(s+a)^2}$ | $\dfrac{Te^{-aT}z}{(z-e^{-aT})^2}$ |
+| $\dfrac{1}{(s+a)^3}$ | $\dfrac{T^2e^{-aT}z(z+e^{-aT})}{2(z-e^{-aT})^3}$ |
 | $\dfrac{a}{s(s+a)}$ | $\dfrac{(1-e^{-aT})z}{(z-1)(z-e^{-aT})}$ |
+| $\dfrac{a}{s^2(s+a)}$ | $\dfrac{Tz}{(z-1)^2}-\dfrac{(1-e^{-aT})z}{a(z-1)(z-e^{-aT})}$ |
 | $\dfrac{\omega}{s^2+\omega^2}$ | $\dfrac{z\sin\omega T}{z^2-2z\cos\omega T+1}$ |
 | $\dfrac{s}{s^2+\omega^2}$ | $\dfrac{z(z-\cos\omega T)}{z^2-2z\cos\omega T+1}$ |
+| $\dfrac{\omega}{s^2-\omega^2}$ | $\dfrac{z\sinh\omega T}{z^2-2z\cosh\omega T+1}$ |
+| $\dfrac{s}{s^2-\omega^2}$ | $\dfrac{z(z-\cosh\omega T)}{z^2-2z\cosh\omega T+1}$ |
+| $\dfrac{\omega^2}{s(s^2+\omega^2)}$ | $\dfrac{z}{z-1}-\dfrac{z(z-\cos\omega T)}{z^2-2z\cos\omega T+1}$ |
 | $\dfrac{\omega}{(s+a)^2+\omega^2}$ | $\dfrac{ze^{-aT}\sin\omega T}{z^2-2ze^{-aT}\cos\omega T+e^{-2aT}}$ |
 | $\dfrac{s+a}{(s+a)^2+\omega^2}$ | $\dfrac{z(z-e^{-aT}\cos\omega T)}{z^2-2ze^{-aT}\cos\omega T+e^{-2aT}}$ |
+| $\dfrac{b-a}{(s+a)(s+b)}$ | $\dfrac{z}{z-e^{-aT}}-\dfrac{z}{z-e^{-bT}}$ |
+| $\dfrac{1}{(s+a)(s+b)(s+c)}$ | $\dfrac{z}{(b-a)(c-a)(z-e^{-aT})}+\dfrac{z}{(a-b)(c-b)(z-e^{-bT})}+\dfrac{z}{(a-c)(b-c)(z-e^{-cT})}$ |
+| $\dfrac{s+d}{(s+a)(s+b)(s+c)}$ | $\dfrac{(d-a)z}{(b-a)(c-a)(z-e^{-aT})}+\dfrac{(d-b)z}{(a-b)(c-b)(z-e^{-bT})}+\dfrac{(d-c)z}{(a-c)(b-c)(z-e^{-cT})}$ |
+| $\dfrac{abc}{s(s+a)(s+b)(s+c)}$ | $\dfrac{z}{z-1}-\dfrac{bcz}{(b-a)(c-a)(z-e^{-aT})}-\dfrac{caz}{(c-b)(a-b)(z-e^{-bT})}-\dfrac{abz}{(a-c)(b-c)(z-e^{-cT})}$ |
+| $\dfrac{a^2b^2}{s^2(s+a)(s+b)}$ | $\dfrac{abTz}{(z-1)^2}-\dfrac{(a+b)z}{z-1}-\dfrac{b^2z}{(a-b)(z-e^{-aT})}+\dfrac{a^2z}{(a-b)(z-e^{-bT})}$ |
 
-> [!tip] 后两行是前两行的母式
-> $\dfrac{\omega}{(s+a)^2+\omega^2}$ 与 $\dfrac{s+a}{(s+a)^2+\omega^2}$ 是 $e^{-at}\sin\omega t$／$e^{-at}\cos\omega t$ 的像；令 $a=0$ 就退化成 $\sin\omega t$／$\cos\omega t$ 那两行——**记两行母式等于记四行**。
+> [!tip] 带 $e^{-at}$ 的两行是 $\sin/\cos$ 两行的母式
+> 第 14、15 行（带 $e^{-at}$ 的 $\dfrac{\omega}{(s+a)^2+\omega^2}$ 与 $\dfrac{s+a}{(s+a)^2+\omega^2}$）是第 9、10 行 $\sin\omega t$／$\cos\omega t$ 的母式；令 $a=0$ 就退化成那两行——**记两行母式等于记四行**。
+>
+> 第 17—20 行是**多极点部分分式**的现成结果（三极点一族与 $\dfrac{a^2b^2}{s^2(s+a)(s+b)}$），对应的 $e(t)$、$F(s)$ 三栏并列写法和系数次序自检见 [[附录 拉氏变换表与z变换表]]。
 
 **留数法（重根、不肯拆式时用）**：设 $F(s)$ 的极点为 $p_i$（$m$ 重极点按 $m$ 重留数算），则
 
