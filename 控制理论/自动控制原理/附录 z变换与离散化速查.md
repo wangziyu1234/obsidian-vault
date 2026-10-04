@@ -26,64 +26,102 @@ $$
 
 **实数位移（滞后／超前）**：两条都从定义式 $\mathcal Z[f]=\sum\limits_{n=0}^{\infty}f(nT)z^{-n}$ 出发，**差别只在换元后序列从哪一项起**。
 
-**① 滞后 $k$ 拍：$f(t-kT)$，三步**
+**① 滞后 $k$ 拍：$f(t-kT)$**
 
 $$
-\mathcal Z\bigl[f(t-kT)\bigr]=\sum_{n=0}^{\infty}f\bigl((n-k)T\bigr)z^{-n}
+\mathcal Z\bigl[f(t-kT)\bigr]=\sum_{n=0}^{\infty}f\bigl((n-k)T\bigr)z^{-n}\ \overset{m=n-k}{=}\ \sum_{m=-k}^{\infty}f(mT)z^{-(m+k)}
 $$
 
-$$
-\overset{m=n-k}{=}\sum_{m=-k}^{\infty}f(mT)z^{-(m+k)}=z^{-k}\underbrace{\sum_{m=-k}^{\infty}f(mT)z^{-m}}_{\text{负标号项按零延拓全为 }0}
-$$
+**写开前几项（$k=1$）**：
 
 $$
-=z^{-k}\sum_{m=0}^{\infty}f(mT)z^{-m}=z^{-k}F(z)
-$$
-
-**② 超前 $k$ 拍：$f(t+kT)$，四步**
-
-$$
-\mathcal Z\bigl[f(t+kT)\bigr]=\sum_{n=0}^{\infty}f\bigl((n+k)T\bigr)z^{-n}
+\mathcal Z\bigl[f(t-T)\bigr]=f(-T)+f(0)z^{-1}+f(T)z^{-2}+\cdots
 $$
 
 $$
-\overset{m=n+k}{=}\sum_{m=k}^{\infty}f(mT)z^{-(m-k)}=z^{k}\sum_{m=k}^{\infty}f(mT)z^{-m}
+=z^{-1}\bigl[f(0)+f(T)z^{-1}+f(2T)z^{-2}+\cdots\bigr]
 $$
 
 $$
-=z^{k}\Bigl[\sum_{m=0}^{\infty}f(mT)z^{-m}-\sum_{m=0}^{k-1}f(mT)z^{-m}\Bigr]
+=z^{-1}F(z)
+$$
+
+$f(-T)=0$ 用的是零延拓；一般 $k$ 时 $f(-kT),\dots,f(-T)$ 这 $k$ 项全为零，所以只剩下乘 $z^{-k}$ 这一个动作。
+
+**② 超前 $k$ 拍：$f(t+kT)$**
+
+$$
+\mathcal Z\bigl[f(t+kT)\bigr]=\sum_{n=0}^{\infty}f\bigl((n+k)T\bigr)z^{-n}\ \overset{m=n+k}{=}\ \sum_{m=k}^{\infty}f(mT)z^{-(m-k)}
+$$
+
+**写开前几项（$k=1$）**：
+
+$$
+\mathcal Z\bigl[f(t+T)\bigr]=f(T)+f(2T)z^{-1}+f(3T)z^{-2}+\cdots
 $$
 
 $$
-=z^{k}\Bigl[F(z)-\sum_{i=0}^{k-1}f(iT)z^{-i}\Bigr]
+=z\bigl[f(0)+f(T)z^{-1}+f(2T)z^{-2}+\cdots\bigr]-z\,f(0)
 $$
+
+$$
+=z\bigl[F(z)-f(0)\bigr]
+$$
+
+一般 $k$ 就是"补回整个 $F(z)$、再减掉被换元换走的前 $k$ 项"：
+
+$$
+\mathcal Z\bigl[f(t+kT)\bigr]=z^{k}\Bigl[F(z)-f(0)-f(T)z^{-1}-\cdots-f\bigl((k-1)T\bigr)z^{-(k-1)}\Bigr]
+$$
+
+括号里那一串就是 $\sum\limits_{i=0}^{k-1}f(iT)z^{-i}$（$k=1$ 只有一个 $f(0)$，$k=2$ 是 $f(0)+f(T)z^{-1}$），**零初值时它才消失**。
 
 > [!note] 两条推导的差别只有一处（求和下限）
-> 滞后换元后下限是 $-k$：**因果信号 $t<0$ 零延拓，负标号项直接为零删掉**，于是只剩一个 $z^{-k}$。
+> 滞后换元后下限是 $-k$：**因果信号 $t<0$ 零延拓，负标号项直接为零删掉**，只剩一个 $z^{-k}$。
 >
-> 超前换元后下限是 $k$：**前 $k$ 项是被换元"换掉"的、不补就丢了**，所以必须加回 $\sum_{m=0}^{\infty}$ 再减去 $\sum_{m=0}^{k-1}$，留下的就是 $\sum_{i=0}^{k-1}f(iT)z^{-i}$（一阶一个 $f(0)$、二阶 $f(0)+f(1)z^{-1}$），零初值时它才消失。
+> 超前换元后下限是 $k$：**前 $k$ 项被换元"换掉"了、不补就丢**，必须加回来再减掉——这就是展开式里那些 $f(0)$、$f(T)z^{-1}$ 的来处。
 
-**代 $f(k)=a^{k}$ 各走一遍**（$F(z)=\dfrac{z}{z-a}$，$f(0)=1$、$f(1)=a$）：
+**代 $f(k)=a^{k}$ 各走一遍**（$F(z)=\dfrac{z}{z-a}$，即 $1+az^{-1}+a^{2}z^{-2}+\cdots$；$f(0)=1$、$f(1)=a$）：先把序列列出来，再逐项代。
 
-**一阶（$k=1$）**：
+**一阶（$k=1$）**
 
-$$
-\mathcal Z\bigl[a^{k-1}\bigr]=z^{-1}\cdot\frac{z}{z-a}=\frac{1}{z-a}
-$$
+滞后：序列 $\{a^{k-1}\}$ 写开是 $0,\ 1,\ a,\ a^{2},\dots$（$k=0$ 那一项按零延拓为 $0$）：
 
 $$
-\mathcal Z\bigl[a^{k+1}\bigr]=z\Bigl[\frac{z}{z-a}-f(0)\Bigr]=z\Bigl[\frac{z}{z-a}-1\Bigr]=\frac{az}{z-a}
-$$
-
-**二阶（$k=2$）**，同一个 $f$：
-
-$$
-\mathcal Z\bigl[a^{k-2}\bigr]=z^{-2}\cdot\frac{z}{z-a}=\frac{1}{z(z-a)}
+\mathcal Z\bigl[a^{k-1}\bigr]=0+z^{-1}+az^{-2}+a^{2}z^{-3}+\cdots=z^{-1}\bigl(1+az^{-1}+a^{2}z^{-2}+\cdots\bigr)
 $$
 
 $$
-\mathcal Z\bigl[a^{k+2}\bigr]=z^{2}\Bigl[\frac{z}{z-a}-f(0)-f(1)z^{-1}\Bigr]=z^{2}\Bigl[\frac{z}{z-a}-1-\frac{a}{z}\Bigr]=\frac{a^{2}z}{z-a}
+=z^{-1}\cdot\frac{z}{z-a}=\frac{1}{z-a}
 $$
+
+超前：序列 $\{a^{k+1}\}$ 写开是 $a,\ a^{2},\ a^{3},\dots$：
+
+$$
+\mathcal Z\bigl[a^{k+1}\bigr]=a+a^{2}z^{-1}+a^{3}z^{-2}+\cdots=a\bigl(1+az^{-1}+a^{2}z^{-2}+\cdots\bigr)=\frac{az}{z-a}
+$$
+
+走公式同结果：$z\bigl[F(z)-f(0)\bigr]=z\Bigl[\dfrac{z}{z-a}-1\Bigr]=\dfrac{az}{z-a}$。
+
+**二阶（$k=2$）**
+
+滞后：序列 $\{a^{k-2}\}$ 写开是 $0,\ 0,\ 1,\ a,\ a^{2},\dots$：
+
+$$
+\mathcal Z\bigl[a^{k-2}\bigr]=0+0+z^{-2}+az^{-3}+a^{2}z^{-4}+\cdots=z^{-2}\bigl(1+az^{-1}+a^{2}z^{-2}+\cdots\bigr)
+$$
+
+$$
+=z^{-2}\cdot\frac{z}{z-a}=\frac{1}{z(z-a)}
+$$
+
+超前：序列 $\{a^{k+2}\}$ 写开是 $a^{2},\ a^{3},\ a^{4},\dots$：
+
+$$
+\mathcal Z\bigl[a^{k+2}\bigr]=a^{2}+a^{3}z^{-1}+a^{4}z^{-2}+\cdots=a^{2}\bigl(1+az^{-1}+a^{2}z^{-2}+\cdots\bigr)=\frac{a^{2}z}{z-a}
+$$
+
+走公式同结果：$z^{2}\bigl[F(z)-f(0)-f(1)z^{-1}\bigr]=z^{2}\Bigl[\dfrac{z}{z-a}-1-\dfrac{a}{z}\Bigr]=\dfrac{a^{2}z}{z-a}$。
 
 > [!tip] 代 $a=1$ 自检两条
 > 超前式给出 $\frac{z}{z-1}$（$1(k+1)=1(k)$，与查表一致）；滞后式给出 $\frac{1}{z-1}=z^{-1}\cdot\frac{z}{z-1}$（延迟一拍，正是位移式的含义）。
@@ -128,8 +166,12 @@ $$
 > 约分后的 $(z-1)F(z)$ **全部极点严格在单位圆内**：$F(z)$ 允许在 $z=1$ 处有单极点，但不能另有单位圆上或圆外的极点。
 > 2019 第 6 题就是直接问「能否定义稳态误差」——先判稳、再代终值，顺序反了就没分。
 
-> [!note] 定义式在这儿
-> $E(z)=\sum\limits_{n=0}^{\infty}e(nT)z^{-n}$，与采样拉氏变换的关系 $E^*(s)=\sum\limits_{n=0}^{\infty}e(nT)e^{-nTs}$，令 $z=e^{sT}$ 即得（左半平面 ↔ 单位圆内）。**变换对表在 [[07-1 采样与z变换]] §7.3（拉氏表与 z 表并列版见 [[附录 拉氏变换表与z变换表]]），本页不重复。**
+> [!note] 定义式在这儿（写开就是一条 $z^{-1}$ 的幂级数）
+> $E(z)=e(0)+e(T)z^{-1}+e(2T)z^{-2}+\cdots$，也就是 $E(z)=\sum\limits_{n=0}^{\infty}e(nT)z^{-n}$——**长除法商出来的系数依次就是 $e(0),e(T),e(2T),\dots$**。
+>
+> 采样拉氏变换同理：$E^*(s)=e(0)+e(T)e^{-Ts}+e(2T)e^{-2Ts}+\cdots$，令 $z=e^{sT}$ 即得（左半平面 ↔ 单位圆内）。
+>
+> **变换对表在 [[07-1 采样与z变换]] §7.3（拉氏表与 z 表并列版见 [[附录 拉氏变换表与z变换表]]），本页不重复。**
 
 ## 🧮 (2) 由 $F(s)$ 求 $F(z)$：两条路
 
