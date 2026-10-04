@@ -415,18 +415,57 @@ $$
 
 \Needspace{5\baselineskip}\textbf{15.（2005.15）答案：$\dfrac12$。}
 
-\Needspace{6\baselineskip}\textbf{第一步：将分母中的积分改写成普通变上限积分。}
+\Needspace{6\baselineskip}\textbf{第一步：先把被积式里的 $x$ 化出去。}
 
-在分母中令 $u=x-t$，则 $\mathrm dt=-\mathrm du$；当 $t=0,x$ 时，$u=x,0$。于是
+分子、分母的被积式都含 $x$，不能直接套变限积分求导公式。分母先用 $a=0,\ b=x$ 的区间再现（也就是换元 $u=x-t$）把 $x$ 挪出去：
 
 $$
 \int_0^x f(x-t)\,\mathrm dt
-=-\int_x^0f(u)\,\mathrm du=\int_0^x f(u)\,\mathrm du.
+=-\int_x^0f(u)\,\mathrm du=\int_0^x f(u)\,\mathrm du,
 $$
 
-\Needspace{6\baselineskip}\textbf{第二步：把两个积分都换到固定区间。}
+于是分母 $=x\displaystyle\int_0^xf(u)\,\mathrm du$。分子拆项即可：
 
-分子令 $t=xs$，分母积分令 $u=xs$（这里 $u$ 是\textbf{重新绑定的一次新换元}，与第一步的 $u=x-t$ 无关；两步各管一件事——第一步管"被积式里的 $x$"，这一步管"随 $x$ 变的区间"）。对任意非零 $x$ 都有
+$$
+\int_0^x(x-t)f(t)\,\mathrm dt
+=x\int_0^xf(t)\,\mathrm dt-\int_0^xtf(t)\,\mathrm dt.
+$$
+
+\Needspace{6\baselineskip}\textbf{第二步：洛必达一次。}
+
+当 $x\to0$ 时分子、分母都趋于 $0$，各自求导（分母是乘积 $x\displaystyle\int_0^xf$，走乘积法则）：
+
+$$
+\frac{\displaystyle\int_0^x(x-t)f(t)\,\mathrm dt}
+{\displaystyle x\int_0^xf(x-t)\,\mathrm dt}
+\ \xrightarrow{\ \text{分子分母各求导}\ }\
+\frac{\displaystyle\int_0^xf(t)\,\mathrm dt}
+{\displaystyle\int_0^xf(t)\,\mathrm dt+xf(x)},
+$$
+
+仍是 $\frac00$。\textbf{这里不能再洛必达}：题设只给 $f$ 连续，$f'$ 未必存在，而第二次求导要用到它。
+
+\Needspace{6\baselineskip}\textbf{第三步：用积分中值定理收尾。}
+
+由积分中值定理，存在 $\xi$ 介于 $0$ 与 $x$ 之间，使 $\displaystyle\int_0^xf(t)\,\mathrm dt=f(\xi)x$，于是
+
+$$
+\frac{f(\xi)x}{f(\xi)x+xf(x)}
+=\frac{f(\xi)}{f(\xi)+f(x)}
+\longrightarrow\frac{f(0)}{2f(0)}=\frac12 .
+$$
+
+题设 $f(0)\ne0$ 保证分母在充分小的非零 $x$ 附近不为零，商的极限合法。因此
+
+$$
+\boxed{\lim_{x\to0}
+\frac{\int_0^x(x-t)f(t)\,\mathrm dt}
+{x\int_0^xf(x-t)\,\mathrm dt}=\frac12.}
+$$
+
+\Needspace{6\baselineskip}\textbf{补一种写法：不借助洛必达，只用连续性。}
+
+把两个积分都换到固定区间：分子令 $t=xs$，分母积分令 $u=xs$（这里 $u$ 是\textbf{重新绑定的一次新换元}，与第一步的 $u=x-t$ 无关；两步各管一件事——第一步管"被积式里的 $x$"，这一步管"随 $x$ 变的区间"）。对任意非零 $x$ 都有
 
 $$
 \int_0^x(x-t)f(t)\,\mathrm dt
@@ -444,8 +483,6 @@ $$
 \frac{\int_0^1(1-s)f(xs)\,\mathrm ds}
 {\int_0^1f(xs)\,\mathrm ds}.
 $$
-
-\Needspace{6\baselineskip}\textbf{第三步：用连续性控制两个积分的极限。}
 
 因为 $f$ 在零点连续，当 $x\to0$ 时，所有 $xs$（$0\le s\le1$）都满足 $|xs|\le|x|$。记
 
@@ -465,15 +502,7 @@ $$
 \le\frac{\varepsilon(x)}2.
 $$
 
-所以分子、分母分别趋于 $f(0)/2$、$f(0)$。题设 $f(0)\ne0$ 保证分母在充分小的非零 $x$ 附近不为零，商的极限合法。因此
-
-$$
-\boxed{\lim_{x\to0}
-\frac{\int_0^x(x-t)f(t)\,\mathrm dt}
-{x\int_0^xf(x-t)\,\mathrm dt}=\frac12.}
-$$
-
-全程只使用了连续性，没有要求 $f$ 本身可导。
+所以分子、分母分别趋于 $f(0)/2$、$f(0)$，同样得到 $\frac12$。\textbf{这条写法全程只用了连续性，没有要求 $f$ 本身可导。}
 
 \begingroup\color{gray}错题：2005-15 被积式含x直接套变限求导公式（洛必达那步没先把 $x$ 化出去，直接对 $\int_0^xf(x-t)\mathrm dt$ 套变限求导公式，把上限 $x$ 代进被积式得 $f(x-x)=f(0)$；分子的 $\int_0^x(x-t)f(t)\mathrm dt$ 是同一处坑）\par\endgroup
 
