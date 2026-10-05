@@ -1,7 +1,8 @@
 {
   "enabledCssSnippets": [
     "callouts",
-    "mistake-dashboard"
+    "mistake-dashboard",
+    "study-home"
   ],
   "cssTheme": "Minimal",
   "theme": "moonstone",

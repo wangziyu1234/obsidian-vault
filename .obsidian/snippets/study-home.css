@@ -1,0 +1,236 @@
+/* Mathematics home only; keep note properties editable in source mode. */
+.study-home {
+  --file-line-width: 1100px;
+  --line-width: 1100px;
+  --line-width-wide: 1100px;
+  --max-width: 100%;
+  --content-line-width: 1100px;
+  --container-table-margin: 0;
+  --table-width: 100%;
+  --table-max-width: 100%;
+  --table-min-width: 0;
+  --container-table-width: 100%;
+  --container-dataview-table-width: 100%;
+  --container-table-max-width: 100%;
+  --table-wrapper-width: 100%;
+  --table-drag-padding: 0;
+  --study-accent: #287c73;
+  --study-wash: #f2f7f5;
+  --study-border: #dce7e2;
+  --study-ink: #253e3a;
+}
+.theme-dark .study-home {
+  --study-accent: #7fc6b8;
+  --study-wash: #202e2b;
+  --study-border: #374942;
+  --study-ink: #d9ebe5;
+}
+.markdown-preview-view.study-home .markdown-preview-sizer {
+  width: 100%;
+  max-width: 1100px;
+  padding-bottom: 64px !important;
+}
+.markdown-preview-view.study-home .markdown-preview-sizer > div:not(.markdown-preview-pusher) {
+  width: 100%;
+  max-width: 100%;
+  margin-inline: 0 !important;
+}
+.markdown-preview-view.study-home :is(.inline-title, .metadata-container) { display: none; }
+.study-home h1 {
+  color: var(--study-ink);
+  font-size: clamp(1.7em, 3.8vw, 2.3em);
+  font-weight: 750;
+  letter-spacing: -0.035em;
+  margin: 0.55em 0 0.6em;
+}
+.study-home h2 {
+  color: var(--study-ink);
+  font-size: 1.2em;
+  font-weight: 650;
+  margin-top: 2.25em;
+  padding-bottom: 0.55em;
+  border-bottom: 1px solid var(--study-border);
+}
+.study-home h3 {
+  color: var(--study-ink);
+  font-size: 1.03em;
+  font-weight: 600;
+  margin: 1.6em 0 0.7em;
+}
+.study-home :is(h1, h2, h3) { scroll-margin-top: 24px; }
+.study-home p { line-height: 1.7; }
+.study-home li { margin-block: 0.45em; }
+.study-home .callout {
+  border: 1px solid rgba(var(--callout-color), 0.18);
+  border-radius: 12px;
+  padding: 15px 18px;
+  box-shadow: none;
+}
+.study-home .callout-title { gap: 9px; font-size: 0.94em; }
+.study-home .callout-content > :last-child { margin-bottom: 0; }
+.study-home .callout[data-callout="abstract"] {
+  border-left: 3px solid rgba(var(--callout-color), 0.6);
+  padding: 18px 22px;
+}
+.study-home .callout[data-callout="abstract"] .callout-content { color: var(--text-muted); }
+.study-home .callout.is-collapsible { margin: 10px 0; }
+.study-home .callout.is-collapsible .callout-title { cursor: pointer; min-height: 24px; }
+.study-home .callout.is-collapsible .callout-fold { margin-left: auto; }
+.study-home .callout.is-collapsed { padding-block: 14px; }
+.study-home .callout.is-collapsed:hover { border-color: rgba(var(--callout-color), 0.4); }
+.study-home table {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.94em;
+  line-height: 1.6;
+  margin: 12px 0 16px;
+}
+.study-home :is(th, td) {
+  padding: 12px 14px;
+  border: 0;
+  border-bottom: 1px solid var(--study-border);
+  text-align: left;
+  vertical-align: top;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.study-home th {
+  color: var(--text-muted);
+  font-size: 0.86em;
+  font-weight: 600;
+}
+.markdown-preview-view.study-home table thead th { background: var(--study-wash); }
+.study-home th:first-child { border-top-left-radius: 8px; }
+.study-home th:last-child { border-top-right-radius: 8px; }
+.study-home tbody tr:hover { background: var(--study-wash); }
+.study-home :is(td, li) a.internal-link {
+  color: var(--study-accent);
+  text-decoration: none;
+  font-weight: 550;
+}
+.study-home :is(td, li) a.internal-link:hover { text-decoration: underline; }
+/* Defeat Minimal trim-cols, including its inherited nowrap on link spans. */
+.study-home.markdown-rendered :is(table, table.table-view-table) > :is(thead, tbody) > tr > :is(th, td) {
+  max-width: none;
+  white-space: normal;
+  text-overflow: clip;
+  overflow: visible;
+}
+.study-home table :is(td, th) :is(span, a) { white-space: normal; overflow-wrap: anywhere; }
+.study-home :is([data-callout-metadata="study-portals"], [data-callout-metadata="study-course"]) table {
+  table-layout: fixed;
+}
+.study-home :is([data-callout-metadata="study-portals"], [data-callout-metadata="study-course"]) th:first-child {
+  width: 32%;
+}
+.study-home .callout[data-callout-metadata="study-links"] {
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+.study-home [data-callout-metadata="study-links"] > .callout-title { display: none; }
+.study-home [data-callout-metadata="study-links"] p { margin: 0; line-height: 2.8; }
+.study-home [data-callout-metadata="study-links"] a.internal-link {
+  display: inline-block;
+  margin: 3px 7px 3px 0;
+  padding: 5px 14px;
+  border: 1px solid var(--study-border);
+  border-radius: 100px;
+  color: var(--study-accent);
+  background: var(--study-wash);
+  font-size: 0.88em;
+  font-weight: 550;
+  line-height: 1.7;
+  text-decoration: none;
+  white-space: normal;
+}
+.study-home [data-callout-metadata="study-links"] a.internal-link:hover {
+  border-color: var(--study-accent);
+  text-decoration: underline;
+}
+.study-home .callout[data-callout-metadata="study-metrics"] {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  overflow: visible;
+}
+.study-home [data-callout-metadata="study-metrics"] > .callout-title {
+  color: var(--text-muted);
+  font-size: 0.8em;
+  margin-bottom: 8px;
+}
+.study-home [data-callout-metadata="study-metrics"] :is(.callout-icon, .small-text) { display: none; }
+.study-home [data-callout-metadata="study-metrics"] table {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  column-gap: 14px;
+  margin: 0;
+}
+.study-home [data-callout-metadata="study-metrics"] :is(thead, tbody, tr) { display: contents; }
+.study-home [data-callout-metadata="study-metrics"] :is(th, td) {
+  width: auto !important;
+  text-align: left;
+  border: 1px solid var(--study-border);
+  grid-column: var(--study-metric-column);
+}
+.study-home [data-callout-metadata="study-metrics"] th {
+  grid-row: 1;
+  padding-top: 15px;
+  padding-bottom: 4px;
+  border-radius: 12px 12px 0 0;
+  font-size: 0.9em;
+}
+.study-home [data-callout-metadata="study-metrics"] td {
+  grid-row: 2;
+  padding-top: 0;
+  padding-bottom: 16px;
+  border-radius: 0 0 12px 12px;
+  color: var(--study-ink);
+  font-size: 2.05em;
+  font-weight: 700;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+}
+.study-home [data-callout-metadata="study-metrics"] :is(th, td):nth-child(1) { --study-metric-column: 1; }
+.study-home [data-callout-metadata="study-metrics"] :is(th, td):nth-child(2) { --study-metric-column: 2; }
+.study-home [data-callout-metadata="study-metrics"] :is(th, td):nth-child(3) { --study-metric-column: 3; }
+.study-home [data-callout-metadata="study-metrics"] :is(th, td):nth-child(4) { --study-metric-column: 4; }
+/* Keep header/body joined even when Minimal stripes and edge padding are active. */
+.markdown-preview-view.study-home [data-callout-metadata="study-metrics"] table :is(th, td) {
+  padding-inline: 18px !important;
+  background: var(--study-wash) !important;
+  border-color: var(--study-border) !important;
+}
+.markdown-preview-view.study-home [data-callout-metadata="study-metrics"] table :is(th, td):first-child {
+  background: var(--study-accent) !important;
+  border-color: var(--study-accent) !important;
+  color: var(--background-primary);
+}
+.markdown-preview-view.study-home [data-callout-metadata="study-metrics"] th { border-bottom: 0 !important; }
+.markdown-preview-view.study-home [data-callout-metadata="study-metrics"] td { border-top: 0 !important; }
+.study-home .mermaid { max-width: 100%; overflow-x: auto; padding-block: 12px; }
+.study-home .mermaid svg { max-width: 100%; height: auto; }
+@media (max-width: 650px) {
+  .markdown-preview-view.study-home .markdown-preview-sizer {
+    width: calc(100% - 28px) !important;
+    max-width: calc(100% - 28px);
+    margin-inline: auto;
+  }
+  .study-home h1 { font-size: 1.8em; }
+  .study-home h2 { margin-top: 1.7em; }
+  .study-home .callout { padding: 12px 13px; }
+  .study-home :is(th, td) { padding: 10px 7px; }
+  .study-home table { font-size: 0.89em; }
+  .study-home [data-callout-metadata="study-links"] a.internal-link { padding: 5px 11px; margin-right: 4px; }
+  .study-home [data-callout-metadata="study-metrics"] table {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 10px;
+  }
+  .study-home [data-callout-metadata="study-metrics"] :is(th, td):nth-child(3) { --study-metric-column: 1; }
+  .study-home [data-callout-metadata="study-metrics"] :is(th, td):nth-child(4) { --study-metric-column: 2; }
+  .study-home [data-callout-metadata="study-metrics"] th:nth-child(n+3) { grid-row: 3; margin-top: 10px; }
+  .study-home [data-callout-metadata="study-metrics"] td:nth-child(n+3) { grid-row: 4; }
+}
