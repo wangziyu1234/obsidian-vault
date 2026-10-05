@@ -1,0 +1,80 @@
+/* Readable transform tables; scoped to the transform-reference note class. */
+.transform-reference {
+  --table-text-size: var(--font-text-size);
+  --table-header-size: var(--font-text-size);
+}
+
+.transform-reference.markdown-rendered table,
+.transform-reference .cm-table-widget table {
+  width: 100%;
+  font-size: var(--font-text-size);
+  line-height: 1.65;
+  border-collapse: collapse;
+}
+
+.transform-reference.markdown-rendered :is(th, td),
+.transform-reference .cm-table-widget :is(th, td) {
+  padding: 14px 16px;
+  vertical-align: middle;
+  border-inline: none;
+  border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.transform-reference.markdown-rendered th,
+.transform-reference .cm-table-widget th {
+  background: var(--background-secondary);
+  color: var(--text-normal);
+}
+
+.transform-reference.markdown-rendered tbody tr:nth-child(even),
+.transform-reference .cm-table-widget tbody tr:nth-child(even) {
+  background: color-mix(in srgb, var(--background-secondary) 45%, transparent);
+}
+
+.transform-reference :is(th, td) mjx-container {
+  font-size: 1.2em !important;
+}
+
+.transform-reference .cm-table-widget .table-cell-wrapper {
+  padding: 0;
+}
+
+/* Keep each transform together on phones without shrinking its fractions. */
+@media (max-width: 600px) {
+  .transform-reference.markdown-rendered table,
+  .transform-reference .cm-table-widget table {
+    table-layout: auto;
+  }
+
+  .transform-reference table :is(tbody, tr, td) {
+    display: block;
+    width: auto !important;
+  }
+
+  .transform-reference table thead {
+    display: none;
+  }
+
+  .transform-reference table tbody tr {
+    margin-bottom: 18px;
+    border: 1px solid var(--background-modifier-border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .transform-reference table td::before {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--text-muted);
+    font-size: 0.8em;
+    font-weight: 600;
+  }
+
+  .transform-reference table td {
+    overflow-x: auto;
+  }
+
+  .transform-reference table td:nth-child(1)::before { content: "f(t)"; }
+  .transform-reference table td:nth-child(2)::before { content: "F(s) · 拉氏"; }
+  .transform-reference table td:nth-child(3)::before { content: "F(z) · z 变换"; }
+}
