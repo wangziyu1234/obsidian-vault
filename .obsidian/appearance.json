@@ -1,6 +1,7 @@
 {
   "enabledCssSnippets": [
-    "callouts"
+    "callouts",
+    "mistake-dashboard"
   ],
   "cssTheme": "Minimal",
   "theme": "moonstone",

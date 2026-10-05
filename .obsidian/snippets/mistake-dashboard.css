@@ -1,0 +1,226 @@
+/* Scoped to the mistake notebook overview; source properties stay editable. */
+.mistake-dashboard {
+  --file-line-width: 1100px;
+  --line-width: 1100px;
+  --line-width-wide: 1100px;
+  --max-width: 100%;
+  --content-line-width: 1100px;
+  --container-table-margin: 0;
+  --table-width: 100%;
+  --table-max-width: 100%;
+  --table-min-width: 0;
+  --container-table-width: 100%;
+  --container-dataview-table-width: 100%;
+  --container-table-max-width: 100%;
+  --table-wrapper-width: 100%;
+  --table-drag-padding: 0;
+  --dashboard-accent: #287c73;
+  --dashboard-wash: #f2f7f5;
+  --dashboard-border: #dce7e2;
+  --dashboard-ink: #253e3a;
+}
+.theme-dark .mistake-dashboard {
+  --dashboard-accent: #7fc6b8;
+  --dashboard-wash: #202e2b;
+  --dashboard-border: #374942;
+  --dashboard-ink: #d9ebe5;
+}
+.markdown-preview-view.mistake-dashboard .markdown-preview-sizer {
+  width: 100%;
+  max-width: 1100px;
+  padding-bottom: 64px !important;
+}
+.markdown-preview-view.mistake-dashboard .markdown-preview-sizer > div:not(.markdown-preview-pusher) {
+  width: 100%;
+  max-width: 100%;
+  margin-inline: 0 !important;
+}
+.markdown-preview-view.mistake-dashboard :is(.inline-title, .metadata-container) {
+  display: none;
+}
+.mistake-dashboard h1 {
+  color: var(--dashboard-ink);
+  font-size: clamp(1.7em, 3.8vw, 2.3em);
+  font-weight: 750;
+  letter-spacing: -0.035em;
+  margin: 0.55em 0 0.6em;
+}
+.mistake-dashboard h2 {
+  color: var(--dashboard-ink);
+  font-size: 1.2em;
+  font-weight: 650;
+  margin-top: 2.25em;
+  padding-bottom: 0.55em;
+  border-bottom: 1px solid var(--dashboard-border);
+}
+.mistake-dashboard :is(h1, h2) { scroll-margin-top: 24px; }
+.mistake-dashboard p { line-height: 1.65; }
+.mistake-dashboard .callout {
+  border: 1px solid rgba(var(--callout-color), 0.18);
+  border-radius: 12px;
+  padding: 15px 18px;
+  box-shadow: none;
+}
+.mistake-dashboard .callout-title { gap: 9px; font-size: 0.94em; }
+.mistake-dashboard .callout-content > :last-child { margin-bottom: 0; }
+.mistake-dashboard .callout[data-callout="abstract"] {
+  border-left: 3px solid rgba(var(--callout-color), 0.6);
+  padding: 18px 22px;
+}
+.mistake-dashboard .callout[data-callout="abstract"] .callout-content {
+  color: var(--text-muted);
+}
+.mistake-dashboard .callout.is-collapsible { margin: 10px 0; }
+.mistake-dashboard .callout.is-collapsible .callout-title {
+  cursor: pointer;
+  min-height: 24px;
+}
+.mistake-dashboard .callout.is-collapsible .callout-fold { margin-left: auto; }
+.mistake-dashboard .callout.is-collapsed { padding-block: 13px; }
+.mistake-dashboard .callout.is-collapsed:hover {
+  border-color: rgba(var(--callout-color), 0.4);
+}
+.mistake-dashboard table {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.92em;
+  line-height: 1.55;
+  margin: 12px 0 16px;
+}
+.mistake-dashboard :is(th, td) {
+  padding: 12px 14px;
+  border: 0;
+  border-bottom: 1px solid var(--dashboard-border);
+  text-align: left;
+  vertical-align: top;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.mistake-dashboard th {
+  color: var(--text-muted);
+  background: var(--dashboard-wash);
+  font-size: 0.86em;
+  font-weight: 600;
+}
+.mistake-dashboard th:first-child { border-top-left-radius: 8px; }
+.mistake-dashboard th:last-child { border-top-right-radius: 8px; }
+.mistake-dashboard tbody tr:hover { background: var(--dashboard-wash); }
+.mistake-dashboard td a.internal-link {
+  color: var(--dashboard-accent);
+  text-decoration: none;
+  font-weight: 550;
+}
+.mistake-dashboard td a.internal-link:hover { text-decoration: underline; }
+.mistake-dashboard :is(th, td) .dataview.small-text { color: var(--text-faint); }
+.mistake-dashboard.markdown-rendered table.table-view-table > :is(thead, tbody) > tr > :is(th, td) {
+  max-width: none;
+  white-space: normal;
+  text-overflow: clip;
+  overflow: visible;
+}
+.mistake-dashboard table.table-view-table :is(td, th) :is(span, a) {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.mistake-dashboard table:has(th:nth-child(4)):not(:has(th:nth-child(5))) {
+  table-layout: fixed;
+}
+.mistake-dashboard table:has(th:nth-child(4)):not(:has(th:nth-child(5))) th:first-child {
+  width: 43%;
+}
+.mistake-dashboard .callout[data-callout-metadata="review-metrics"] {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  overflow: visible;
+}
+.mistake-dashboard [data-callout-metadata="review-metrics"] > .callout-title {
+  color: var(--text-muted);
+  font-size: 0.8em;
+  margin-bottom: 8px;
+}
+.mistake-dashboard [data-callout-metadata="review-metrics"] .callout-icon { display: none; }
+.mistake-dashboard [data-callout-metadata="review-metrics"] table {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  column-gap: 14px;
+  margin: 0;
+}
+.mistake-dashboard [data-callout-metadata="review-metrics"] :is(thead, tbody, tr) {
+  display: contents;
+}
+.mistake-dashboard [data-callout-metadata="review-metrics"] :is(th, td) {
+  width: auto !important;
+  text-align: left;
+  border: 1px solid var(--dashboard-border);
+  background: var(--dashboard-wash);
+  padding-inline: 18px;
+  grid-column: var(--metric-column);
+}
+.mistake-dashboard [data-callout-metadata="review-metrics"] th {
+  grid-row: 1;
+  padding-top: 15px;
+  padding-bottom: 4px;
+  border-bottom: 0;
+  border-radius: 12px 12px 0 0;
+  font-size: 0.9em;
+}
+.mistake-dashboard [data-callout-metadata="review-metrics"] td {
+  grid-row: 2;
+  padding-top: 0;
+  padding-bottom: 16px;
+  border-top: 0;
+  border-radius: 0 0 12px 12px;
+  color: var(--dashboard-ink);
+  font-size: 2.05em;
+  font-weight: 700;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+}
+.mistake-dashboard [data-callout-metadata="review-metrics"] :is(th, td):nth-child(1) { --metric-column: 1; }
+.mistake-dashboard [data-callout-metadata="review-metrics"] :is(th, td):nth-child(2) { --metric-column: 2; }
+.mistake-dashboard [data-callout-metadata="review-metrics"] :is(th, td):nth-child(3) { --metric-column: 3; }
+.mistake-dashboard [data-callout-metadata="review-metrics"] :is(th, td):nth-child(4) { --metric-column: 4; }
+.mistake-dashboard [data-callout-metadata="review-metrics"] :is(th, td):first-child {
+  background: var(--dashboard-accent);
+  border-color: var(--dashboard-accent);
+  color: var(--background-primary);
+}
+/* Minimal stripes and edge-cell spacing should not split the metric cards. */
+.markdown-preview-view.mistake-dashboard [data-callout-metadata="review-metrics"] table :is(th, td) {
+  padding-inline: 18px !important;
+  background: var(--dashboard-wash) !important;
+  border-color: var(--dashboard-border) !important;
+}
+.markdown-preview-view.mistake-dashboard [data-callout-metadata="review-metrics"] table :is(th, td):first-child {
+  background: var(--dashboard-accent) !important;
+  border-color: var(--dashboard-accent) !important;
+}
+.markdown-preview-view.mistake-dashboard [data-callout-metadata="review-metrics"] th { border-bottom: 0 !important; }
+.markdown-preview-view.mistake-dashboard [data-callout-metadata="review-metrics"] td { border-top: 0 !important; }
+.mistake-dashboard [data-callout-metadata="review-metrics"] .small-text { display: none; }
+.markdown-preview-view.mistake-dashboard table thead th { background: var(--dashboard-wash); }
+@media (max-width: 650px) {
+  .markdown-preview-view.mistake-dashboard .markdown-preview-sizer {
+    width: calc(100% - 28px) !important;
+    max-width: calc(100% - 28px);
+    margin-inline: auto;
+  }
+  .mistake-dashboard h1 { font-size: 1.8em; }
+  .mistake-dashboard h2 { margin-top: 1.7em; }
+  .mistake-dashboard .callout { padding: 12px 13px; }
+  .mistake-dashboard :is(th, td) { padding: 10px 7px; }
+  .mistake-dashboard table { font-size: 0.87em; }
+  .mistake-dashboard [data-callout-metadata="review-metrics"] table {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 10px;
+  }
+  .mistake-dashboard [data-callout-metadata="review-metrics"] :is(th, td):nth-child(3) { --metric-column: 1; }
+  .mistake-dashboard [data-callout-metadata="review-metrics"] :is(th, td):nth-child(4) { --metric-column: 2; }
+  .mistake-dashboard [data-callout-metadata="review-metrics"] th:nth-child(n+3) { grid-row: 3; margin-top: 10px; }
+  .mistake-dashboard [data-callout-metadata="review-metrics"] td:nth-child(n+3) { grid-row: 4; }
+  .mistake-dashboard [data-callout-metadata="review-metrics"] :is(th, td) { padding-inline: 14px; }
+}
