@@ -10,42 +10,101 @@
   1. frontmatter 必备字段齐全，且 type=mistake、tags 含 #错题
   2. 唯一 H1；有「> 返回：」行；有 [!abstract] 定位块
   3. 四个必备小节齐全：❌ 我卡在哪 / ✅ 纠正的关键一步 / 🔁 同类与变式 / ⏱️ 复习记录
-  4. 复习记录里的勾选项日期 与 frontmatter review 一致：
-     每个未完成项必须在 review 里；已完成项(打了叉)不该留在 review 里
-     （`mastery: 3` 视为已归档、`mastery: 0` 视为跳过未做，两者都不排复习节点，跳过这一项检查）
-  5. 篇幅：60~90 行为宜（>90 提示拆分，<50 提示过简）
+  4. 不再保留 frontmatter review；下次日期只放在复习区的一条 Tasks 任务里：
+     mastery 1/2 必须有且只有一条待办，mastery 0/3 不排待办。
+     历史已完成记录原样保留，不用次数推断掌握度；忽略代码块及其他小节待办。
+  5. 篇幅仅作提示，复习历史增长不要求精简或拆分单题。
+
+本脚本只读文件，不修改笔记。frontmatter 支持平铺字段及行内/分行字符串列表。
 """
+from datetime import date
 import io
+import json
 import os
 import re
 import sys
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "数学", "错题本")
-REQUIRED_FM = ["create", "modify", "tags", "type", "year", "no", "kind", "topic", "cause", "mastery", "review"]
+REQUIRED_FM = ["create", "modify", "tags", "type", "year", "no", "kind", "topic", "cause", "mastery"]
 SECTIONS = ["❌ 我卡在哪", "✅ 纠正的关键一步", "🔁 同类与变式", "⏱️ 复习记录"]
 SKIP = {"01 错题本使用规范.md", "00 错题本总览.md"}
+FM_PATTERN = re.compile(r"^\ufeff?---\r?\n(.*?)\r?\n---(?:\r?\n|$)", re.S)
 
 errors, warns = [], []
 
 
+def unquote(value):
+    """Read a plain or quoted scalar from the card's flat YAML fields."""
+    value = value.strip()
+    if value.startswith('"'):
+        match = re.match(r'"(?:[^"\\]|\\.)*"', value)
+        if match:
+            try:
+                return json.loads(match.group())
+            except ValueError:
+                return match.group()[1:-1]
+    elif value.startswith("'"):
+        match = re.match(r"'(?:[^']|'')*'", value)
+        if match:
+            return match.group()[1:-1].replace("''", "'")
+    return re.split(r"\s+#", value, maxsplit=1)[0].strip()
+
+
 def parse_fm(text):
-    m = re.match(r"^---\r?\n(.*?)\r?\n---\r?\n", text, re.S)
+    m = FM_PATTERN.match(text)
     if not m:
         return None
-    fm, order, key = {}, [], None
+    fm, key = {}, None
     for line in m.group(1).splitlines():
-        km = re.match(r"^([A-Za-z_]+):\s*(.*)$", line)
+        km = re.match(r"^([A-Za-z_][A-Za-z_0-9-]*):\s*(.*)$", line)
         if km:
             key = km.group(1)
-            fm[key] = km.group(2).strip()
-            order.append(key)
+            value = km.group(2).strip()
+            fm[key] = unquote(value)
+            sequence = re.fullmatch(r"\[(.*)\]\s*(?:#.*)?", value)
+            if sequence:
+                items = re.findall(r'''"(?:[^"\\]|\\.)*"|'(?:[^']|'')*'|[^,\s][^,]*''', sequence.group(1))
+                fm[key + "__list"] = [unquote(item) for item in items if item.strip()]
         elif line.strip().startswith("- ") and key:
-            fm.setdefault(key + "__list", []).append(line.strip()[2:].strip())
+            fm.setdefault(key + "__list", []).append(unquote(line.strip()[2:]))
     return fm
 
 
-def check(path, rel):
-    text = io.open(path, encoding="utf-8").read()
+def prose_lines(text):
+    """Remove frontmatter and fenced examples without changing line positions."""
+    m = FM_PATTERN.match(text)
+    if m:
+        text = "\n" * text[:m.end()].count("\n") + text[m.end():]
+    result, fence = [], None
+    for line in text.splitlines():
+        # Callout code examples are fenced too; strip quote prefixes only for detection.
+        candidate = re.sub(r"^(?: {0,3}> ?)+", "", line)
+        if fence:
+            if re.fullmatch(r" {0,3}" + re.escape(fence[0]) + r"{" + str(len(fence)) + r",}\s*", candidate):
+                fence = None
+            result.append("")
+        else:
+            opening = re.match(r"^ {0,3}(`{3,}|~{3,})(.*)$", candidate)
+            if opening and (opening.group(1)[0] != "`" or "`" not in opening.group(2)):
+                fence = opening.group(1)
+                result.append("")
+            else:
+                result.append(line)
+    return result
+
+
+def review_lines(lines):
+    """Yield only the review section, ending at the next peer/parent heading."""
+    active = False
+    for line in lines:
+        heading = re.match(r"^(#{1,6})\s+(.+?)(?:\s+#+)?\s*$", line)
+        if heading and len(heading.group(1)) <= 4:
+            active = len(heading.group(1)) == 4 and heading.group(2) == SECTIONS[-1]
+        elif active:
+            yield line
+
+
+def check_text(text, rel):
     lines = text.splitlines()
     fm = parse_fm(text)
     if not fm:
@@ -62,47 +121,61 @@ def check(path, rel):
         errors.append("[%s] cause 为空（至少要有一个错因）" % rel)
     if fm.get("mastery") not in ("0", "1", "2", "3"):
         errors.append("[%s] mastery 应为 0/1/2/3，现为 %r" % (rel, fm.get("mastery")))
-    if not fm.get("review__list") and fm.get("mastery") != "0":
-        errors.append("[%s] review 为空（没有复习节点；只有 mastery: 0 的跳过题允许为空）" % rel)
+    if "review" in fm:
+        errors.append("[%s] 迁移未完成：删除 frontmatter `review`，下次日期只保留在复习任务中" % rel)
 
-    h1 = [l for l in lines if l.startswith("# ")]
+    prose = prose_lines(text)
+    h1 = [l for l in prose if l.startswith("# ")]
     if len(h1) != 1:
         errors.append("[%s] H1 数量应为 1，现为 %d" % (rel, len(h1)))
-    if not any(l.startswith("> 返回：") for l in lines):
+    if not any(l.startswith("> 返回：") for l in prose):
         errors.append("[%s] 缺少「> 返回：」行" % rel)
-    if "[!abstract]" not in text:
+    if not any("[!abstract]" in l for l in prose):
         errors.append("[%s] 缺少 [!abstract] 定位块" % rel)
 
     for s in SECTIONS:
-        if s not in text:
+        if not any(re.fullmatch(r"####\s+" + re.escape(s) + r"(?:\s+#+)?\s*", l) for l in prose):
             errors.append("[%s] 缺少小节 `#### %s`" % (rel, s))
 
-    review_dates = set(fm.get("review__list", []))
-    boxes = re.findall(r"^- \[([ xX])\]\s*(\d{4}-\d{2}-\d{2})", text, re.M)
-    archived = fm.get("mastery") == "3"          # mastery 3 = 归档，不再排复习节点
-    unstarted = fm.get("mastery") == "0"         # mastery 0 = 跳过未做，先不排复习节点
-    if not archived and not unstarted:
-        for state, d in boxes:
-            if state == " " and d not in review_dates:
-                errors.append("[%s] 未完成项 %s 不在 frontmatter review 里" % (rel, d))
-            if state.lower() == "x" and d in review_dates:
-                errors.append("[%s] %s 已勾选，但仍留在 review 里（应删掉该日期）" % (rel, d))
-        if not boxes and "review__list" in fm:
-            warns.append("[%s] ⏱️ 复习记录 里没有可勾选的日期项" % rel)
+    pending = []
+    for line in review_lines(prose):
+        task = re.match(r"^\s*[-*+]\s+\[([ xX])\]\s*(.*)$", line)
+        if task and task.group(1) == " ":
+            pending.append(line)
+    mastery = fm.get("mastery")
+    if mastery in ("1", "2") and len(pending) != 1:
+        errors.append("[%s] mastery: %s 必须且只能有一条未完成复习任务，现有 %d 条" % (rel, mastery, len(pending)))
+    if mastery in ("0", "3") and pending:
+        errors.append("[%s] mastery: %s 不应有未完成复习任务，现有 %d 条" % (rel, mastery, len(pending)))
+    for line in pending:
+        task = re.fullmatch(r"- \[ \] 错题复习（[^（）\r\n]+） 📅 (\d{4}-\d{2}-\d{2})\s*", line)
+        if not task:
+            errors.append("[%s] 复习待办格式应为 `- [ ] 错题复习（阶段名） 📅 YYYY-MM-DD`" % rel)
+            continue
+        try:
+            date.fromisoformat(task.group(1))
+        except ValueError:
+            errors.append("[%s] 复习日期无效：%s" % (rel, task.group(1)))
 
     n = len(lines)
     if n > 90:
-        warns.append("[%s] %d 行，超过 90 行——按规范考虑拆分/精简" % (rel, n))
+        warns.append("[%s] %d 行；复习记录可随历史增长，单题保持完整（仅提示）" % (rel, n))
     elif n < 50:
         warns.append("[%s] %d 行，偏简——检查「我卡在哪」是否写清" % (rel, n))
 
 
+def check(path, rel):
+    with io.open(path, encoding="utf-8-sig") as handle:
+        check_text(handle.read(), rel)
+
+
 def main():
+    errors.clear()
+    warns.clear()
     target = sys.argv[1] if len(sys.argv) > 1 else ""
     hits = 0
-    for dirpath, _, files in os.walk(ROOT):
-        if os.path.basename(dirpath) == "templates":
-            continue
+    for dirpath, dirs, files in os.walk(ROOT):
+        dirs[:] = [d for d in dirs if d != "templates"]
         for f in sorted(files):
             if not f.endswith(".md") or f in SKIP:
                 continue

@@ -1,5 +1,26 @@
 {
-  "choices": [],
+  "choices": [
+    {
+      "id": "2d862f4c-cc1d-42c0-b990-43c9088d937c",
+      "name": "记录本次复习",
+      "type": "Macro",
+      "command": true,
+      "runOnStartup": false,
+      "macro": {
+        "id": "6a227fb3-a03e-409d-a1be-7ed87a720307",
+        "name": "记录本次复习",
+        "commands": [
+          {
+            "id": "1379b0d9-7db1-49b6-b60a-40cbb116fc52",
+            "name": "review-mistake",
+            "type": "UserScript",
+            "path": "templates/scripts/review-mistake.js",
+            "settings": {}
+          }
+        ]
+      }
+    }
+  ],
   "inputPrompt": "single-line",
   "persistInputPromptDrafts": true,
   "useSelectionAsCaptureValue": true,
