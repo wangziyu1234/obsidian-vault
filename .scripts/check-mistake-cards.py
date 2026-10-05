@@ -10,8 +10,10 @@
   1. frontmatter 必备字段齐全，且 type=mistake、tags 含 #错题
   2. 唯一 H1；有「> 返回：」行；有 [!abstract] 定位块
   3. 四个必备小节齐全：❌ 我卡在哪 / ✅ 纠正的关键一步 / 🔁 同类与变式 / ⏱️ 复习记录
-  4. 不再保留 frontmatter review；下次日期只放在复习区的一条 Tasks 任务里：
-     mastery 1/2 必须有且只有一条待办，mastery 0/3 不排待办。
+  4. frontmatter 不再保留 review / review-start；复习区只安排次日、第 3 天、
+     第 7 天、第 30 天四轮 Tasks 待办，直接打勾即可，不安排当天待办。
+     mastery 1/2 可有 0~4 条待办，mastery 0/3 不排待办；阶段和日期不能重复，
+     日期按阶段递增。
      历史已完成记录原样保留，不用次数推断掌握度；忽略代码块及其他小节待办。
   5. 篇幅仅作提示，复习历史增长不要求精简或拆分单题。
 
@@ -27,6 +29,7 @@ import sys
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "数学", "错题本")
 REQUIRED_FM = ["create", "modify", "tags", "type", "year", "no", "kind", "topic", "cause", "mastery"]
 SECTIONS = ["❌ 我卡在哪", "✅ 纠正的关键一步", "🔁 同类与变式", "⏱️ 复习记录"]
+REVIEW_STAGES = ("次日", "第 3 天", "第 7 天", "第 30 天")
 SKIP = {"01 错题本使用规范.md", "00 错题本总览.md"}
 FM_PATTERN = re.compile(r"^\ufeff?---\r?\n(.*?)\r?\n---(?:\r?\n|$)", re.S)
 
@@ -121,8 +124,9 @@ def check_text(text, rel):
         errors.append("[%s] cause 为空（至少要有一个错因）" % rel)
     if fm.get("mastery") not in ("0", "1", "2", "3"):
         errors.append("[%s] mastery 应为 0/1/2/3，现为 %r" % (rel, fm.get("mastery")))
-    if "review" in fm:
-        errors.append("[%s] 迁移未完成：删除 frontmatter `review`，下次日期只保留在复习任务中" % rel)
+    for key in ("review", "review-start"):
+        if key in fm:
+            errors.append("[%s] 迁移未完成：删除旧 frontmatter `%s`，日期只保留在复习任务中" % (rel, key))
 
     prose = prose_lines(text)
     h1 = [l for l in prose if l.startswith("# ")]
@@ -139,23 +143,36 @@ def check_text(text, rel):
 
     pending = []
     for line in review_lines(prose):
-        task = re.match(r"^\s*[-*+]\s+\[([ xX])\]\s*(.*)$", line)
-        if task and task.group(1) == " ":
+        candidate = re.sub(r"^(?: {0,3}> ?)+", "", line)
+        task = re.match(r"^\s*[-*+]\s+\[([^\]\r\n])\]\s*(.*)$", candidate)
+        if task and task.group(1) not in ("x", "X"):
             pending.append(line)
-    mastery = fm.get("mastery")
-    if mastery in ("1", "2") and len(pending) != 1:
-        errors.append("[%s] mastery: %s 必须且只能有一条未完成复习任务，现有 %d 条" % (rel, mastery, len(pending)))
-    if mastery in ("0", "3") and pending:
-        errors.append("[%s] mastery: %s 不应有未完成复习任务，现有 %d 条" % (rel, mastery, len(pending)))
+    if pending:
+        if fm.get("mastery") in ("0", "3"):
+            errors.append("[%s] mastery: %s 不应有未完成复习任务，现有 %d 条" % (rel, fm["mastery"], len(pending)))
+        if len(pending) > 4:
+            errors.append("[%s] 未完成复习任务最多 4 条，现有 %d 条" % (rel, len(pending)))
+    stages, dated = [], []
     for line in pending:
-        task = re.fullmatch(r"- \[ \] 错题复习（[^（）\r\n]+） 📅 (\d{4}-\d{2}-\d{2})\s*", line)
+        task = re.fullmatch(r"- \[ \] 错题复习（(次日|第 3 天|第 7 天|第 30 天)） 📅 (\d{4}-\d{2}-\d{2})\s*", line)
         if not task:
-            errors.append("[%s] 复习待办格式应为 `- [ ] 错题复习（阶段名） 📅 YYYY-MM-DD`" % rel)
+            errors.append("[%s] 复习待办格式应为 `- [ ] 错题复习（次日/第 3 天/第 7 天/第 30 天） 📅 YYYY-MM-DD`，不再安排当天待办" % rel)
             continue
+        stage, due = task.groups()
+        stages.append(stage)
         try:
-            date.fromisoformat(task.group(1))
+            dated.append((REVIEW_STAGES.index(stage), date.fromisoformat(due)))
         except ValueError:
-            errors.append("[%s] 复习日期无效：%s" % (rel, task.group(1)))
+            errors.append("[%s] 复习日期无效：%s" % (rel, due))
+    if len(set(stages)) != len(stages):
+        errors.append("[%s] 未完成复习任务的阶段不能重复" % rel)
+    dates = [due for _, due in dated]
+    if len(set(dates)) != len(dates):
+        errors.append("[%s] 未完成复习任务的日期不能重复" % rel)
+    ordered = sorted(dated)
+    if any(earlier_stage < later_stage and earlier_due >= later_due
+           for (earlier_stage, earlier_due), (later_stage, later_due) in zip(ordered, ordered[1:])):
+        errors.append("[%s] 未完成复习任务的日期必须按次日、第 3 天、第 7 天、第 30 天顺序递增" % rel)
 
     n = len(lines)
     if n > 90:

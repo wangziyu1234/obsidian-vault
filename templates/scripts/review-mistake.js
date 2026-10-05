@@ -1,9 +1,9 @@
 /* QuickAdd user script: record one review without rewriting the rest of the card. */
 "use strict";
 
-const STAGES = ["当天", "次日", "第 3 天", "第 7 天", "第 30 天"];
-const INTERVALS = [1, 2, 4, 23, 30];
 const RESULTS = { wrong: "仍做不对", aided: "提示后做对", independent: "独立做对" };
+const STAGES = ["次日", "第 3 天", "第 7 天", "第 30 天"];
+const OFFSETS = [1, 3, 7, 30];
 const REVIEW_HEADING = /^####\s+⏱\uFE0F?\s+复习记录\s*$/u;
 
 function localDate(date = new Date()) {
@@ -23,6 +23,10 @@ function addDays(value, days) {
     const date = parseDate(value);
     date.setDate(date.getDate() + days);
     return localDate(date);
+}
+
+function reviewSchedule(today) {
+    return STAGES.map((stage, index) => ({ stage, due: addDays(today, OFFSETS[index]) }));
 }
 
 function lineSpans(text) {
@@ -51,6 +55,7 @@ function parseCard(text) {
     if (!/^[0-3]$/.test(mastery.value)) throw new Error("mastery 必须是 0、1、2 或 3。");
     const modify = field("modify");
     if (lines.slice(1, frontEnd).some(line => /^review:/.test(line.text))) throw new Error("仍有旧 review 属性，请先完成错题格式迁移。");
+    if (lines.slice(1, frontEnd).some(line => /^review-start:/.test(line.text))) throw new Error("仍有 review-start 属性，请先迁移为四轮复习任务。");
     // Examples in fenced code must not be mistaken for real headings or tasks.
     let fence = null;
     const visible = new Set();
@@ -68,16 +73,18 @@ function parseCard(text) {
     if (end < 0) end = lines.length;
     const section = lines.slice(start, end).filter(line => visible.has(line));
     const pendingLines = section.filter(line => /^\s*[-*+]\s+\[ \]/.test(line.text));
-    if (pendingLines.length > 1) throw new Error("复习记录中有多条待办，请先整理为唯一一条下次复习任务。");
+    if (pendingLines.length > 4) throw new Error("复习待办最多保留次日、第 3、7、30 天四轮。");
     if (pendingLines.length && [0, 3].includes(Number(mastery.value))) throw new Error("挂起或已归档的错题不应有复习待办，请先核对掌握度与排期。");
-    if (!pendingLines.length && [1, 2].includes(Number(mastery.value))) throw new Error("未掌握或待复习的错题缺少下次复习任务，请先修复排期。");
-    let pending = null;
-    if (pendingLines.length) {
-        const line = pendingLines[0];
-        const match = /^- \[ \] 错题复习（(当天|次日|第\s*3\s*天|第\s*7\s*天|第\s*30\s*天)） 📅 (\d{4}-\d{2}-\d{2})\s*$/.exec(line.text);
-        if (!match) throw new Error("复习待办格式不正确，请使用「- [ ] 错题复习（次日） 📅 YYYY-MM-DD」。");
+    const pending = pendingLines.map(line => {
+        const match = /^- \[ \] 错题复习（(次日|第\s*3\s*天|第\s*7\s*天|第\s*30\s*天)） 📅 (\d{4}-\d{2}-\d{2})\s*$/.exec(line.text);
+        if (!match) throw new Error("复习待办格式无效；使用「- [ ] 错题复习（次日） 📅 YYYY-MM-DD」，不安排当天复习。");
         parseDate(match[2]);
-        pending = { line, stage: STAGES.findIndex(stage => stage.replace(/\s/g, "") === match[1].replace(/\s/g, "")), due: match[2] };
+        const stageIndex = STAGES.findIndex(stage => stage.replace(/\s/g, "") === match[1].replace(/\s/g, ""));
+        return { line, stage: STAGES[stageIndex], stageIndex, due: match[2] };
+    }).sort((a, b) => a.stageIndex - b.stageIndex);
+    for (let index = 1; index < pending.length; index++) {
+        if (pending[index].stageIndex === pending[index - 1].stageIndex) throw new Error("未完成复习任务的阶段不能重复。");
+        if (pending[index].due <= pending[index - 1].due) throw new Error("未完成复习任务的日期须随阶段严格递增且不能重复。");
     }
     // Untagged old checkmarks have no reliable result and never prove mastery.
     const records = section.filter(line => /^- \[[xX]\]/.test(line.text)).map(line => {
@@ -88,8 +95,19 @@ function parseCard(text) {
     });
     let insertAt = end < lines.length ? lines[end].start : text.length;
     for (let index = end - 1; index >= start && !lines[index].text.trim(); index--) insertAt = lines[index].start;
+    const snapshot = section.find(line => /^>\s*\[!note\]-\s*旧复习计划/.test(line.text));
+    let snapshotEnd = null;
+    if (snapshot) {
+        insertAt = snapshot.start;
+        let index = lines.indexOf(snapshot);
+        while (index < end && /^>/.test(lines[index].text)) {
+            snapshotEnd = lines[index].end + lines[index].newline.length;
+            index++;
+        }
+    }
     return { text, lines, mastery: Number(mastery.value), masteryLine: mastery.line, modifyLine: modify.line,
-        pending, records, insertAt, newline: lines.find(line => line.newline)?.newline || "\n" };
+        pending, records, insertAt, snapshotEnd,
+        newline: lines.find(line => line.newline)?.newline || "\n" };
 }
 
 function canArchive(card, result, today) {
@@ -109,28 +127,38 @@ function planReview(card, { result, today, remark = "", archive = false, supplem
     if (typeof remark !== "string" || /[\r\n]/.test(remark)) throw new Error("复盘备注请写在一行内。");
     // Escape HTML delimiters so a remark cannot forge machine-readable result markers.
     const safeRemark = remark.trim().replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    const stage = card.pending?.stage ?? 0;
-    let next = null;
-    if (!archive) {
-        if (result !== "independent") next = { stage: 1, due: addDays(today, 1) };
-        else if (sameDay && card.pending) next = { stage: card.pending.stage, due: card.pending.due };
-        else next = { stage: Math.min(stage + 1, STAGES.length - 1), due: addDays(today, INTERVALS[stage]) };
-    }
-    const completed = `- [x] 错题复习（${STAGES[stage]}） ✅ ${today} —— ${RESULTS[result]}${safeRemark ? `；${safeRemark}` : ""}${sameDay ? "（补记）" : ""} <!-- review-result: ${result} -->`;
-    const pending = next ? `- [ ] 错题复习（${STAGES[next.stage]}） 📅 ${next.due}` : null;
+    const restart = !archive && (result !== "independent" || [0, 3].includes(card.mastery));
+    const removed = archive || restart ? card.pending : sameDay ? [] : card.pending.slice(0, 1);
+    const added = restart ? reviewSchedule(today) : [];
+    const pending = restart ? added : card.pending.filter(task => !removed.includes(task)).map(({ stage, due }) => ({ stage, due }));
+    const next = pending[0]?.due ?? null;
+    const completed = `- [x] 错题复盘 ✅ ${today} —— ${RESULTS[result]}${safeRemark ? `；${safeRemark}` : ""}${sameDay ? "（补记）" : ""} <!-- review-result: ${result} -->`;
     const mastery = archive ? 3 : result === "independent" ? 2 : 1;
     const propertyPatch = (line, value) => ({ start: line.start, end: line.end,
         value: line.text.replace(/^([^:]+:\s*)[^#]*?(\s+#.*)?$/, (_, prefix, comment) => `${prefix}${value}${comment || ""}`) });
     const patches = [propertyPatch(card.masteryLine, mastery), propertyPatch(card.modifyLine, today)];
-    const content = [completed, pending].filter(Boolean).join(card.newline);
-    if (card.pending) patches.push({ start: card.pending.line.start, end: card.pending.line.end, value: content });
-    else {
-        const prefix = card.insertAt > 0 && !card.text.slice(0, card.insertAt).endsWith("\n") ? card.newline : "";
-        patches.push({ start: card.insertAt, end: card.insertAt, value: prefix + content + card.newline });
+    for (const task of removed) patches.push({ start: task.line.start, end: task.line.end + task.line.newline.length, value: "" });
+    let beforeInsert = card.text.slice(0, card.insertAt);
+    // Measure spacing after removals; the last old task can end at insertAt.
+    for (const task of [...removed].sort((a, b) => b.line.start - a.line.start)) {
+        const end = task.line.end + task.line.newline.length;
+        if (end <= card.insertAt) beforeInsert = beforeInsert.slice(0, task.line.start) + beforeInsert.slice(end);
     }
+    let prefix = beforeInsert && !beforeInsert.endsWith("\n") ? card.newline : "";
+    let suffix = card.newline;
+    if (card.snapshotEnd !== null) {
+        if (beforeInsert && !(beforeInsert + prefix).endsWith(card.newline + card.newline)) prefix += card.newline;
+        suffix += card.newline;
+        const beforeEnd = card.text.slice(0, card.snapshotEnd);
+        const afterEnd = card.text.slice(card.snapshotEnd);
+        const separator = !beforeEnd.endsWith("\n") ? card.newline + card.newline : afterEnd.startsWith(card.newline) ? "" : card.newline;
+        if (separator) patches.push({ start: card.snapshotEnd, end: card.snapshotEnd, value: separator });
+    }
+    const content = [completed, ...added.map(task => `- [ ] 错题复习（${task.stage}） 📅 ${task.due}`)].join(card.newline);
+    patches.push({ start: card.insertAt, end: card.insertAt, value: prefix + content + suffix });
     let text = card.text;
     for (const patch of patches.sort((a, b) => b.start - a.start)) text = text.slice(0, patch.start) + patch.value + text.slice(patch.end);
-    return { text, mastery, next, result, today, supplement: sameDay };
+    return { text, mastery, pending, next, result, today, supplement: sameDay };
 }
 
 async function runReview({ app, quickAddApi }, now = () => new Date()) {
@@ -145,7 +173,7 @@ async function runReview({ app, quickAddApi }, now = () => new Date()) {
     if (card.records.some(record => record.date > today)) throw new Error("复习历史中存在未来日期，请先核对设备日期与记录。");
     const sameDay = card.records.some(record => record.date === today);
     if (sameDay) {
-        const action = await quickAddApi.suggester(["补记（独立做对保留排期；仍错或需提示则改为明天）", "取消"], ["supplement", "cancel"], `今天已记过 ${file.basename || path}`);
+        const action = await quickAddApi.suggester(["补记（独立做对保留待办；仍错或需提示则重新排四轮）", "取消"], ["supplement", "cancel"], `今天已记过 ${file.basename || path}`);
         if (action !== "supplement") return { status: "cancelled" };
     }
     const result = await quickAddApi.suggester(Object.values(RESULTS), Object.keys(RESULTS), `记录本次复习：${file.basename || path}`);
@@ -154,7 +182,7 @@ async function runReview({ app, quickAddApi }, now = () => new Date()) {
     if (remark == null) return { status: "cancelled" };
     let archive = false;
     if (canArchive(card, result, today)) {
-        const action = await quickAddApi.suggester(["继续复习，保留下次排期", "归档（不同日期已连续两次独立做对）", "取消本次记录"], ["continue", "archive", "cancel"], "已达到归档条件");
+        const action = await quickAddApi.suggester(["继续复习，保留余下任务", "归档（不同日期已连续两次独立做对）", "取消本次记录"], ["continue", "archive", "cancel"], "已达到归档条件");
         if (action == null || action === "cancel") return { status: "cancelled" };
         archive = action === "archive";
     }
@@ -165,10 +193,10 @@ async function runReview({ app, quickAddApi }, now = () => new Date()) {
         if (file.path !== path || current !== original) throw new Error("错题在填写期间已被编辑或同步更新，本次没有写入；请重新运行。");
         return plan.text;
     });
-    await quickAddApi.infoDialog("本次复习已记录", plan.next ? `${RESULTS[result]}；下次复习：${plan.next.due}（${STAGES[plan.next.stage]}）。` : "已归档；复习历史全部保留。");
+    await quickAddApi.infoDialog("本次复盘已记录", plan.mastery === 3 ? "已归档；复习历史全部保留。" : plan.next ? `${RESULTS[result]}；下次复习：${plan.next}。做得没问题时直接勾选对应任务即可。` : `${RESULTS[result]}；当前已无待复习任务。`);
     return { status: "saved", ...plan };
 }
 
 module.exports = async params => runReview(params);
 // Pure helpers and an injectable clock keep regression tests independent of Obsidian.
-Object.assign(module.exports, { parseCard, planReview, canArchive, localDate, addDays, runReview });
+Object.assign(module.exports, { parseCard, planReview, canArchive, localDate, addDays, reviewSchedule, runReview });
