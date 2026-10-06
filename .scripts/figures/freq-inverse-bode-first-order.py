@@ -18,7 +18,7 @@ fs.use_style()
 FAM = ["Microsoft YaHei", "SimHei"]
 K = 10 ** 1.5                        # 20 lg K = 30 dB
 T = 0.5                              # 转折频率 1/T = 2 rad/s
-WC = 2 * 10 ** 1.5                   # 渐近法截止频率 63.2 rad/s
+WC = 2 * np.sqrt(999)                   # 渐近法截止频率 63.2 rad/s
 WB = 10.0                            # 读数校验点
 sys = ct.tf([K], [T, 1])
 
@@ -62,10 +62,12 @@ mark(ax_m, WB, 20 * np.log10(abs(at(WB))), "B")
 mark(ax_m, WC, 20 * np.log10(abs(at(WC))), "C")
 mark(ax_p, 2.0, -45.0, "A")
 
-fig.suptitle(r"$G(s)=\frac{31.6}{0.5s+1}$", fontsize=17, y=0.975)
+fig.suptitle(r"$G(s)=\frac{10\sqrt{10}}{0.5s+1}$", fontsize=17, y=0.975)
 fig.text(0.5, 0.018,
-         "A 转折频率 ω=2（相角 −45°）  ·  B 渐近线读数校验点 ω=10  ·  C 截止频率 ωc=63.2（0 dB）",
+         "A 转折频率 ω=2（相角 −45°）  ·  B 幅值校验点 ω=10  ·  C 实际截止频率 ωc = 2√999",
          ha="center", va="bottom", fontsize=10.5, color=fs.SUB, family=FAM)
 
 fig.subplots_adjust(left=0.105, right=0.97, top=0.87, bottom=0.19, hspace=0.30)
 fs.save(fig, "频域-反求-一阶Bode.png")
+
+assert np.isclose(abs(at(WC)),1)

@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# figure: 频域-矢量法-s平面.png
 """矢量法与惯性环节描点（05-1-1 §5.1.3、05-1-2 §5.2.2）：
 
   频域-矢量法-s平面.png      —— 极点矢量之比：$G(s)=2/(s+2)$ 的极点 s=-2 到 jω 的矢量
@@ -21,6 +21,7 @@ W = np.array([0.0, 0.6, 1.0, 2.0, 4.0, 8.0])
 
 def save(fig, name):
     path = os.path.join(OUT, name)
+    fig.subplots_adjust(left=0.14,right=0.96,bottom=0.17,top=0.82)
     fig.savefig(path, dpi=fs.DPI)
     plt.close(fig)
     print("saved", path)
@@ -53,11 +54,11 @@ for i, w in enumerate(W[1:]):
 ax.annotate("", xy=(0, 2), xytext=(-2, 0),
             arrowprops=dict(arrowstyle="-|>", color=fs.PHA, lw=2.2,
                             mutation_scale=14, shrinkA=0, shrinkB=2), zorder=5)
-ax.annotate("|矢量| = √8 = 2.828\n∠ = 45°", xy=(-1.0, 1.0), xytext=(-3.15, 2.6),
+ax.annotate("|矢量| = 2√2\n∠ = 45°", xy=(-1.0, 1.0), xytext=(-3.15, 2.6),
             color=fs.PHA, fontsize=11)
-ax.annotate("A(ω) = 2 / |极点矢量|\nφ(ω) = −∠(极点矢量)", xy=(0.35, 9.2),
+ax.annotate("A(ω) = 2 / |极点矢量|\nφ(ω) = −∠(极点矢量)", xy=(1.0, 9.2),
             color=fs.INK, fontsize=11.5, ha="left", va="top")
-ax.annotate("ω = 2 时：\nA = 2/2.828 = 0.707\nφ = −45°", xy=(0.35, 6.4),
+ax.annotate("ω = 2 时：\nA = 1/√2\nφ = −45°", xy=(0.35, 6.4),
             color=fs.SUB, fontsize=10.5, ha="left", va="top")
 save(fig, "频域-矢量法-s平面.png")
 
@@ -83,20 +84,18 @@ ax.plot(0.5 + 0.5 * np.cos(th), 0.5 * np.sin(th), color=fs.SUB,
         linewidth=0.9, linestyle=(0, (2, 3)), zorder=2)
 ax.plot([0.5], [0], marker="x", color=fs.SUB, markersize=6, zorder=3)
 
-pts = [(0.0, "1∠0°\n1+j0", (8, 10)), (0.6, "0.959∠−16.7°\n0.92−j0.27", (10, -6)),
-       (1.0, "0.894∠−26.6°\n0.8−j0.4", (12, -22)),
-       (2.0, "0.707∠−45°\n0.5−j0.5（最低点）", (14, -30)),
-       (4.0, "0.447∠−63.4°\n0.2−j0.4", (14, 6)),
-       (8.0, "0.243∠−76°\n0.06−j0.24", (16, 16))]
-for wv, lab, off in pts:
-    g = 2 / (2 + 1j * wv)
-    ax.plot([g.real], [g.imag], marker="o", color=fs.PHA, markersize=6, zorder=6)
-    ax.annotate(lab, xy=(g.real, g.imag), xytext=off, textcoords="offset points",
-                color=fs.PHA, fontsize=10.5)
-ax.annotate("ω→∞：原点（0∠−90°）", xy=(0.02, -0.02), xytext=(8, -76),
-            textcoords="offset points", color=fs.INK, fontsize=10.5)
-ax.annotate("ω 增大方向", xy=(0.93, -0.24), xytext=(-4, 22), textcoords="offset points",
-            color=fs.MAG, fontsize=10.5)
+# Frequency labels only; exact coordinates remain in the note table.
+pts=[(0,(8,12)),(.6,(12,8)),(1,(12,-12)),(2,(-20,-24)),(4,(-8,-40)),(8,(-52,8))]
+for wv,off in pts:
+    g=2/(2+1j*wv)
+    ax.plot(g.real,g.imag,'o',color=fs.PHA,ms=5)
+    ax.annotate('ω = %g'%wv,(g.real,g.imag),xytext=off,textcoords='offset points',fontsize=10)
+ax.annotate('ω → ∞',(0,0),xytext=(-32,12),textcoords='offset points',fontsize=10)
+from _nyquist_style import curve
+import control as ct
+curve(ax,ct.tf([2],[1,2]),np.geomspace(1e-4,1e4,3000),arrows=(1.4,5.5))
+fig.text(.5,.035,'各点的复数坐标见正文表；箭头表示频率增大。',ha='center',fontsize=10)
+assert abs(2/(2+2j)-(.5-.5j))<1e-12
 save(fig, "频域-惯性环节-描点.png")
 
 # 打印核对值

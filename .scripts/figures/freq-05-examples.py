@@ -1,4 +1,4 @@
-# 批量出图：教材例5-12（奈氏图 + 伯德图）、例5-15（伯德图）、例6-4（校正前后伯德图）。
+# figure: 奈氏-例512.png
 """Frequency-domain figures reproduced from the transfer functions in the notes.
 
 K/(s+1)^3 for example 5-12; 9/[s(1+Ts)] with T = 2/27 for example 5-15;
@@ -80,35 +80,52 @@ def save(fig, name, title=None):
 
 # ---------------------------------------------------------------- 例5-12
 def fig_nyquist_512():
-    """K/(s+1)^3，K=4（稳定）与 K=10（不稳定）。"""
+    """Whole Nyquist loci and a separate critical-point enlargement."""
+    from _nyquist_style import response, curve
     s = ct.tf("s")
     fs.use_style()
-    fig, ax = plt.subplots(figsize=(6.4, 5.8))
-    ax.axhline(0, color=fs.SUB, lw=0.9, zorder=1)
-    ax.axvline(0, color=fs.SUB, lw=0.9, zorder=1)
-    ax.grid(True, color=fs.GRID, lw=0.55, alpha=0.55)
-    ax.set_aspect("equal", adjustable="box")
-    ax.spines[["top", "right"]].set_visible(False)
-    ax.set_xlabel(r"$Re\,G(j\omega)$", fontsize=11.5)
-    ax.set_ylabel(r"$Im\,G(j\omega)$", fontsize=11.5)
-    for k, colour, style, label in (
-            (4.0, fs.MAG, "-",
-             r"$K=4$$:\ \mathrm{不包围}\ (-1,j0)$$\mathrm{, 稳定}$"),
-            (10.0, fs.PHA, (0, (6, 3)),
-             r"$K=10$$:\ \mathrm{包围}\ (-1,j0)$$\mathrm{, 不稳定}$")):
-        resp = ct.frequency_response(k / (s + 1) ** 3, np.geomspace(1e-2, 1e2, 3000))
-        z = resp.fresp[0, 0].squeeze()
-        keep = (z.real > -4.0) & (z.real < 1.6) & (np.abs(z.imag) < 3.0)
-        ax.plot(z.real[keep], z.imag[keep], color=colour, lw=2.0, ls=style,
-                zorder=4, label=label)
-    ax.plot(-1, 0, marker="x", color=fs.INK, ms=10, mew=1.8, zorder=8,
-            label=r"$\mathrm{判据点}\ (-1,\,0)$")
-    ax.set_xlim(-3.4, 1.4)
-    ax.set_ylim(-2.4, 1.4)
-    ax.legend(loc="lower left", fontsize=9.5, framealpha=0.95,
-              facecolor="white", edgecolor=fs.GRID)
-    save(fig, "奈氏-例512.png",
-         r"$\mathrm{例5-12}\ \ G(s)=K/(s+1)^3$")
+    fig, axes = plt.subplots(1,2,figsize=(10.6,5.2))
+    w = np.geomspace(1e-5,1e5,10000)
+    for ax in axes:
+        ax.axhline(0,color=fs.SUB,lw=.8)
+        ax.axvline(0,color=fs.SUB,lw=.8)
+        ax.spines[["top","right"]].set_visible(False)
+        ax.grid(True,color=fs.GRID,lw=.5,alpha=.6)
+        ax.set_xlabel(r"$\mathrm{Re}\,G(j\omega)$",fontsize=12)
+        ax.set_ylabel(r"$\mathrm{Im}\,G(j\omega)$",fontsize=12)
+        ax.plot(-1,0,"x",color=fs.INK,ms=8,zorder=7)
+    for k,colour in [(4,fs.MAG),(10,fs.PHA)]:
+        model=k/(s+1)**3
+        z=response(model,w)
+        assert abs(response(model,[np.sqrt(3)])[0]+k/8)<1e-12
+        assert np.count_nonzero(ct.poles(ct.feedback(model)).real>0)==(0 if k==4 else 2)
+        assert max(abs(z.imag)) < 8
+        for i,ax in enumerate(axes):
+            curve(ax,model,w,((.3,) if i==0 else (1.25,2.3)),color=colour)
+            ax.plot(np.r_[k,z.real,0],np.r_[0,-z.imag,0],color=colour,lw=1.2,ls=":")
+            ax.plot(-k/8,0,"o",color=colour,ms=5,zorder=7)
+        axes[0].plot(k,0,"o",color=colour,ms=5)
+    axes[0].set_xlim(-3,11)
+    axes[0].set_ylim(-8,8)
+    axes[0].set_aspect("equal",adjustable="box")
+    axes[0].set_title("完整轨迹：实线正频率，点线负频率",fontsize=11)
+    axes[1].set_xlim(-1.65,.3)
+    axes[1].set_ylim(-.7,.55)
+    axes[1].set_title("放大判据点附近",fontsize=12)
+    box=dict(facecolor="white",edgecolor="none",pad=1.5)
+    for x,text,colour,pos in [(-.5,r"$-1/2$",fs.MAG,(-.30,.36)),
+                              (-1.25,r"$-5/4$",fs.PHA,(-1.56,.36))]:
+        axes[1].annotate(text,(x,0),xytext=pos,color=colour,fontsize=12,
+                         bbox=box,arrowprops=dict(arrowstyle="-",color=colour,lw=.7))
+    axes[1].annotate(r"$(-1,0)$",(-1,0),xytext=(.035,-.59),
+                     fontsize=11,bbox=box,
+                     arrowprops=dict(arrowstyle="-",color=fs.SUB,lw=.6))
+    fig.suptitle(r"$G(s)=K/(s+1)^3$",fontsize=15,y=.98)
+    fig.text(.5,.05,"蓝：K = 4，闭环稳定；红：K = 10，闭环有两个右半平面极点。",
+             ha="center",fontsize=11,color=fs.SUB)
+    fig.subplots_adjust(left=.07,right=.98,top=.82,bottom=.19,wspace=.30)
+    fig.savefig(str(fs.ATTACH_DIR/"奈氏-例512.png"),dpi=fs.DPI)
+    plt.close(fig)
 
 
 def fig_bode_512():
@@ -188,8 +205,12 @@ def fig_bode_64():
 
 
 if __name__ == "__main__":
-    if os.environ.get("FIGURE_ONLY") != "64":
+    if os.environ.get("FIGURE_ONLY") == "512":
+        fig_nyquist_512()
+    elif os.environ.get("FIGURE_ONLY") == "64":
+        fig_bode_64()
+    else:
         fig_nyquist_512()
         fig_bode_512()
         fig_bode_515()
-    fig_bode_64()
+        fig_bode_64()

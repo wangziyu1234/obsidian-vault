@@ -1,171 +1,43 @@
 # figure: 频域-典型环节-比例Nyquist.png
-r"""典型环节幅相曲线：10 张单图（含 2 张非最小相位对应项）。
-
-与 `bode-typical-links.py` 的 8 张伯德图一一对应：
-  频域-典型环节-比例Nyquist.png / 积分 / 微分 / 惯性 / 一阶微分 / 振荡 / 二阶微分 / 延迟
-
-图内文字不混用中文与 `$…$`；公式一律纯文本。
-构建：..\\build.ps1 -File .\\ch5-typical-links-nyquist.py
-"""
 import os
-
-import control as ct
 import numpy as np
+import control as ct
 import matplotlib.pyplot as plt
-
 import figures_style as fs
-from _nyquist_style import canvas, curve, point, note, finish
-
+from _nyquist_style import canvas,curve,point,finish,response
 fs.use_style()
-OUT = os.path.dirname(os.environ["FIGURE_OUT"]) if os.environ.get("FIGURE_OUT") else str(fs.ATTACH_DIR)
-ONLY = set(filter(None, os.environ.get("FIGURE_ONLY", "").split(";")))
-W = np.logspace(-2, 2, 1200)
-
-
-def style(ax, xlim, ylim, title):
-    ax.set_aspect("equal", adjustable="box")
-    ax.set_xlim(*xlim)
-    ax.set_ylim(*ylim)
-    ax.axhline(0, color=fs.SUB, linewidth=0.8, zorder=1)
-    ax.axvline(0, color=fs.SUB, linewidth=0.8, zorder=1)
-    ax.grid(True, color=fs.GRID, linewidth=0.6, alpha=0.85)
-    for s in ("top", "right"):
-        ax.spines[s].set_visible(False)
-    ax.set_xlabel("实部")
-    ax.set_ylabel("虚部")
-    ax.set_title(title, pad=8)
-
-
-def arrow(ax, x, y, dx, dy):
-    ax.annotate("", xy=(x + dx, y + dy), xytext=(x, y),
-                arrowprops=dict(arrowstyle="-|>", color=fs.MAG, lw=1.7,
-                                mutation_scale=14), zorder=6)
-
-
-def dot(ax, x, y, lab, off=(7, 7), color=fs.PHA):
-    ax.plot([x], [y], marker="o", color=color, markersize=6, zorder=6)
-    ax.annotate(lab, xy=(x, y), xytext=off, textcoords="offset points",
-                color=color, fontsize=11)
-
-
-def save(fig, name):
-    if ONLY and name not in ONLY:
-        plt.close(fig)
-        return
-    path = os.path.join(OUT, name)
-    fig.savefig(path, dpi=fs.DPI)
-    plt.close(fig)
-    print("saved", path)
-
-
-def newfig():
-    return plt.subplots(figsize=(5.6, 4.6))
-
-
-# 1 比例
-fig, ax = newfig()
-style(ax, (-0.4, 3.0), (-1.0, 1.0), "比例环节  G = K（K = 2）")
-dot(ax, 2, 0, "实轴上一点，不随 ω 变", off=(-150, 18))
-save(fig, "频域-典型环节-比例Nyquist.png")
-
-# 2 积分
-fig, ax = newfig()
-style(ax, (-1.1, 1.1), (-2.6, 0.7), "积分环节  G = 1/s")
-G = 1 / (1j * W)
-ax.plot(G.real, G.imag, color=fs.MAG, linewidth=2.2)
-arrow(ax, 0, -1.6, 0, 0.35)
-dot(ax, 0, 0, "ω→∞：原点", off=(10, 6))
-ax.annotate("ω→0⁺：沿 −90° 到 −j∞", xy=(0, -2.5), xytext=(-1.05, -2.45),
-            color=fs.INK, fontsize=11)
-save(fig, "频域-典型环节-积分Nyquist.png")
-
-# 3 微分
-fig, ax = newfig()
-style(ax, (-1.1, 1.1), (-0.7, 2.6), "微分环节  G = s")
-G = 1j * W
-ax.plot(G.real, G.imag, color=fs.MAG, linewidth=2.2)
-arrow(ax, 0, 1.6, 0, 0.35)
-dot(ax, 0, 0, "ω = 0：原点", off=(10, -4))
-ax.annotate("ω→∞：沿 +90° 到 +j∞", xy=(0, 2.5), xytext=(-1.05, 2.2),
-            color=fs.INK, fontsize=11)
-save(fig, "频域-典型环节-微分Nyquist.png")
-
-# 4 惯性
-fig, ax = newfig()
-style(ax, (-0.25, 1.3), (-0.8, 0.35), "惯性环节  G = 1/(Ts+1)（T = 1）")
-G = 1 / (1 + 1j * W)
-ax.plot(G.real, G.imag, color=fs.MAG, linewidth=2.2)
-arrow(ax, 0.68, -0.37, -0.05, 0.06)
-dot(ax, 1, 0, "起点 (1, j0)（ω = 0）", off=(-145, 16))
-dot(ax, 0, 0, "终点：原点 ∠−90°", off=(8, 4))
-ax.annotate("第四象限半圆：圆心 (0.5, 0)、半径 0.5", xy=(0.5, -0.55),
-            xytext=(-0.2, -0.74), color=fs.SUB, fontsize=10.5)
-save(fig, "频域-典型环节-惯性Nyquist.png")
-
-# 5 一阶微分
-fig, ax = newfig()
-style(ax, (-0.5, 2.4), (-0.6, 2.6), "一阶微分环节  G = 1+Ts（T = 1）")
-G = 1 + 1j * W
-ax.plot(G.real, G.imag, color=fs.MAG, linewidth=2.2)
-arrow(ax, 1, 1.6, 0, 0.35)
-dot(ax, 1, 0, "起点 (1, j0)（ω = 0）", off=(-150, -20))
-ax.annotate("竖直射线 Re = 1，ω→∞：+j∞", xy=(1, 2.45), xytext=(-0.45, 2.2),
-            color=fs.INK, fontsize=11)
-save(fig, "频域-典型环节-一阶微分Nyquist.png")
-
-# 6 振荡
-fig, ax = newfig()
-style(ax, (-0.65, 1.3), (-1.45, 0.4), "振荡环节  1/(s²+2ζs+1)，ζ = 0.5")
-G = 1 / (1 - W ** 2 + 2j * 0.5 * W)
-ax.plot(G.real, G.imag, color=fs.MAG, linewidth=2.2)
-arrow(ax, -0.12, -0.9, 0.1, 0.12)
-dot(ax, 1, 0, "起点 (1, j0)（ω = 0）", off=(-150, 12))
-dot(ax, 0, -1, "ωn 处 (0, −j/(2ζ))", off=(12, -18))
-ax.annotate("ω→∞：原点 ∠−180°", xy=(0, 0), xytext=(10, 10), color=fs.INK, fontsize=11)
-save(fig, "频域-典型环节-振荡Nyquist.png")
-
-# 7 二阶微分
-fig, ax = newfig()
-style(ax, (-2.7, 1.3), (-0.5, 2.5), "二阶微分环节  s²+2ζs+1，ζ = 0.5")
-G = 1 - W ** 2 + 2j * 0.5 * W
-ax.plot(G.real, G.imag, color=fs.MAG, linewidth=2.2)
-arrow(ax, -1.6, 1.9, -0.35, 0.12)
-dot(ax, 1, 0, "起点 (1, j0)（ω = 0）", off=(4, -20))
-dot(ax, 0, 1, "ωn 处 (0, j2ζ)", off=(8, 6))
-ax.annotate("恒在上半平面，ω→∞：沿 180° 到 ∞", xy=(-2.6, 2.3),
-            xytext=(-2.65, -0.4), color=fs.INK, fontsize=11)
-save(fig, "频域-典型环节-二阶微分Nyquist.png")
-
-# 8 延迟
-fig, ax = newfig()
-style(ax, (-1.4, 1.4), (-1.4, 1.4), "延迟环节  G = e^(−τs)（τ = 1）")
-th = np.linspace(0, -2.2 * np.pi, 800)
-ax.plot(np.cos(th), np.sin(th), color=fs.MAG, linewidth=2.2)
-arrow(ax, np.cos(-1.4), np.sin(-1.4), 0.16 * np.cos(-2.97), 0.16 * np.sin(-2.97))
-ax.annotate("单位圆：|G| ≡ 1，相位 −ωτ\n顺时针无限绕转", xy=(0, 0),
-            xytext=(-1.35, 1.0), color=fs.INK, fontsize=11)
-save(fig, "频域-典型环节-延迟Nyquist.png")
-
-# 9-10: actual response paths and on-curve increasing-frequency arrows.
-s = ct.tf("s")
-w = np.geomspace(1e-4, 1e4, 10000)
-name = "频域-典型环节-不稳定惯性Nyquist.png"
-if not ONLY or name in ONLY:
-    fig, ax = canvas("不稳定惯性：惯性曲线关于实轴的镜像",
-                     r"$G(s)=1/(1-s)$", (-0.22,1.22),(-0.23,0.78))
-    curve(ax, 1/(1-s), w, (0.6,2.0))
-    point(ax, 1, r"$\omega=0$", (-44,-23))
-    point(ax, 0, r"$\omega\to\infty$", (8,-23), limit=True)
-    note(ax, r"$\varphi:0^\circ\to+90^\circ$", (0.04,0.88))
-    finish(fig, os.path.join(OUT,name))
-
-name = "频域-典型环节-不稳定振荡Nyquist.png"
-if not ONLY or name in ONLY:
-    fig, ax = canvas("不稳定振荡（ζ = 0.5，ωₙ = 1）",
-                     r"$G(s)=1/(s^2-s+1)$", (-0.62,1.42),(-0.43,1.4))
-    curve(ax, 1/(s*s-s+1), w, (0.48,1.4))
-    point(ax, 1, r"$\omega=0$", (-44,-23))
-    point(ax, 0, r"$\omega\to\infty$", (-30,-23), limit=True)
-    point(ax, 1j, r"$\omega_n=1$", (-64,15))
-    note(ax, r"$\varphi:0^\circ\to+180^\circ$", (0.06,0.87))
-    finish(fig, os.path.join(OUT,name))
+out=os.path.dirname(os.environ['FIGURE_OUT']) if os.environ.get('FIGURE_OUT') else str(fs.ATTACH_DIR)
+s=ct.tf('s');w=np.geomspace(1e-5,1e5,12000)
+items=[
+('\u6bd4\u4f8b',ct.tf([2],[1]),r'$G(s)=2$',(-.4,3),(-1,1),[],2,2,None,'\u6240\u6709\u9891\u7387\u90fd\u5bf9\u5e94\u540c\u4e00\u70b9 (2, 0)\u3002'),
+('\u79ef\u5206',1/s,r'$G(s)=1/s$',(-.7,.7),(-2.6,.5),[.65],None,0,None,'\u4ece\u8d1f\u865a\u8f74\u65e0\u7a77\u8fdc\u51fa\u53d1\uff0c\u6cbf\u7bad\u5934\u8d8b\u5411\u539f\u70b9\u3002'),
+('\u5fae\u5206',s,r'$G(s)=s$',(-.7,.7),(-.5,2.6),[1.4],0,None,None,'\u4ece\u539f\u70b9\u51fa\u53d1\uff0c\u6cbf\u6b63\u865a\u8f74\u7ee7\u7eed\u8d8b\u5411\u65e0\u7a77\u8fdc\u3002'),
+('\u60ef\u6027',1/(s+1),r'$G(s)=1/(s+1),\quad T=1$',(-.25,1.3),(-.75,.3),[.65,2],1,0,-.5j+.5,'\u7ea2\u70b9\u4e3a\u8d77\u70b9 (1, 0)\uff1b\u6700\u4f4e\u70b9 (1/2, -1/2)\u3002'),
+('\u4e00\u9636\u5fae\u5206',1+s,r'$G(s)=1+s,\quad T=1$',(-.3,2),(-.5,2.6),[1.4],1,None,1+1j,'\u4ece (1, 0) \u6cbf Re = 1 \u5411\u4e0a\uff0c\u7ee7\u7eed\u8d8b\u5411\u65e0\u7a77\u8fdc\u3002'),
+('\u632f\u8361',1/(s*s+s+1),r'$G(s)=1/(s^2+s+1),\quad \zeta=1/2$',(-.65,1.3),(-1.4,.35),[.55,1.4],1,0,-1j,'\u7a7f\u865a\u8f74\u70b9 (0, -1) \u5bf9\u5e94 \u03c9n = 1\uff1b\u672b\u7aef\u8d8b\u5411\u539f\u70b9\u3002'),
+('\u4e8c\u9636\u5fae\u5206',s*s+s+1,r'$G(s)=s^2+s+1,\quad \zeta=1/2$',(-2.7,1.5),(-.5,2.5),[.6,1.5],1,None,1j,'\u7a7f\u865a\u8f74\u70b9 (0, 1) \u5bf9\u5e94 \u03c9n = 1\uff1b\u7ee7\u7eed\u5411\u5de6\u4e0a\u65b9\u65e0\u7a77\u8fdc\u3002'),
+('\u4e0d\u7a33\u5b9a\u60ef\u6027',1/(1-s),r'$G(s)=1/(1-s),\quad T=1$',(-.25,1.3),(-.3,.75),[.65,2],1,0,.5+.5j,'\u60ef\u6027\u66f2\u7ebf\u5173\u4e8e\u5b9e\u8f74\u7684\u955c\u50cf\uff1b\u76f8\u89d2\u7531 0\u00b0 \u8d8b\u5411 +90\u00b0\u3002'),
+('\u4e0d\u7a33\u5b9a\u632f\u8361',1/(s*s-s+1),r'$G(s)=1/(s^2-s+1),\quad \zeta=1/2$',(-.65,1.3),(-.35,1.4),[.55,1.4],1,0,1j,'\u632f\u8361\u66f2\u7ebf\u5173\u4e8e\u5b9e\u8f74\u7684\u955c\u50cf\uff1b\u76f8\u89d2\u7531 0\u00b0 \u8d8b\u5411 +180\u00b0\u3002')]
+for name,sys,formula,xlim,ylim,arrows,start,end,cross,desc in items:
+ fig,ax=canvas(name+'\u73af\u8282',formula,xlim,ylim,figsize=(6.3,5.3))
+ z=curve(ax,sys,w,arrows)
+ if start is not None:point(ax,start,'')
+ if end is not None and end!=start:point(ax,end,'',limit=True)
+ if cross is not None:point(ax,cross,'',color=fs.MAG)
+ fig.text(.5,.067,desc,ha='center',fontsize=9.5)
+ finish(fig,os.path.join(out,'\u9891\u57df-\u5178\u578b\u73af\u8282-'+name+'Nyquist.png'),footer='\u7bad\u5934\u6cbf\u66f2\u7ebf\u8868\u793a\u9891\u7387\u589e\u5927\uff1b\u7a7a\u5fc3\u70b9\u4e3a\u6781\u9650\u3002',rect=(.01,.17,.99,.91))
+ assert np.isfinite(z).all()
+assert np.allclose(response(1/(s*s+s+1),[1]),[-1j])
+assert np.allclose(response(1/(s+1),[1]),[.5-.5j])
+fig,ax=canvas('\u5ef6\u8fdf\u73af\u8282',r'$G(s)=e^{-s},\quad \tau=1$',(-1.3,1.3),(-1.3,1.3),figsize=(6.3,5.3))
+q=np.linspace(0,2*np.pi,1200);z=np.exp(-1j*q)
+ax.plot(z.real,z.imag,color=fs.MAG,lw=2.3)
+from matplotlib.patches import FancyArrowPatch
+from matplotlib.path import Path as MplPath
+for at in [1.2,3.6,5.5]:
+ zz=np.exp(-1j*np.linspace(at-.12,at+.12,35))
+ ax.add_patch(FancyArrowPatch(path=MplPath(np.c_[zz.real,zz.imag]),arrowstyle='-|>',mutation_scale=15,color=fs.MAG,lw=1.7))
+point(ax,1,'')
+fig.text(.5,.067,'\u5e45\u503c\u6052\u4e3a 1\uff1b\u4ece (1, 0) \u51fa\u53d1\uff0c\u987a\u65f6\u9488\u65e0\u9650\u7ed5\u8f6c\u3002',ha='center',fontsize=9.5)
+finish(fig,os.path.join(out,'\u9891\u57df-\u5178\u578b\u73af\u8282-\u5ef6\u8fdfNyquist.png'),rect=(.01,.17,.99,.91))
+assert np.allclose(abs(z),1)

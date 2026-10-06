@@ -43,7 +43,7 @@ def features(K, T1, T2, tau=0.0):
     }
     if tau > 0 and D > 0:
         out["wx"] = 1 / np.sqrt(D)
-        out["Gx"] = -K * D * D / (tau * T)
+        out["Gx"] = -K * D / T
     return out
 
 
@@ -59,6 +59,10 @@ def verify():
     assert abs(value_at(GZ, fz["w0"]).real - fz["Re0"]) < 1e-12
     zx = value_at(GZ, fz["wx"])
     assert abs(zx.real - fz["Gx"]) < 1e-12 and abs(zx.imag) < 1e-12
+    for tau in (0.1, 0.3, 0.6):
+        ftest = features(1, 1, 2, tau)
+        test_model = (1 + tau*s)/(s*(1+s)*(1+2*s))
+        assert abs(value_at(test_model, ftest["wx"]) - ftest["Gx"]) < 1e-12
     # τ→0 极限：实轴交点回到 ω=1/√(T₁T₂)、G→-K T₁T₂/(T₁+T₂)
     assert abs(fz["Re0"] - features(KZ, T1_Z, T2_Z)["Re0"]) < 1e-12
     # 教材例：K=5、T₁=1、T₂=2
@@ -83,9 +87,9 @@ def draw_no_zero():
     ax.axvline(f["asym"], color=fs.SUB, lw=1.1, ls=(0, (4, 3)), zorder=2)
     point(ax, f["Re0"], r"$(-2/3,\,0)$", (-72, 12))
     point(ax, 0, r"$\omega\to\infty$", (8, 10), limit=True)
-    note(ax, r"$\mathrm{Re}\,G\to -K(T_1+T_2)=-3$", (0.03, 0.90))
-    note(ax, r"$\omega_x=1/\sqrt{T_1T_2}=0.707$", (0.03, 0.81))
-    finish(fig, OUT / name, "无零点时只在 ω=1/√(T₁T₂) 穿负实轴，交点 -10/3（K=5 时）。")
+    note(ax, r"$\mathrm{Re}\,G\to -3$", (0.19, 0.91))
+    note(ax, r"$\omega_x=1/\sqrt{2}$", (0.19, 0.82))
+    finish(fig, OUT / name, "正频率支；低频沿左侧虚线延伸至无穷远。", rect=(0.005,0.13,0.995,0.94))
 
 
 def draw_with_zero():
@@ -106,4 +110,5 @@ def draw_with_zero():
 if __name__ == "__main__":
     verify()
     draw_no_zero()
-    draw_with_zero()
+    if os.environ.get("FIGURE_ONLY") != "no-zero":
+        draw_with_zero()

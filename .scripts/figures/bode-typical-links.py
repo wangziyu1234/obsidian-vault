@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# figure: 频域-典型环节-比例Bode.png
 """典型环节伯德图（自控 05-1-2 §5.2）：8 张单图，**统一上下两层**
 （上：对数幅频 L/dB，下：对数相频 φ/°，共用横轴）。
 
@@ -9,6 +9,7 @@
 构建：..\\build.ps1 -File .\\bode-typical-links.py
 """
 import os
+import control as ct
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -34,6 +35,10 @@ def emit(name, title, w, mag, pha, ylim_db, ylim_ph, turn=(), asymptote=None,
     axp.plot(w, pha, color=fs.PHA, linewidth=2.2)
     axm.set_ylim(*ylim_db)
     axp.set_ylim(*ylim_ph)
+    phase_ticks = [-540, -360, -180, -90, 0, 90, 180]
+    if ylim_ph[1] - ylim_ph[0] < 150:
+        phase_ticks += [-45, 45]
+    axp.set_yticks(sorted(t for t in phase_ticks if ylim_ph[0] <= t <= ylim_ph[1]))
     axm.axhline(0, color=fs.SUB, linewidth=0.9, linestyle=(0, (4, 3)))
     axp.axhline(0, color=fs.SUB, linewidth=0.7, linestyle=(0, (1, 4)))
     axp.axhline(-180, color=fs.SUB, linewidth=0.9, linestyle=(0, (4, 3)))
@@ -41,8 +46,9 @@ def emit(name, title, w, mag, pha, ylim_db, ylim_ph, turn=(), asymptote=None,
         wa, La = asymptote
         axm.plot(wa, La, color=fs.INK, linewidth=1.3, linestyle=(0, (6, 4)))
     if note:
-        axm.annotate(note, xy=(0.02, 0.06), xycoords="axes fraction",
-                     color=fs.INK, fontsize=11)
+        fig.text(0.5, 0.025, note, ha="center", fontsize=10)
+    fig.subplots_adjust(left=0.16, right=0.96, top=0.85, bottom=0.15, hspace=0.25)
+    axm.tick_params(labelbottom=False)
     fig.suptitle(title, fontsize=13, y=0.97)
     path = os.path.join(OUT, name)
     fig.savefig(path, dpi=fs.DPI)
@@ -51,9 +57,9 @@ def emit(name, title, w, mag, pha, ylim_db, ylim_ph, turn=(), asymptote=None,
 
 
 # 1 比例 K = 1
-emit("频域-典型环节-比例Bode.png", "比例环节\nK", W,
-     np.full_like(W, 0.0), np.zeros_like(W), (-40, 40), (-180, 180),
-     note="L ≡ 20lgK = 0 dB，φ ≡ 0°")
+emit("频域-典型环节-比例Bode.png", "比例环节（K = 2）\nG(s) = K", W,
+     np.full_like(W, 20*np.log10(2)), np.zeros_like(W), (-40, 40), (-180, 180),
+     note="L = 20lg2 dB；相角恒为 0°")
 
 # 2 积分
 emit("频域-典型环节-积分Bode.png", "积分环节\n1/s", W,
@@ -87,20 +93,20 @@ pha_osc = -np.degrees(np.arctan2(2 * z * np.sqrt(u), 1 - u))
 emit("频域-典型环节-振荡Bode.png", "振荡环节\nωn²/(s²+2ζωn s+ωn²)", W1,
      mag_osc, pha_osc, (-60, 25), (-200, 20), turn=(1,),
      asymptote=([W1[0], 1, W1[-1]], [0, 0, -40]),
-     note="转折频率 ωn = 1：φ = −90°、L = −20lg(2ζ)；本例 ζ = 0.5")
+     note="ωn = 1，ζ = 0.5；转折处相角 −90°，幅值 0 dB")
 
 # 7 二阶微分 ζ = 0.5
 emit("频域-典型环节-二阶微分Bode.png", "二阶微分环节\ns²/ωn²+2ζs/ωn+1", W1,
      -mag_osc, -pha_osc, (-25, 60), (-20, 200), turn=(1,),
      asymptote=([W1[0], 1, W1[-1]], [0, 0, 40]),
-     note="转折频率 ωn = 1：φ = +90°、L = 20lg(2ζ)；本例 ζ = 0.5")
+     note="ωn = 1，ζ = 0.5；转折处相角 +90°，幅值 0 dB")
 
 # 8 延迟 τ = 1：相角 −57.3°·ω 无界，频率轴取到 10 rad/s、纵轴留到 −620°，
 #   曲线全程可见并明显越出 −360°（证明"无相角限位"），不能取到 ω=100 后被裁平
 WD = np.logspace(-1, 1, 1500)
 emit("频域-典型环节-延迟Bode.png", "延迟环节\ne^(−τs)", WD,
      np.zeros_like(WD), -np.degrees(WD), (-40, 40), (-620, 60),
-     note="L ≡ 0 dB；φ = −ωτ(rad)，无相角限位（图中已越过 −360°）")
+     note="τ = 1；幅值恒为 0 dB，相角继续减小而无下界")
 
 # 9 不稳定惯性（非最小相位）G = 1/(1−Ts)，T = 1：幅频与惯性相同、相频反号
 mag_u = -10 * np.log10(1 + W1 ** 2)
@@ -108,7 +114,7 @@ pha_u = np.degrees(np.arctan(W1))
 emit("频域-典型环节-不稳定惯性Bode.png", "不稳定惯性环节（非最小相位）\n1/(1−Ts)", W1,
      mag_u, pha_u, (-40, 10), (-10, 100), turn=(1,),
      asymptote=([W1[0], 1, W1[-1]], [0, 0, -20]),
-     note="幅频与惯性完全相同；相频 +arctan(Tω)：0° → +90°（滞后变超前）")
+     note="T = 1；与惯性幅频相同，相角反号")
 
 # 10 不稳定振荡（非最小相位）ζ = 0.5：幅频与振荡相同、相频反号
 emit("频域-典型环节-不稳定振荡Bode.png",
@@ -116,3 +122,9 @@ emit("频域-典型环节-不稳定振荡Bode.png",
      mag_osc, -pha_osc, (-60, 25), (-20, 200), turn=(1,),
      asymptote=([W1[0], 1, W1[-1]], [0, 0, -40]),
      note="幅频与振荡环节完全相同；相频 0° → +180°；本例 ζ = 0.5")
+
+# Independent library check of the oscillator and unbounded delay phase.
+sys_check=ct.tf([1],[1,1,1])
+z_check=ct.frequency_response(sys_check,W1).frdata.ravel()
+assert np.allclose(20*np.log10(abs(z_check)),mag_osc)
+assert -np.degrees(WD[-1]) < -360

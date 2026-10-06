@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# figure: 频域-图示法-幅相曲线.png
 """三种图示法：3 张单图（05-1-1 §5.1.4）。
 
 同一个 RC 一阶低通 G(s) = 1/(0.5s+1)（教材图5-3/5-7/5-8）分别画成
@@ -19,7 +19,7 @@ import figures_style as fs
 fs.use_style()
 OUT = os.path.join(fs.REPO_ROOT, "附件")
 sys = ct.tf([1], [0.5, 1])
-w = np.logspace(-2, 2, 3000)
+w = np.logspace(-5, 4, 6000)
 r = ct.frequency_response(sys, w)
 G = r.fresp[0, 0, :]
 mag = 20 * np.log10(np.abs(G))
@@ -28,6 +28,10 @@ pha = np.unwrap(np.angle(G)) * 180 / np.pi
 
 def save(fig, name):
     path = os.path.join(OUT, name)
+    if len(fig.axes)==1:
+        fig.subplots_adjust(left=0.16,right=0.95,bottom=0.15,top=0.80)
+    else:
+        fig.subplots_adjust(left=0.16,right=0.96,bottom=0.14,top=0.84,hspace=0.25)
     fig.savefig(path, dpi=fs.DPI)
     plt.close(fig)
     print("saved", path)
@@ -64,7 +68,7 @@ save(fig, "频域-图示法-幅相曲线.png")
 fig, (ax, ax2) = fs.new_bode_axes(figsize=(6.6, 6.2))
 for a in (ax, ax2):
     a.set_xscale("log")
-    a.set_xlim(w[0], w[-1])
+    a.set_xlim(0.01, 100)
     fs.tidy(a)
 ax.plot(w, mag, color=fs.MAG, linewidth=2.2)
 ax2.plot(w, pha, color=fs.PHA, linewidth=2.2)
@@ -78,13 +82,13 @@ ax2.axvline(2, color=fs.SUB, linewidth=0.9, linestyle=(0, (4, 3)))
 # 于是「右上（y 高）」和「右下（y 低）」各有一整条空带可用，再用细引线连回目标点。
 ax.annotate("转折频率 1/T = 2", xy=(2, 5), xytext=(1.15, 5.5),
             color=fs.SUB, fontsize=10.5, ha="right")
-ax.annotate("ω = 2 处 L = −3 dB", xy=(2, -3), xytext=(14, -5),
+ax.annotate("ω = 2 处 L = −3 dB", xy=(2, -3), xytext=(5, 5),
             color=fs.INK, fontsize=10.5, ha="left", va="center",
             arrowprops=dict(arrowstyle="-", linewidth=0.8, color=fs.SUB))
 ax.annotate("−20 dB/dec", xy=(40, -26.0), xytext=(40, -46),
             color=fs.MAG, fontsize=11, ha="center", va="center",
             arrowprops=dict(arrowstyle="-", linewidth=0.8, color=fs.SUB))
-ax2.annotate("ω = 2 处 φ = −45°", xy=(2, -45), xytext=(11, -10),
+ax2.annotate("ω = 2 处 φ = −45°", xy=(2, -45), xytext=(4, -10),
              color=fs.PHA, fontsize=10.5, ha="left", va="center",
              arrowprops=dict(arrowstyle="-", linewidth=0.8, color=fs.SUB))
 fig.suptitle("对数频率特性（伯德图）：上幅频、下相频，共用横轴 lgω", fontsize=13, y=0.97)
@@ -97,9 +101,9 @@ i2 = int(np.argmin(np.abs(w - 2)))
 ax.plot([pha[i2]], [mag[i2]], marker="o", color=fs.PHA, markersize=6)
 ax.annotate("ω = 2：(−45°, −3 dB)", xy=(pha[i2], mag[i2]), xytext=(12, 14),
             textcoords="offset points", color=fs.PHA, fontsize=10.5)
-ax.annotate("ω = 0：(0°, 0 dB)", xy=(0, 0), xytext=(8, -36),
+ax.annotate("ω = 0：(0°, 0 dB)", xy=(0, 0), xytext=(-108, -38),
             textcoords="offset points", color=fs.INK, fontsize=10.5)
-ax.annotate("ω → ∞：(−90°, −∞)", xy=(-90, -60), xytext=(-18, 10),
+ax.annotate("ω → ∞：(−90°, −∞)", xy=(-90, -60), xytext=(22, 10),
             textcoords="offset points", color=fs.INK, fontsize=10.5)
 ax.set_xlim(-100, 10)
 ax.set_ylim(-70, 12)
@@ -114,3 +118,5 @@ ax.set_title("对数幅相曲线（尼科尔斯图）\n横轴 φ、纵轴 L，�
 save(fig, "频域-图示法-尼科尔斯图.png")
 
 print("ω=2 处 mag=%.2f dB, phase=%.2f°" % (mag[i2], pha[i2]))
+
+assert np.allclose(complex(ct.evalfr(sys,2j)), .5-.5j)

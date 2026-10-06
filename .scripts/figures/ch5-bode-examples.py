@@ -25,7 +25,11 @@ OUT = os.path.join(fs.REPO_ROOT, "附件")
 
 
 def save(fig, name):
-    path = os.path.join(OUT, name)
+    selected = os.environ.get('CH5_EXAMPLE_OUTPUT')
+    if selected and name != selected:
+        plt.close(fig)
+        return
+    path = (os.environ.get('FIGURE_OUT') if selected else None) or os.path.join(OUT, name)
     fig.savefig(path, dpi=fs.DPI)
     plt.close(fig)
     print("saved", path)
@@ -99,7 +103,8 @@ sys57 = ct.tf([1, 0], np.polymul([1 / 3.98, 1],
                                  [1 / 50.1 ** 2, 0.408 / 50.1, 1]))
 w = np.logspace(-2, 3, 3000)
 mag, pha = fdata(sys57, w)
-fig, ax, ax2 = bode_axes(w, (-70, 40), (-200, 20), (-180, -90, 0))
+assert 89 < pha[0] < 90 and -181 < pha[-1] < -170
+fig, ax, ax2 = bode_axes(w, (-70, 40), (-200, 100), (-180, -90, 0, 90))
 ax.plot(w, mag, color=fs.MAG, linewidth=2.0)
 ax2.plot(w, pha, color=fs.PHA, linewidth=2.0)
 wa = np.array([1e-2, 3.98, 50.1, 1e3])
@@ -121,7 +126,7 @@ ax.annotate("谐振峰 ≈ 20 dB", xy=(wpk, mpk), xytext=(8, 10),
 ax.annotate("基线 12 dB", xy=(6, 12), xytext=(0, -62), textcoords="offset points",
             color=fs.SUB, fontsize=11,
             arrowprops=dict(arrowstyle="-", lw=0.8, color=fs.SUB))
-ax.set_title("例5-7  实测对数幅频曲线（实线）与渐近线/基线（点线）", pad=8)
+ax.set_title("例5-7：辨识模型与渐近线", pad=8)
 save(fig, "频域-例57-实测幅频辨识.png")
 print("例5-7  峰频 %.2f、峰值 %.2f dB、基线 12.00 dB" % (wpk, mpk))
 
@@ -227,8 +232,12 @@ def example_three(prefix, title, Gs, tmax, wlim, ylim_db, ylim_ph):
 
     t = np.linspace(0, tmax, 4000)
     tt, yy = ct.step_response(Phi, t)
-    info = ct.step_info(Phi)
-    info5 = ct.step_info(Phi, SettlingTimeThreshold=0.05)
+    info = ct.step_info(yy, timepts=tt, final_output=1.0)
+    info5 = ct.step_info(yy, timepts=tt, final_output=1.0, SettlingTimeThreshold=0.05)
+    if prefix.endswith('517'):
+        assert 12.2 < info5['SettlingTime'] < 12.4
+    elif prefix.endswith('518'):
+        assert .0056 < info5['SettlingTime'] < .0058
     fig, ax = single(title + "  单位阶跃响应", "t / s", "c(t)", (6.2, 4.6))
     ax.plot(tt, yy, color=fs.MAG, linewidth=2.2)
     ax.axhline(1, color=fs.SUB, linewidth=0.9, linestyle=(0, (4, 3)))

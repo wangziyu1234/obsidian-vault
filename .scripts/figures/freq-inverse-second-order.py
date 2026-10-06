@@ -20,7 +20,7 @@ fs.use_style()
 
 FAM = ["Microsoft YaHei", "SimHei"]
 K, XI, WN = 10.0, 0.203, 30.0
-WR = 28.77                     # 谐振频率（题给读数）
+WR = WN * np.sqrt(1 - 2 * XI**2)  # Exact peak for the displayed model.
 sys = ct.tf([K * WN ** 2], [1.0, 2 * XI * WN, WN ** 2])
 WC_ASYM = WN * np.sqrt(10)     # 渐近线读数 94.87 rad/s
 
@@ -43,6 +43,10 @@ for _ in range(120):
     else:
         hi = mid
 WC = (lo + hi) / 2
+assert abs(WC - 99.08939923367842) < 1e-9
+assert abs(WR - 28.737150171859422) < 1e-9
+assert abs(abs(at(WC)) - 1) < 1e-12
+assert abs(at(WR)) > max(abs(at(WR*0.999)), abs(at(WR*1.001)))
 
 fig = plt.figure(figsize=(12.6, 5.3))
 gs = fig.add_gridspec(2, 2, width_ratios=[1.32, 1.0], wspace=0.26, hspace=0.34)
@@ -56,7 +60,8 @@ BOX = dict(facecolor="white", edgecolor="none", alpha=0.95, pad=1.2)
 def mark(ax, x, y, text, dx=9, dy=9, color=fs.PHA):
     ax.plot([x], [y], "o", ms=5.5, color=color, zorder=6)
     ax.annotate(text, (x, y), xytext=(dx, dy), textcoords="offset points",
-                fontsize=13, color=color, bbox=BOX, zorder=7)
+                fontsize=13, color=color, bbox=BOX, zorder=7,
+                arrowprops=dict(arrowstyle="-",color=color,lw=0.6))
 
 
 # ---------------- 左：伯德图 ----------------
@@ -73,14 +78,15 @@ ax_m.set_ylabel(r"$L(\omega)$ / dB")
 ax_p.set_ylabel(r"$\varphi(\omega)$ / $^\circ$")
 ax_p.set_xlabel(r"$\omega$ / (rad/s)")
 ax_m.set_ylim(-40, 40)
+ax_m.tick_params(labelbottom=False)
 ax_p.set_ylim(-200, 12)
 ax_p.set_yticks([0, -90, -180])
 ax_m.set_title("对数幅频特性", loc="left", fontsize=12.5, color=fs.SUB, family=FAM)
 ax_p.set_title("对数相频特性", loc="left", fontsize=12.5, color=fs.SUB, family=FAM)
 
-mark(ax_m, WR, 20 * np.log10(abs(at(WR))), "A", dx=-16, dy=8)
-mark(ax_m, 50.0, 20 * np.log10(abs(at(50.0))), "C", dx=8, dy=-18)
-mark(ax_m, WC, 0.0, "D", dx=6, dy=-20)
+mark(ax_m, WR, 20 * np.log10(abs(at(WR))), "A", dx=-16, dy=4)
+mark(ax_m, 50.0, 20 * np.log10(abs(at(50.0))), "C", dx=12, dy=12)
+mark(ax_m, WC, 0.0, "D", dx=12, dy=12)
 mark(ax_p, WN, -90.0, "B", dx=9, dy=-16)
 
 # ---------------- 右：奈氏图 ----------------
@@ -95,7 +101,7 @@ ax_n.annotate(r"$K=10$", (K, 0), xytext=(7, 6), textcoords="offset points",
 ax_n.annotate("unit circle", (0.62, 0.78), xytext=(6, 4), textcoords="offset points",
               fontsize=11, color=fs.SUB, bbox=BOX, zorder=7, family=FAM)
 
-for w, key, dx, dy in [(WR, "A", 8, -20), (WN, "B", -20, -20), (50.0, "C", -22, 6), (WC, "D", -22, 6)]:
+for w, key, dx, dy in [(WR, "A", 8, -20), (WN, "B", -20, -20), (50.0, "C", -22, 32), (WC, "D", -22, 6)]:
     z = at(w)
     mark(ax_n, z.real, z.imag, key, dx=dx, dy=dy)
 
@@ -114,7 +120,7 @@ ax_n.set_title("奈氏图（正频率支）", loc="left", fontsize=12.5, color=f
 
 fig.suptitle(r"$G(s)=\frac{9000}{s^2+12.18s+900}$", fontsize=15.5, y=0.975)
 fig.text(0.5, 0.022,
-         "A 谐振频率 ωr=28.77（幅频峰）  ·  B ωn=30（相角 −90°）  ·  C 下降段 ω=50  ·  "
+         "A 谐振频率 ωr≈28.74（幅频峰）  ·  B ωn=30（相角 −90°）  ·  C 下降段 ω=50  ·  "
          "D 截止频率 ωc（精确 99.1，渐近线读数 94.9）",
          ha="center", va="bottom", fontsize=10.5, color=fs.SUB, family=FAM)
 
