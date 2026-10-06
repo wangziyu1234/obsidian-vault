@@ -1,0 +1,52 @@
+% figure: 现控1-16-模拟结构图.png
+% Parallel integrator realization: xdot = diag(-1,-2,-3)x + (1,-2,3)'u.
+\documentclass[border=10pt]{standalone}
+\usepackage{fontspec}
+\setmainfont{Cambria}
+\usepackage{unicode-math}
+\setmathfont{Cambria Math}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
+\begin{document}
+\begin{tikzpicture}[>=Stealth,line width=0.85pt,
+ b/.style={draw,minimum width=0.8cm,minimum height=0.65cm,fill=blue!5},
+ sum/.style={draw,circle,inner sep=1pt,minimum size=0.4cm},
+ lab/.style={fill=white,inner sep=2pt},dot/.style={circle,fill,inner sep=1.4pt}]
+\node[b] (g1) at (-0.7,2.4) {$1$};
+\node[b] (g2) at (-0.7,0) {$-2$};
+\node[b] (g3) at (-0.7,-2.4) {$3$};
+\node[sum] (s1) at (1,2.4) {$+$};
+\node[sum] (s2) at (1,0) {$+$};
+\node[sum] (s3) at (1,-2.4) {$+$};
+\node[b] (i1) at (2.8,2.4) {$\int$};
+\node[b] (i2) at (2.8,0) {$\int$};
+\node[b] (i3) at (2.8,-2.4) {$\int$};
+\node[b] (f1) at (2.8,1.35) {$-1$};
+\node[b] (f2) at (2.8,-1.05) {$-2$};
+\node[b] (f3) at (2.8,-3.45) {$-3$};
+\node[sum] (o) at (6,0) {$+$};
+\draw[->] (-3.2,0) -- node[lab,above] {$u$} (g2.west);
+\node[dot] at (-2,0) {};
+\draw[->] (-2,0) -- (-2,2.4) -- (g1.west);
+\draw[->] (-2,0) -- (-2,-2.4) -- (g3.west);
+\draw[->] (g1.east) -- (s1.west);
+\draw[->] (g2.east) -- (s2.west);
+\draw[->] (g3.east) -- (s3.west);
+\draw[->] (s1.east) -- node[lab,above] {$\dot x_1$} (i1.west);
+\draw[->] (s2.east) -- node[lab,above] {$\dot x_2$} (i2.west);
+\draw[->] (s3.east) -- node[lab,above] {$\dot x_3$} (i3.west);
+\draw[->] (i1.east) -- node[lab,above,pos=0.38] {$x_1$} (6,2.4) -- (o.north);
+\draw[->] (i2.east) -- node[lab,above,pos=0.38] {$x_2$} (o.west);
+\draw[->] (i3.east) -- node[lab,above,pos=0.38] {$x_3$} (6,-2.4) -- (o.south);
+\node[dot] at (4.5,2.4) {};
+\node[dot] at (4.5,0) {};
+\node[dot] at (4.5,-2.4) {};
+\draw[->] (4.5,2.4) -- (4.5,1.35) -- (f1.east);
+\draw[->] (f1.west) -- (1,1.35) -- (s1.south);
+\draw[->] (4.5,0) -- (4.5,-1.05) -- (f2.east);
+\draw[->] (f2.west) -- (1,-1.05) -- (s2.south);
+\draw[->] (4.5,-2.4) -- (4.5,-3.45) -- (f3.east);
+\draw[->] (f3.west) -- (1,-3.45) -- (s3.south);
+\draw[->] (o.east) -- node[lab,above] {$y$} (7.35,0);
+\end{tikzpicture}
+\end{document}
