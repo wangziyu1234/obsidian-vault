@@ -79,6 +79,8 @@ UNICODE_MAP = {
 }
 
 RE_ITEM = re.compile(r"^\*\*\d+\.\s*[（(]")
+RE_SUBHEADING = re.compile(r"^#{3,6}\s+(.+)$")
+RE_NUMBERED_TITLE = re.compile(r"^\d+\.\s*[（(]")
 RE_CALLOUT = re.compile(r"^>\s*\[!([A-Za-z]+)\]\s*(.*)$")
 RE_WIKI = re.compile(r"\[\[([^\[\]|]+)(?:\|([^\[\]]+))?\]\]")
 RE_MATH_INLINE = re.compile(r"\$\$[^$\n]*\$\$|\$[^$\n]*\$")
@@ -164,6 +166,19 @@ def convert(md_text):
             i += 1
             continue
 
+        # --- H3-H6：题号标题沿用每题分页，其余作为小标题 ---
+        subheading = RE_SUBHEADING.match(line)
+        if subheading:
+            title = subheading.group(1).replace("✏️", "").replace("✏", "").strip()
+            if RE_NUMBERED_TITLE.match(title):
+                line = "**%s**" % title
+            else:
+                out.append(r"\Needspace{6\baselineskip}")
+                out.append(r"{\bfseries %s\par}" % inline(title))
+                prev_section = False
+                i += 1
+                continue
+
         # --- `>` 块：连续 `>` 行合为一块 ---
         if line.startswith(">"):
             callout = RE_CALLOUT.match(line)
@@ -180,15 +195,20 @@ def convert(md_text):
                 if cont.startswith(" "):
                     cont = cont[1:]
                 if disp:
-                    # `$$` 块内部原样透传，防止 `_` `%` `&` 被误转义
-                    body.append(cont)
+                    # 将整个公式保存在同一段，避免输出段间空行时拆开 aligned。
+                    # 数学内容原样透传，防止 `_` `%` `&` 被误转义。
+                    if cont.strip():
+                        body[-1] += "\r\n" + cont
                     if cont.strip() == "$$":
                         disp = False
                 elif cont.strip() == "$$":
                     body.append(cont)
                     disp = True
                 elif cont.strip():
-                    body.append(inline(cont))
+                    paragraph = inline(cont)
+                    if is_heading_line(cont):
+                        paragraph = r"\Needspace{9\baselineskip}" + paragraph
+                    body.append(paragraph)
                 i += 1
             if callout is not None:
                 # callout：`\Needspace{4\baselineskip}` + 加粗小标题 + 正文段落
