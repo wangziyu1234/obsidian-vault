@@ -7,6 +7,7 @@ unstable inertia) do to the shape and to the continuous end phase.
 Every branch and crossing used in the captions is asserted below.
 
 Build: .\\build.ps1 -File .\\zero-combination-nyquist.py
+FIGURE_ONLY may select output names separated by semicolons.
 """
 from __future__ import annotations
 import os
@@ -22,6 +23,7 @@ from _nyquist_style import canvas, curve, response, point, note, finish, BOX
 s = ct.tf("s")
 W = np.geomspace(1e-4, 1e4, 20000)
 OUT = Path(os.environ.get("FIGURE_OUT", fs.ATTACH_DIR / "unused.png")).parent
+ONLY = set(filter(None, os.environ.get("FIGURE_ONLY", "").split(";")))
 
 # --- 0 型：两惯性 + 一个实零点（τ = 0.5 < T₁ + T₂）------------------------
 TAU, T1, T2 = 0.5, 1.0, 2.0
@@ -132,11 +134,15 @@ def verify():
         assert abs(a.real - b.real) < 40 * omega**2
     assert abs(value_at(G0L, 1).imag + value_at(G0R, 1).imag) > 0.05
 
-    # Ⅰ 型复零点对（n = 3）：左对 -270°→-90°，右对 -90°→-450°（复零点按二阶计）
-    # 左对的低频端与右对的高频端在同一分支上，故用 branch_phase 指定参考点
-    assert abs(branch_phase(GIL, -270, W[-1])[-1] + 90) < 0.5     # 左对高频端 -90°
-    assert abs(branch_phase(GIR, -270, W[0])[0] + 90) < 0.5       # 右对低频端 -90°
+    # Both type-I branches start at -90 degrees; unwrap from that same reference.
+    check_phase(GIL, -90, -90)
     check_phase(GIR, -90, -450)
+    # G(s) = 1/s + (a - 3) + O(s), where a = +/-1/4.
+    # Thus Re G(jw) tends to -11/4 or -13/4, and w Im G(jw) tends to -1.
+    for system, constant in ((GIL, -11 / 4), (GIR, -13 / 4)):
+        low = value_at(system, 1e-6)
+        np.testing.assert_allclose(low.real, constant, rtol=1e-10)
+        np.testing.assert_allclose(1e-6 * low.imag, -1, rtol=1e-10)
     # 两对零点在 ω_z 处相角恰为 ±90°，整体值可用解析式复算
     for system, sign in [(GIL, +1), (GIR, -1)]:
         num = (1j) ** 2 + sign * 2 * ZETA * 1j + 1
@@ -191,18 +197,22 @@ def draw_complex_pair():
                      r"$G_L=\frac{(s/4)^2+0.25s+1}{s(1+s)(1+2s)},\quad"
                      r"G_R=\frac{(s/4)^2-0.25s+1}{s(1+s)(1+2s)}$",
                      (-4.6, 1.1), (-5.6, 0.72), figsize=(7.0, 6.0))
-    curve(ax, GIL, W, (0.35, 1.4), fs.MAG, "左复零点对：−270°→−90°")
+    curve(ax, GIL, W, (0.35, 1.4), fs.MAG, "左复零点对：−90°→−90°")
     curve(ax, GIR, W, (0.35, 1.4), fs.PHA, "右复零点对：−90°→−450°")
-    point(ax, ZL_CROSS, "跨负实轴", (-40, 26))
+    point(ax, ZL_CROSS, "跨负实轴", (-40, 26), color=fs.MAG)
+    # Draw only the low-frequency parts of the two vertical asymptotes.
+    for constant, color in ((-11 / 4, fs.MAG), (-13 / 4, fs.PHA)):
+        ax.plot([constant, constant], [-5.6, -1.7], "--",
+                color=color, lw=0.9, alpha=0.65, zorder=2)
     point(ax, 0, r"$\omega\to\infty$", (8, 10), limit=True)
     # 两条曲线绕的圈几乎占满坐标轴，任何够宽的框都会压住低频竖渐近线或纵轴；
     # 而 set_aspect("equal") 又把坐标轴压到画布中间（左右各留约 1/4 空白），
     # 故放弃图例（改在图注里按颜色点名），说明块写到坐标轴右侧的那片画布留白里。
-    fig.text(0.985, 0.50, "复零点对\n按二阶计\nΔm_eff = ±2", ha="right", va="center",
+    fig.text(0.985, 0.50, "起始相角\n同为 −90°\n\nω → 0⁺ 时\nIm → −∞", ha="right", va="center",
              fontsize=10.5, color=fs.SUB, bbox=BOX)
     finish(fig, OUT / name,
-           "深蓝：左复零点对 −270°→−90°；赭红：右复零点对 −90°→−450°；"
-           "低频竖渐近线同为 −K(T₁+T₂) = −3。")
+           "深蓝：左复零点对，连续相角 −90°→−90°，低频 Re → −11/4。\n"
+           "赭红：右复零点对，连续相角 −90°→−450°，低频 Re → −13/4。")
 
 
 def draw_out_of_table():
@@ -234,8 +244,16 @@ def draw_unstable_inertia():
 
 
 if __name__ == "__main__":
+    figures = {
+        "频域-幅相-零点组合-0型左右零点.png": draw_zero_pair,
+        "频域-幅相-零点组合-Ⅰ型复零点对.png": draw_complex_pair,
+        "频域-幅相-零点组合-一阶全通.png": draw_out_of_table,
+        "频域-幅相-零点组合-不稳定惯性.png": draw_unstable_inertia,
+    }
+    unknown = ONLY - figures.keys()
+    if unknown:
+        raise ValueError(f"Unknown FIGURE_ONLY selection: {sorted(unknown)}")
     verify()
-    draw_zero_pair()
-    draw_complex_pair()
-    draw_out_of_table()
-    draw_unstable_inertia()
+    for name, draw in figures.items():
+        if not ONLY or name in ONLY:
+            draw()
