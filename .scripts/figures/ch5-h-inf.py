@@ -1,5 +1,5 @@
 # figure: 自控-频域-h无穷的判据.png
-"""05-4-3 §5.4.7 配图：相频够不到 −180° ⟺ 无 ωx ⟺ h = ∞。
+"""05-4-3 §5.4.7 配图：有限正频率无负实轴交点时，通常记 h = ∞。
 
 (a) 三种「够不到」的相频（都是最小相位、相角单调的标准形式）：
       一阶   G = 5/(0.5s+1)        φ: 0° → −90°
@@ -7,7 +7,7 @@
       0 型二阶 G = 5/(s²+0.6s+1)    φ: 0° → −180°（只在 ω→∞ 处逼近）
     三条都**没有有限交点**，$h=\\infty$。
 
-(b) 两个反例（相角被零点或延迟破坏单调性）：
+(b) 两个反例（零点造成相角凹陷，延迟使相角持续下降）：
       最小相位带零点 G = (s+1)²/[s(s+0.01)²]（ν=1、n−m=1，比二阶还"轻"）
           —— 极点靠低频、零点靠高频，相角被凹到 −247°，两个交点
       含延迟         G = e^{−0.5s}/[s(s+1)]              —— 相角无下界，交点无穷多个
@@ -110,7 +110,7 @@ def draw():
     ax.legend(loc="lower left", bbox_to_anchor=(0.012, 0.010), fontsize=10.5,
               handlelength=1.5, borderpad=0.6, labelspacing=0.55, borderaxespad=0.35,
               frameon=True, facecolor="white", edgecolor="none", framealpha=0.95)
-    ax.set_title("(a) 相角够不到 −180°：无 ωx，h = ∞（一阶、二阶最小相位系统都是这样）",
+    ax.set_title("(a) 常见正参数模型：无负实轴交点，h = ∞",
                  fontsize=12.5, pad=7)
     ax.text(0.00075, -170, "−180° 线", color=fs.INK, fontsize=10.5, ha="left",
             va="bottom", zorder=9,
@@ -139,12 +139,11 @@ def draw():
                  bbox=dict(facecolor="white", edgecolor="none", pad=1.4),
                  arrowprops=dict(arrowstyle="-", color=fs.SUB, lw=0.8,
                                  shrinkA=3.0, shrinkB=3.0))
-    ax2.set_title("(b) 反例：带零点或延迟后相角不再单调 —— 穿过 −180°，h 变有限",
+    ax2.set_title("(b) 零点相角凹陷与延迟相角下降",
                   fontsize=12.5, pad=7)
 
-    fig.suptitle("相频够不到 −180° ⟺ 无穿越频率 ⟺ h = ∞", fontsize=14, y=0.972)
-    fig.text(0.5, 0.030, "判据只对「积分＋一阶惯性」这类相角单调的形式成立；"
-                         "带零点、带延迟时老实画相频（§5.4.7）",
+    fig.suptitle("无负实轴交点时的幅值裕度", fontsize=14, y=0.972)
+    fig.text(0.5, 0.030, "检查全部有限正频率；h = ∞ 不能代替闭环判稳（§5.4.7）",
              ha="center", va="bottom", fontsize=10.5, color=fs.SUB)
     fs.save(fig, "自控-频域-h无穷的判据.png")
 
