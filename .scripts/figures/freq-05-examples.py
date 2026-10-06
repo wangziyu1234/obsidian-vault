@@ -7,6 +7,7 @@ Chinese labels sit inside $\\mathrm{...}$ (see figures_style.use_style).
 """
 from __future__ import annotations
 
+import os
 import control as ct
 import numpy as np
 
@@ -148,25 +149,47 @@ def fig_bode_64():
     """串联超前校正前后：L0 与 L0*(4Gc)。"""
     s = ct.tf("s")
     g0 = 10 / (s * (s + 1))
-    gc = (1 + 0.456 * s) / (1 + 0.114 * s)
+    compensated_gc = (1 + 0.456 * s) / (1 + 0.114 * s)
+    corrected = compensated_gc * g0
+    _, exact_gamma, _, exact_wc = ct.margin(corrected)
+    assert 4.42 < exact_wc < 4.44 and 49.5 < exact_gamma < 49.7
+    assert abs(ct.dcgain(compensated_gc) - 1) < 1e-12
     fig, (axm, axp) = bode_axes()
     add_bode(axm, axp, g0, fs.MAG, r"$\mathrm{校正前}\ L_0$")
-    add_bode(axm, axp, 4 * gc * g0, fs.PHA, r"$\mathrm{校正后}\ L_0\cdot 4G_c$",
+    add_bode(axm, axp, corrected, fs.PHA, r"$\mathrm{校正后}\ L_0\cdot 4G_c$",
              linestyle=(0, (6, 3)))
-    wc0, gam0 = mark_gamma(axm, axp, g0, fs.MAG, note_xy=(-96, 12))
-    wc1, gam1 = mark_gamma(axm, axp, 4 * gc * g0, fs.PHA, note_xy=(-108, -20))
+    _, gam0, _, wc0 = ct.margin(g0)
+    wc1, gam1 = exact_wc, exact_gamma
+    for wc, gamma, colour, label_y in (
+            (wc0, gam0, fs.MAG, -191),
+            (wc1, gam1, fs.PHA, -207)):
+        axp.plot(wc, gamma - 180, "o", color=colour, ms=6, zorder=7)
+        for ax in (axm, axp):
+            ax.axvline(wc, color=colour, lw=0.9, ls=(0, (4, 4)), alpha=0.8)
+        axp.text(0.025, label_y,
+                 rf"$\omega_c={wc:.2f}$, $\gamma={gamma:.1f}^\circ$",
+                 fontsize=10, color=colour,
+                 bbox=dict(facecolor="white", edgecolor="none", pad=1.5))
     axm.axhline(0, color=fs.SUB, lw=0.8)
     axp.axhline(-180, color=fs.SUB, lw=0.8, ls=(0, (4, 4)))
     axm.legend(loc="lower left", fontsize=10, framealpha=0.95,
                facecolor="white", edgecolor=fs.GRID)
-    save(fig, "校正-例64超前.png",
-         r"$\mathrm{例6-4}\ \ \mathrm{串联超前校正前后}$")
+    axm.set_xlim(0.01, 100)
+    axm.set_ylim(-70, 70)
+    axp.set_ylim(-215, -80)
+    axm.tick_params(labelbottom=False)
+    fig.suptitle(r"$\mathrm{例6-4}\ \ \mathrm{串联超前校正前后}$",
+                 fontsize=13, y=0.97)
+    fig.subplots_adjust(left=0.12, right=0.97, top=0.90, bottom=0.11, hspace=0.14)
+    fig.savefig(str(fs.ATTACH_DIR / "校正-例64超前.png"), dpi=fs.DPI)
+    plt.close(fig)
     print(f"  校正前: wc={wc0:.2f}, gamma={gam0:.1f} deg")
     print(f"  校正后: wc={wc1:.2f}, gamma={gam1:.1f} deg")
 
 
 if __name__ == "__main__":
-    fig_nyquist_512()
-    fig_bode_512()
-    fig_bode_515()
+    if os.environ.get("FIGURE_ONLY") != "64":
+        fig_nyquist_512()
+        fig_bode_512()
+        fig_bode_515()
     fig_bode_64()
