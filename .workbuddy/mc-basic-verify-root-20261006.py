@@ -1,0 +1,58 @@
+import sympy as S
+M=S.Matrix
+t,s,z,a,b,q=S.symbols('t s z a b q', real=True)
+R=S.Rational
+checks=[]
+def eq(name,left,right):
+    d=left-right
+    ok=all(S.simplify(v)==0 for v in d) if isinstance(d,S.MatrixBase) else S.simplify(d)==0
+    assert ok,(name,d)
+    checks.append(name)
+def phi(name,A,P):
+    eq(name+' initial',P.subs(t,0),S.eye(A.rows))
+    eq(name+' ode',P.diff(t),A*P)
+phi('2-1',M([[-3,4],[-1,1]]),S.exp(-t)*M([[1-2*t,4*t],[-t,1+2*t]]))
+A=M([[-1,-2,6],[-1,0,3],[-1,-1,4]])
+phi('2-2',A,S.exp(t)*(S.eye(3)+(A-S.eye(3))*t))
+A=M([[-5,-1],[6,0]]); B=M([0,2]); C=M([[0,1]])
+eq('2-3 transfer',(C*(s*S.eye(2)-A).inv()*B)[0],2*(s+5)/((s+2)*(s+3)))
+phi('2-3',A,M([[-2*S.exp(-2*t)+3*S.exp(-3*t),-S.exp(-2*t)+S.exp(-3*t)],[6*S.exp(-2*t)-6*S.exp(-3*t),3*S.exp(-2*t)-2*S.exp(-3*t)]]))
+eq('2-3 controllability',B.row_join(A*B),M([[0,-2],[2,0]]))
+eq('2-3 observability',C.col_join(C*A),M([[0,1],[6,0]]))
+A=M([[1,2],[2,1]]); X=M([R(2,3)*(S.exp(3*t)-1)+S.exp(-t),R(2,3)*S.exp(3*t)+R(1,3)-S.exp(-t)])
+eq('2-4 ode',X.diff(t),A*X+M([0,1]));eq('2-4 initial',X.subs(t,0),M([1,0]))
+phi('2-5 distinct',M([[a,1],[0,b]]),M([[S.exp(a*t),(S.exp(a*t)-S.exp(b*t))/(a-b)],[0,S.exp(b*t)]]))
+phi('2-5 repeated',M([[a,1],[0,a]]),S.exp(a*t)*M([[1,t],[0,1]]))
+A=M([[-1,0],[2,-3]]); X=M([S.exp(-t),R(1,3)+S.exp(-t)-S.exp(3-3*t)/3])
+phi('2-6',A,M([[S.exp(-t),0],[S.exp(-t)-S.exp(-3*t),S.exp(-3*t)]]))
+eq('2-6 after step',X.diff(t),A*X+M([0,1]));eq('2-6 continuity',X.subs(t,1),M([S.exp(-1),S.exp(-1)]))
+A=M([[0,1],[2,-1]]); P=M([[S.exp(-2*t)+2*S.exp(t),-S.exp(-2*t)+S.exp(t)],[-2*S.exp(-2*t)+2*S.exp(t),2*S.exp(-2*t)+S.exp(t)]])/3
+phi('2-7',A,P);eq('2-7 reverse',P*M([-S.exp(2*t)+3*S.exp(-t),2*S.exp(2*t)+3*S.exp(-t)]),M([2,5]))
+X=M([-2,2])*S.exp(-R(3,2)*t)
+eq('2-8 zero output dynamics',X.diff(t),M([[-1,0],[0,-2]])*X+M([1,1])*S.exp(-R(3,2)*t))
+G=M([[1,(1-q)/2],[0,q]]); H=M([q/4,(1-q)/2]); k1,k2=S.symbols('k1 k2')
+f=(z*S.eye(2)-G+H*M([[k1,k2]])).det().expand()
+eq('2-9 polynomial',f,z**2-(1+q-q*k1/4-(1-q)*k2/2)*z+q+(1-2*q)*k1/4-(1-q)*k2/2)
+K=M([[R(29,25)/(1-q), q*(71-100*q)/(50*(1-q)**2)]])
+eq('2-9 exact placement',(z*S.eye(2)-G+H*K).det(),z*z-z+R(29,100))
+A=M([[0,4],[-4,0]]);P=M([[S.cos(4*t),S.sin(4*t)],[-S.sin(4*t),S.cos(4*t)]])
+phi('2-10',A,P);H=M([1-S.cos(4*t),S.sin(4*t)])
+eq('2-10 controllability',H.row_join(P*H).det(),2*S.sin(4*t)*(S.cos(4*t)-1))
+A=M([[0,1],[-2,-3]]);P=M([[2*S.exp(-t)-S.exp(-2*t),S.exp(-t)-S.exp(-2*t)],[-2*S.exp(-t)+2*S.exp(-2*t),-S.exp(-t)+2*S.exp(-2*t)]])
+phi('2-11',A,P);eq('2-11 step input',M([1-S.exp(-t),-1+S.exp(-t)]).diff(t)-A*M([1-S.exp(-t),-1+S.exp(-t)]),M([1,-1]))
+eq('2-11 discrete',P.subs(t,S.log(2)),M([[R(3,4),R(1,4)],[-R(1,2),0]]))
+eq('2-12 discrete input',S.integrate(M([(1-S.exp(-2*t))/2,S.exp(-2*t)]),(t,0,1)),M([(1+S.exp(-2))/4,(1-S.exp(-2))/2]))
+for name,A,P in [('4-9',M([[0,1],[-1,-1]]),M([[R(3,2),R(1,2)],[R(1,2),1]])),('4-11',M([[-1,0],[1,-2]]),M([[R(7,12),R(1,12)],[R(1,12),R(1,4)]])),('4-13',M([[-2,1],[0,-2]]),M([[R(1,4),R(1,16)],[R(1,16),R(9,32)]])),('4-14',M([[2,2],[-3,5]]),M([[-R(25,112),R(1,56)],[R(1,56),-R(3,28)]]))]:
+    eq(name+' Lyapunov',A.T*P+P*A,-S.eye(2))
+x1,x2=S.symbols('x1 x2',real=True)
+eq('4-6 unique equilibrium substitution',(-2*x1-6*x2-2*x2**3).subs(x1,-x2/6),-x2*(R(17,3)+2*x2*x2))
+eq('4-8 V derivative',2*x1*(-2*x1+2*x2**4)-8*x2**8,-4*(x1-x2**4/2)**2-7*x2**8)
+A=M([[a,1],[0,b]]);P=M([[-1/(2*a),1/(2*a*(a+b))],[1/(2*a*(a+b)),-(a*a+a*b+1)/(2*a*b*(a+b))]])
+eq('4-12 Lyapunov',A.T*P+P*A,-S.eye(2));eq('4-12 determinant',P.det(),((a+b)**2+1)/(4*a*b*(a+b)**2))
+F=M([[1,-1],[2,0]]);P=M([[-R(15,8),R(5,8)],[R(5,8),-R(7,8)]])
+eq('4-15 subsystem',F.T*P*F-P,-S.eye(2))
+Q=M([[12,1-2*a],[1-2*a,12*a]])
+eq('4-19 derivative',2*x1*(-6*x1-x2)+2*a*x2*(2*x1-6*x2-2*x2**3),-(M([[x1,x2]])*Q*M([x1,x2]))[0]-4*a*x2**4)
+eq('4-19 determinant',Q.det(),-4*a*a+148*a-1)
+for v in [(37-6*S.sqrt(38))/2,(37+6*S.sqrt(38))/2]:eq('4-19 endpoint',Q.det().subs(a,v),0)
+print('PASS',len(checks),'exact symbolic checks')

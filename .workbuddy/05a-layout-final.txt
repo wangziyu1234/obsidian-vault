@@ -1,0 +1,69 @@
+
+===== bode-typical-links.py =====
+saved D:\obsidian\附件\频域-典型环节-比例Bode.png
+saved D:\obsidian\附件\频域-典型环节-积分Bode.png
+saved D:\obsidian\附件\频域-典型环节-微分Bode.png
+saved D:\obsidian\附件\频域-典型环节-惯性Bode.png
+saved D:\obsidian\附件\频域-典型环节-一阶微分Bode.png
+saved D:\obsidian\附件\频域-典型环节-振荡Bode.png
+saved D:\obsidian\附件\频域-典型环节-二阶微分Bode.png
+saved D:\obsidian\附件\频域-典型环节-延迟Bode.png
+saved D:\obsidian\附件\频域-典型环节-不稳定惯性Bode.png
+saved D:\obsidian\附件\频域-典型环节-不稳定振荡Bode.png
+  频域-典型环节-比例Bode.png: 文字 18 个，问题 0 处，画布 640x620px
+  频域-典型环节-积分Bode.png: 文字 18 个，问题 0 处，画布 640x620px
+  频域-典型环节-微分Bode.png: 文字 18 个，问题 0 处，画布 640x620px
+  频域-典型环节-惯性Bode.png: 文字 19 个，问题 0 处，画布 640x620px
+  频域-典型环节-一阶微分Bode.png: 文字 19 个，问题 0 处，画布 640x620px
+  频域-典型环节-振荡Bode.png: 文字 18 个，问题 0 处，画布 640x620px
+  频域-典型环节-二阶微分Bode.png: 文字 18 个，问题 0 处，画布 640x620px
+  频域-典型环节-延迟Bode.png: 文字 17 个，问题 0 处，画布 640x620px
+  频域-典型环节-不稳定惯性Bode.png: 文字 19 个，问题 0 处，画布 640x620px
+  频域-典型环节-不稳定振荡Bode.png: 文字 18 个，问题 0 处，画布 640x620px
+
+===== ch5-typical-links-nyquist.py =====
+saved D:\obsidian\附件\频域-典型环节-比例Nyquist.png
+saved D:\obsidian\附件\频域-典型环节-积分Nyquist.png
+saved D:\obsidian\附件\频域-典型环节-微分Nyquist.png
+saved D:\obsidian\附件\频域-典型环节-惯性Nyquist.png
+saved D:\obsidian\附件\频域-典型环节-一阶微分Nyquist.png
+saved D:\obsidian\附件\频域-典型环节-振荡Nyquist.png
+saved D:\obsidian\附件\频域-典型环节-二阶微分Nyquist.png
+saved D:\obsidian\附件\频域-典型环节-不稳定惯性Nyquist.png
+saved D:\obsidian\附件\频域-典型环节-不稳定振荡Nyquist.png
+saved D:\obsidian\附件\频域-典型环节-延迟Nyquist.png
+  频域-典型环节-比例Nyquist.png: 文字 15 个，问题 0 处，画布 630x530px
+  频域-典型环节-积分Nyquist.png: 文字 15 个，问题 0 处，画布 630x530px
+  频域-典型环节-微分Nyquist.png: 文字 15 个，问题 0 处，画布 630x530px
+  频域-典型环节-惯性Nyquist.png: 文字 15 个，问题 0 处，画布 630x530px
+  频域-典型环节-一阶微分Nyquist.png: 文字 15 个，问题 0 处，画布 630x530px
+  频域-典型环节-振荡Nyquist.png: 文字 15 个，问题 0 处，画布 630x530px
+  频域-典型环节-二阶微分Nyquist.png: 文字 15 个，问题 0 处，画布 630x530px
+  频域-典型环节-不稳定惯性Nyquist.png: 文字 15 个，问题 0 处，画布 630x530px
+  频域-典型环节-不稳定振荡Nyquist.png: 文字 15 个，问题 0 处，画布 630x530px
+  频域-典型环节-延迟Nyquist.png: 文字 16 个，问题 0 处，画布 630x530px
+
+===== ch5-three-plots.py =====
+saved D:\obsidian\附件\频域-图示法-幅相曲线.png
+saved D:\obsidian\附件\频域-图示法-伯德图.png
+saved D:\obsidian\附件\频域-图示法-尼科尔斯图.png
+ω=2 处 mag=-3.00 dB, phase=-44.96°
+  频域-图示法-幅相曲线.png: 文字 18 个，问题 0 处，画布 580x480px
+  频域-图示法-伯德图.png: 文字 20 个，问题 0 处，画布 660x620px
+  频域-图示法-尼科尔斯图.png: 文字 16 个，问题 0 处，画布 580x480px
+
+===== ch5-vector-method.py =====
+saved D:\obsidian\附件\频域-矢量法-s平面.png
+saved D:\obsidian\附件\频域-惯性环节-描点.png
+ω=0     |G|=1.0000  ∠=0.00°  1.0000+0.0000j
+ω=0.6   |G|=0.9578  ∠=-16.70°  0.9174-0.2752j
+ω=1     |G|=0.8944  ∠=-26.57°  0.8000-0.4000j
+ω=2     |G|=0.7071  ∠=-45.00°  0.5000-0.5000j
+ω=4     |G|=0.4472  ∠=-63.43°  0.2000-0.4000j
+ω=8     |G|=0.2425  ∠=-75.96°  0.0588-0.2353j
+  频域-矢量法-s平面.png: 文字 20 个，问题 0 处，画布 640x560px
+  [压线 6点] ax0.text[4]:'ω = 4'  ×  ax0.line[1]-  框内像素 (177,164)-(209,177)
+  频域-惯性环节-描点.png: 文字 23 个，问题 1 处，画布 640x540px
+
+===== freq-inverse-bode-first-order.py =====
+  频域-反求-一阶Bode.png: 文字 18 个，问题 0 处，画布 780x560px

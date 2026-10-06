@@ -1,0 +1,86 @@
+[
+  {
+    "question": "8-34",
+    "pdf_page": 166,
+    "page_size": [
+      595.0,
+      842.0
+    ],
+    "rect_points": [
+      215,
+      170,
+      532,
+      295
+    ],
+    "rect_normalized": [
+      0.36134453781512604,
+      0.20190023752969122,
+      0.8941176470588236,
+      0.3503562945368171
+    ],
+    "png": "D:\\obsidian\\.workbuddy\\c8-resume-crops\\8-34-structure.png"
+  },
+  {
+    "question": "8-35",
+    "pdf_page": 166,
+    "page_size": [
+      595.0,
+      842.0
+    ],
+    "rect_points": [
+      252,
+      459,
+      532,
+      575
+    ],
+    "rect_normalized": [
+      0.4235294117647059,
+      0.5451306413301663,
+      0.8941176470588236,
+      0.6828978622327792
+    ],
+    "png": "D:\\obsidian\\.workbuddy\\c8-resume-crops\\8-35-structure.png"
+  },
+  {
+    "question": "8-36",
+    "pdf_page": 167,
+    "page_size": [
+      595.0,
+      842.0
+    ],
+    "rect_points": [
+      207,
+      154,
+      513,
+      293
+    ],
+    "rect_normalized": [
+      0.34789915966386553,
+      0.1828978622327791,
+      0.8621848739495799,
+      0.3479809976247031
+    ],
+    "png": "D:\\obsidian\\.workbuddy\\c8-resume-crops\\8-36-structure.png"
+  },
+  {
+    "question": "8-37",
+    "pdf_page": 167,
+    "page_size": [
+      595.0,
+      842.0
+    ],
+    "rect_points": [
+      188,
+      562,
+      514,
+      696
+    ],
+    "rect_normalized": [
+      0.31596638655462184,
+      0.667458432304038,
+      0.8638655462184874,
+      0.8266033254156769
+    ],
+    "png": "D:\\obsidian\\.workbuddy\\c8-resume-crops\\8-37-structure.png"
+  }
+]

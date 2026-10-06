@@ -1,0 +1,75 @@
+{
+  "files": [
+    {
+      "file": "现控200题基础 第1章 控制系统的状态空间表达式（答案与解析）.md",
+      "exercises": 27,
+      "links": 111,
+      "images": 13,
+      "math_blocks": 195
+    },
+    {
+      "file": "现控200题基础 第1章 控制系统的状态空间表达式（题目）.md",
+      "exercises": 27,
+      "links": 59,
+      "images": 9,
+      "math_blocks": 19
+    },
+    {
+      "file": "现控200题基础 第2章 状态空间表达式的解（答案与解析）.md",
+      "exercises": 12,
+      "links": 51,
+      "images": 1,
+      "math_blocks": 130
+    },
+    {
+      "file": "现控200题基础 第2章 状态空间表达式的解（题目）.md",
+      "exercises": 12,
+      "links": 30,
+      "images": 1,
+      "math_blocks": 15
+    },
+    {
+      "file": "现控200题基础 第3章 能控性和能观性（答案与解析）.md",
+      "exercises": 27,
+      "links": 111,
+      "images": 1,
+      "math_blocks": 261
+    },
+    {
+      "file": "现控200题基础 第3章 能控性和能观性（题目）.md",
+      "exercises": 27,
+      "links": 89,
+      "images": 0,
+      "math_blocks": 26
+    },
+    {
+      "file": "现控200题基础 第4章 稳定性与李雅普诺夫（答案与解析）.md",
+      "exercises": 19,
+      "links": 79,
+      "images": 0,
+      "math_blocks": 97
+    },
+    {
+      "file": "现控200题基础 第4章 稳定性与李雅普诺夫（题目）.md",
+      "exercises": 19,
+      "links": 64,
+      "images": 0,
+      "math_blocks": 24
+    },
+    {
+      "file": "现控200题基础 第5章 线性定常系统的综合（答案与解析）.md",
+      "exercises": 34,
+      "links": 140,
+      "images": 7,
+      "math_blocks": 345
+    },
+    {
+      "file": "现控200题基础 第5章 线性定常系统的综合（题目）.md",
+      "exercises": 34,
+      "links": 77,
+      "images": 5,
+      "math_blocks": 43
+    }
+  ],
+  "errors": []
+}

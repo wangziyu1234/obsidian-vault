@@ -1,0 +1,191 @@
+saved D:\obsidian\附件\频域-矢量法-s平面.png
+saved D:\obsidian\附件\频域-惯性环节-描点.png
+ω=0     |G|=1.0000  ∠=0.00°  1.0000+0.0000j
+ω=0.6   |G|=0.9578  ∠=-16.70°  0.9174-0.2752j
+ω=1     |G|=0.8944  ∠=-26.57°  0.8000-0.4000j
+ω=2     |G|=0.7071  ∠=-45.00°  0.5000-0.5000j
+ω=4     |G|=0.4472  ∠=-63.43°  0.2000-0.4000j
+ω=8     |G|=0.2425  ∠=-75.96°  0.0588-0.2353j
+== 频域-矢量法-s平面.png  (640x560px)
+  ax0: xlim=(np.float64(-3.2), np.float64(3.6)) ylim=(np.float64(-0.6), np.float64(9.4)) axesbox=(np.float64(181.392), np.float64(61.599999999999994), np.float64(293.21600000000007), np.float64(431.20000000000005))
+    annot[0] '极点 −2': x -1.950~-0.698  y -0.502~-0.119
+    annot[1] '': x -2.000~-2.000  y +0.000~+0.000
+    annot[2] 'j0.6': x +0.193~+0.727  y +0.428~+0.766
+    annot[3] '': x -2.000~-2.000  y +0.000~+0.000
+    annot[4] 'j1.0': x +0.193~+0.727  y +0.828~+1.166
+    annot[5] '': x -2.000~-2.000  y +0.000~+0.000
+    annot[6] 'j2.0': x +0.193~+0.727  y +1.828~+2.166
+    annot[7] '': x -2.000~-2.000  y +0.000~+0.000
+    annot[8] 'j4.0': x +0.193~+0.727  y +3.828~+4.166
+    annot[9] '': x -2.000~-2.000  y +0.000~+0.000
+    annot[10] 'j8.0': x +0.193~+0.727  y +7.828~+8.166
+    annot[11] '': x -2.000~-2.000  y +0.000~+0.000
+    annot[12] '|矢量| = √8 = 2.828\n∠ = ': x -3.150~-0.344  y +2.491~+3.371
+    annot[13] 'A(ω) = 2 / |极点矢量|\nφ(ω)': x +0.350~+3.829  y +8.305~+9.200
+    annot[14] 'ω = 2 时：\nA = 2/2.828 =': x +0.350~+3.179  y +5.195~+6.400
+== 频域-惯性环节-描点.png  (640x540px)
+  ax0: xlim=(np.float64(-0.18), np.float64(1.24)) ylim=(np.float64(-0.78), np.float64(0.34)) axesbox=(np.float64(80.0), np.float64(71.69436619718307), np.float64(496.0), np.float64(391.21126760563385))
+    annot[0] '1∠0°\n1+j0': x +1.032~+1.123  y +0.027~+0.125
+    annot[1] '0.959∠−16.7°\n0.92−j0.2': x +0.957~+1.203  y -0.312~-0.214
+    annot[2] '0.894∠−26.6°\n0.8−j0.4': x +0.848~+1.094  y -0.500~-0.402
+    annot[3] '0.707∠−45°\n0.5−j0.5（最低': x +0.556~+0.914  y -0.632~-0.532
+    annot[4] '0.447∠−63.4°\n0.2−j0.4': x +0.256~+0.502  y -0.389~-0.291
+    annot[5] '0.243∠−76°\n0.06−j0.24': x +0.122~+0.337  y -0.185~-0.087
+    annot[6] 'ω→∞：原点（0∠−90°）': x +0.052~+0.510  y -0.331~-0.288
+    annot[7] 'ω 增大方向': x +0.914~+1.126  y -0.162~-0.115
+saved D:\obsidian\附件\频域-图示法-幅相曲线.png
+saved D:\obsidian\附件\频域-图示法-伯德图.png
+saved D:\obsidian\附件\频域-图示法-尼科尔斯图.png
+ω=2 处 mag=-3.01 dB, phase=-44.98°
+== 频域-图示法-幅相曲线.png  (580x480px)
+  ax0: xlim=(np.float64(-0.3), np.float64(1.2)) ylim=(np.float64(-0.9), np.float64(0.4)) axesbox=(np.float64(84.01923076923077), np.float64(52.8), np.float64(426.4615384615385), np.float64(369.59999999999997))
+    annot[0] 'ω = 0': x +1.060~+1.176  y -0.082~-0.028
+    annot[1] 'ω → ∞': x -0.300~-0.149  y -0.082~-0.028
+    annot[2] '圆心 (0.5, 0)、半径 0.5 的半圆': x +0.111~+0.789  y -0.831~-0.778
+    annot[3] '': x +0.450~+0.450  y -0.740~-0.740
+== 频域-图示法-伯德图.png  (660x620px)
+  ax0: xlim=(np.float64(0.01), np.float64(100.0)) ylim=(np.float64(-60.0), np.float64(10.0)) axesbox=(np.float64(82.5), np.float64(328.6), np.float64(511.5), np.float64(217.0))
+    annot[0] '转折频率 1/T = 2': x +0.162~+1.150  y +4.455~+9.371
+    annot[1] 'ω = 2 处 L = −3 dB': x +14.000~+105.192  y -7.458~-2.542
+    annot[2] '−20 dB/dec': x +20.731~+77.178  y -48.464~-43.536
+  ax1: xlim=(np.float64(0.01), np.float64(100.0)) ylim=(np.float64(-100.0), np.float64(10.0)) axesbox=(np.float64(82.5), np.float64(68.19999999999999), np.float64(511.5), np.float64(217.0))
+    annot[0] 'ω = 2 处 φ = −45°': x +11.000~+78.305  y -13.863~-6.137
+    fig.text[0] '对数频率特性（伯德图）：上幅频、下相': px x 98~562
+== 频域-图示法-尼科尔斯图.png  (580x480px)
+  ax0: xlim=(np.float64(-100.0), np.float64(10.0)) ylim=(np.float64(-70.0), np.float64(12.0)) axesbox=(np.float64(72.5), np.float64(52.8), np.float64(449.5), np.float64(369.59999999999997))
+    annot[0] 'ω = 2：(−45°, −3 dB)': x -40.904~-8.601  y +0.587~+3.823
+    annot[1] 'ω = 0：(0°, 0 dB)': x +2.719~+29.148  y -11.812~-8.576
+    annot[2] 'ω → ∞：(−90°, −∞)': x -96.118~-65.039  y -57.637~-54.402
+saved D:\obsidian\附件\频域-典型环节-比例Bode.png
+saved D:\obsidian\附件\频域-典型环节-积分Bode.png
+saved D:\obsidian\附件\频域-典型环节-微分Bode.png
+saved D:\obsidian\附件\频域-典型环节-惯性Bode.png
+saved D:\obsidian\附件\频域-典型环节-一阶微分Bode.png
+saved D:\obsidian\附件\频域-典型环节-振荡Bode.png
+saved D:\obsidian\附件\频域-典型环节-二阶微分Bode.png
+saved D:\obsidian\附件\频域-典型环节-延迟Bode.png
+saved D:\obsidian\附件\频域-典型环节-不稳定惯性Bode.png
+saved D:\obsidian\附件\频域-典型环节-不稳定振荡Bode.png
+== 频域-典型环节-比例Bode.png  (640x620px)
+  ax0: xlim=(np.float64(0.01), np.float64(100.0)) ylim=(np.float64(-40.0), np.float64(40.0)) axesbox=(np.float64(80.0), np.float64(328.6), np.float64(496.0), np.float64(217.0))
+    annot[0] 'L ≡ 20lgK = 0 dB，φ ≡ 0': x +0.012~+0.235  y -36.451~-30.819
+  ax1: xlim=(np.float64(0.01), np.float64(100.0)) ylim=(np.float64(-180.0), np.float64(180.0)) axesbox=(np.float64(80.0), np.float64(68.19999999999999), np.float64(496.0), np.float64(217.0))
+    fig.text[0] '比例环节\nK': px x 284~356
+== 频域-典型环节-积分Bode.png  (640x620px)
+  ax0: xlim=(np.float64(0.01), np.float64(100.0)) ylim=(np.float64(-60.0), np.float64(60.0)) axesbox=(np.float64(80.0), np.float64(328.6), np.float64(496.0), np.float64(217.0))
+    annot[0] '过 (1, 0) 点、斜率 −20 dB/d': x +0.012~+1.618  y -54.677~-46.164
+  ax1: xlim=(np.float64(0.01), np.float64(100.0)) ylim=(np.float64(-180.0), np.float64(180.0)) axesbox=(np.float64(80.0), np.float64(68.19999999999999), np.float64(496.0), np.float64(217.0))
+    fig.text[0] '积分环节\n1/s': px x 284~356
+== 频域-典型环节-微分Bode.png  (640x620px)
+  ax0: xlim=(np.float64(0.01), np.float64(100.0)) ylim=(np.float64(-60.0), np.float64(60.0)) axesbox=(np.float64(80.0), np.float64(328.6), np.float64(496.0), np.float64(217.0))
+    annot[0] '过 (1, 0) 点、斜率 +20 dB/d': x +0.012~+1.618  y -54.677~-46.164
+  ax1: xlim=(np.float64(0.01), np.float64(100.0)) ylim=(np.float64(-180.0), np.float64(180.0)) axesbox=(np.float64(80.0), np.float64(68.19999999999999), np.float64(496.0), np.float64(217.0))
+    fig.text[0] '微分环节\ns': px x 284~356
+== 频域-典型环节-惯性Bode.png  (640x620px)
+  ax0: xlim=(np.float64(0.1), np.float64(10.0)) ylim=(np.float64(-40.0), np.float64(10.0)) axesbox=(np.float64(80.0), np.float64(328.6), np.float64(496.0), np.float64(217.0))
+    annot[0] '转折频率 1/T = 1：φ = −45°、': x +0.110~+1.138  y -37.782~-34.235
+  ax1: xlim=(np.float64(0.1), np.float64(10.0)) ylim=(np.float64(-100.0), np.float64(10.0)) axesbox=(np.float64(80.0), np.float64(68.19999999999999), np.float64(496.0), np.float64(217.0))
+    fig.text[0] '惯性环节\n1/(Ts+1)': px x 284~356
+== 频域-典型环节-一阶微分Bode.png  (640x620px)
+  ax0: xlim=(np.float64(0.1), np.float64(10.0)) ylim=(np.float64(-10.0), np.float64(40.0)) axesbox=(np.float64(80.0), np.float64(328.6), np.float64(496.0), np.float64(217.0))
+    annot[0] '转折频率 1/T = 1：φ = +45°、': x +0.110~+1.138  y -7.782~-4.235
+  ax1: xlim=(np.float64(0.1), np.float64(10.0)) ylim=(np.float64(-10.0), np.float64(100.0)) axesbox=(np.float64(80.0), np.float64(68.19999999999999), np.float64(496.0), np.float64(217.0))
+    fig.text[0] '一阶微分环节\nTs+1': px x 266~374
+== 频域-典型环节-振荡Bode.png  (640x620px)
+  ax0: xlim=(np.float64(0.1), np.float64(10.0)) ylim=(np.float64(-60.0), np.float64(25.0)) axesbox=(np.float64(80.0), np.float64(328.6), np.float64(496.0), np.float64(217.0))
+    annot[0] '转折频率 ωn = 1：φ = −90°、L': x +0.110~+3.073  y -56.230~-50.200
+  ax1: xlim=(np.float64(0.1), np.float64(10.0)) ylim=(np.float64(-200.0), np.float64(20.0)) axesbox=(np.float64(80.0), np.float64(68.19999999999999), np.float64(496.0), np.float64(217.0))
+    fig.text[0] '振荡环节\nωn²/(s²+2ζωn ': px x 234~406
+== 频域-典型环节-二阶微分Bode.png  (640x620px)
+  ax0: xlim=(np.float64(0.1), np.float64(10.0)) ylim=(np.float64(-25.0), np.float64(60.0)) axesbox=(np.float64(80.0), np.float64(328.6), np.float64(496.0), np.float64(217.0))
+    annot[0] '转折频率 ωn = 1：φ = +90°、L': x +0.110~+2.853  y -21.230~-15.200
+  ax1: xlim=(np.float64(0.1), np.float64(10.0)) ylim=(np.float64(-20.0), np.float64(200.0)) axesbox=(np.float64(80.0), np.float64(68.19999999999999), np.float64(496.0), np.float64(217.0))
+    fig.text[0] '二阶微分环节\ns²/ωn²+2ζs/': px x 248~392
+== 频域-典型环节-延迟Bode.png  (640x620px)
+  ax0: xlim=(np.float64(0.1), np.float64(10.0)) ylim=(np.float64(-40.0), np.float64(40.0)) axesbox=(np.float64(80.0), np.float64(328.6), np.float64(496.0), np.float64(217.0))
+    annot[0] 'L ≡ 0 dB；φ = −ωτ(rad)，': x +0.110~+4.013  y -36.451~-30.407
+  ax1: xlim=(np.float64(0.1), np.float64(10.0)) ylim=(np.float64(-620.0), np.float64(60.0)) axesbox=(np.float64(80.0), np.float64(68.19999999999999), np.float64(496.0), np.float64(217.0))
+    fig.text[0] '延迟环节\ne^(−τs)': px x 284~356
+== 频域-典型环节-不稳定惯性Bode.png  (640x620px)
+  ax0: xlim=(np.float64(0.1), np.float64(10.0)) ylim=(np.float64(-40.0), np.float64(10.0)) axesbox=(np.float64(80.0), np.float64(328.6), np.float64(496.0), np.float64(217.0))
+    annot[0] '幅频与惯性完全相同；相频 +arctan(T': x +0.110~+6.879  y -37.782~-34.235
+  ax1: xlim=(np.float64(0.1), np.float64(10.0)) ylim=(np.float64(-10.0), np.float64(100.0)) axesbox=(np.float64(80.0), np.float64(68.19999999999999), np.float64(496.0), np.float64(217.0))
+    fig.text[0] '不稳定惯性环节（非最小相位）\n1/(': px x 194~446
+== 频域-典型环节-不稳定振荡Bode.png  (640x620px)
+  ax0: xlim=(np.float64(0.1), np.float64(10.0)) ylim=(np.float64(-60.0), np.float64(25.0)) axesbox=(np.float64(80.0), np.float64(328.6), np.float64(496.0), np.float64(217.0))
+    annot[0] '幅频与振荡环节完全相同；相频 0° → +1': x +0.110~+3.435  y -56.230~-50.200
+  ax1: xlim=(np.float64(0.1), np.float64(10.0)) ylim=(np.float64(-20.0), np.float64(200.0)) axesbox=(np.float64(80.0), np.float64(68.19999999999999), np.float64(496.0), np.float64(217.0))
+    fig.text[0] '不稳定振荡环节（非最小相位）\n1/(': px x 194~446
+saved D:\obsidian\附件\频域-典型环节-比例Nyquist.png
+saved D:\obsidian\附件\频域-典型环节-积分Nyquist.png
+saved D:\obsidian\附件\频域-典型环节-微分Nyquist.png
+saved D:\obsidian\附件\频域-典型环节-惯性Nyquist.png
+saved D:\obsidian\附件\频域-典型环节-一阶微分Nyquist.png
+saved D:\obsidian\附件\频域-典型环节-振荡Nyquist.png
+saved D:\obsidian\附件\频域-典型环节-二阶微分Nyquist.png
+saved D:\obsidian\附件\频域-典型环节-延迟Nyquist.png
+saved D:\obsidian\附件\频域-典型环节-不稳定惯性Nyquist.png
+saved D:\obsidian\附件\频域-典型环节-不稳定振荡Nyquist.png
+== 频域-典型环节-比例Nyquist.png  (560x460px)
+  ax0: xlim=(np.float64(-0.4), np.float64(3.0)) ylim=(np.float64(-1.0), np.float64(1.0)) axesbox=(np.float64(70.0), np.float64(100.05294117647055), np.float64(434.0), np.float64(255.29411764705884))
+    annot[0] '实轴上一点，不随 ω 变': x +0.368~+1.559  y +0.169~+0.298
+== 频域-典型环节-积分Nyquist.png  (560x460px)
+  ax0: xlim=(np.float64(-1.1), np.float64(1.1)) ylim=(np.float64(-2.6), np.float64(0.7)) axesbox=(np.float64(168.93333333333334), np.float64(50.59999999999999), np.float64(236.13333333333338), np.float64(354.2))
+    annot[0] '': x -0.000~-0.000  y -1.600~-1.600
+    annot[1] 'ω→∞：原点': x +0.129~+0.893  y +0.046~+0.189
+    annot[2] 'ω→0⁺：沿 −90° 到 −j∞': x -1.050~+0.320  y -2.482~-2.338
+== 频域-典型环节-微分Nyquist.png  (560x460px)
+  ax0: xlim=(np.float64(-1.1), np.float64(1.1)) ylim=(np.float64(-0.7), np.float64(2.6)) axesbox=(np.float64(168.93333333333334), np.float64(50.59999999999999), np.float64(236.13333333333338), np.float64(354.2))
+    annot[0] '': x -0.000~-0.000  y +1.600~+1.600
+    annot[1] 'ω = 0：原点': x +0.129~+0.856  y -0.083~+0.060
+    annot[2] 'ω→∞：沿 +90° 到 +j∞': x -1.050~+0.310  y +2.168~+2.312
+== 频域-典型环节-惯性Nyquist.png  (560x460px)
+  ax0: xlim=(np.float64(-0.25), np.float64(1.3)) ylim=(np.float64(-0.8), np.float64(0.35)) axesbox=(np.float64(70.0), np.float64(66.69999999999997), np.float64(434.0), np.float64(321.99999999999994))
+    annot[0] '': x +0.680~+0.680  y -0.370~-0.370
+    annot[1] '起点 (1, j0)（ω = 0）': x +0.281~+0.759  y +0.067~+0.122
+    annot[2] '终点：原点 ∠−90°': x +0.040~+0.461  y +0.008~+0.063
+    annot[3] '第四象限半圆：圆心 (0.5, 0)、半径 ': x -0.200~+0.693  y -0.752~-0.697
+== 频域-典型环节-一阶微分Nyquist.png  (560x460px)
+  ax0: xlim=(np.float64(-0.5), np.float64(2.4)) ylim=(np.float64(-0.6), np.float64(2.6)) axesbox=(np.float64(126.50312500000003), np.float64(50.59999999999999), np.float64(320.99375), np.float64(354.2))
+    annot[0] '': x +1.000~+1.000  y +1.600~+1.600
+    annot[1] '起点 (1, j0)（ω = 0）': x -0.882~+0.328  y -0.282~-0.143
+    annot[2] '竖直射线 Re = 1，ω→∞：+j∞': x -0.450~+1.291  y +2.169~+2.308
+== 频域-典型环节-振荡Nyquist.png  (560x460px)
+  ax0: xlim=(np.float64(-0.65), np.float64(1.3)) ylim=(np.float64(-1.45), np.float64(0.4)) axesbox=(np.float64(100.32702702702704), np.float64(50.59999999999999), np.float64(373.3459459459459), np.float64(354.2))
+    annot[0] '': x -0.120~-0.120  y -0.900~-0.900
+    annot[1] '起点 (1, j0)（ω = 0）': x -0.088~+0.612  y +0.069~+0.150
+    annot[2] 'ωn 处 (0, −j/(2ζ))': x +0.087~+0.667  y -1.148~-1.068
+    annot[3] 'ω→∞：原点 ∠−180°': x +10.000~+10.695  y +9.982~+10.063
+== 频域-典型环节-二阶微分Nyquist.png  (560x460px)
+  ax0: xlim=(np.float64(-2.7), np.float64(1.3)) ylim=(np.float64(-0.5), np.float64(2.5)) axesbox=(np.float64(70.0), np.float64(64.94999999999995), np.float64(434.0), np.float64(325.50000000000006))
+    annot[0] '': x -1.600~-1.600  y +1.900~+1.900
+    annot[1] '起点 (1, j0)（ω = 0）': x +1.051~+2.286  y -0.287~-0.145
+    annot[2] 'ωn 处 (0, j2ζ)': x +0.102~+0.877  y +1.046~+1.187
+    annot[3] '恒在上半平面，ω→∞：沿 180° 到 ∞': x -2.650~-0.447  y -0.431~-0.280
+== 频域-典型环节-延迟Nyquist.png  (560x460px)
+  ax0: xlim=(np.float64(-1.4), np.float64(1.4)) ylim=(np.float64(-1.4), np.float64(1.4)) axesbox=(np.float64(109.90000000000002), np.float64(50.59999999999999), np.float64(354.19999999999993), np.float64(354.2))
+    annot[0] '': x +0.170~+0.170  y -0.985~-0.985
+    annot[1] '单位圆：|G| ≡ 1，相位 −ωτ\n顺时针': x -1.350~+0.057  y +0.963~+1.248
+== 频域-典型环节-不稳定惯性Nyquist.png  (660x600px)
+  ax0: xlim=(np.float64(-0.22), np.float64(1.22)) ylim=(np.float64(-0.23), np.float64(0.78)) axesbox=(np.float64(85.2022894965278), np.float64(85.34770865734711), np.float64(549.6018771701389), np.float64(385.4846499596114))
+    annot[0] '$\\omega=0$': x +0.840~+0.937  y -0.093~-0.052
+    annot[1] '$\\omega\\to\\infty$': x +0.029~+0.147  y -0.093~-0.053
+    text [2] '$\\varphi:0^\\circ\\to+90': x -0.162~+0.102  y +0.648~+0.690
+    fig.text[0] '不稳定惯性：惯性曲线关于实轴的镜像': px x 168~492
+    fig.text[1] '仅正频率支；箭头表示频率增大，空心点': px x 169~491
+== 频域-典型环节-不稳定振荡Nyquist.png  (660x600px)
+  ax0: xlim=(np.float64(-0.62), np.float64(1.42)) ylim=(np.float64(-0.43), np.float64(1.4)) axesbox=(np.float64(154.59322125099615), np.float64(101.60286139195259), np.float64(410.21584699453547), np.float64(367.9877450980391))
+    annot[0] '$\\omega=0$': x +0.696~+0.880  y -0.176~-0.099
+    annot[1] '$\\omega\\to\\infty$': x -0.207~+0.017  y -0.176~-0.100
+    annot[2] '$\\omega_n=1$': x -0.442~-0.228  y +1.087~+1.163
+    text [3] '$\\varphi:0^\\circ\\to+18': x -0.498~+0.049  y +1.142~+1.222
+    fig.text[0] '不稳定振荡（ζ = 0.5，ωₙ =': px x 202~458
+    fig.text[1] '仅正频率支；箭头表示频率增大，空心点': px x 169~491
+== 频域-反求-一阶Bode.png  (780x560px)
+  ax0: xlim=(np.float64(0.03629784351181817), np.float64(339.22032470377775)) ylim=(np.float64(-28.0), np.float64(36.0)) axesbox=(np.float64(81.89999999999999), np.float64(321.6347826086957), np.float64(674.7), np.float64(165.56521739130432))
+    annot[0] 'B': x +11.846~+13.750  y +19.132~+26.111
+    annot[1] 'C': x +74.919~+85.791  y +3.277~+10.256
+  ax1: xlim=(np.float64(0.03629784351181817), np.float64(339.22032470377775)) ylim=(np.float64(-104.0), np.float64(8.0)) axesbox=(np.float64(81.89999999999999), np.float64(106.39999999999998), np.float64(674.7), np.float64(165.56521739130437))
+    annot[0] 'A': x +2.369~+2.750  y -39.258~-27.044
+    fig.text[0] '$G(s)=\\frac{31.6}{': px x 328~452
+    fig.text[1] 'A 转折频率 ω=2（相角 −45°': px x 74~706

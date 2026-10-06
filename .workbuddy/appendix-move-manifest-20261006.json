@@ -1,0 +1,72 @@
+[
+  {
+    "source": "D:\\obsidian\\控制理论\\自动控制原理\\附录 常用数学补充.md",
+    "target": "D:\\obsidian\\控制理论\\附录\\附录 常用数学补充.md",
+    "sha256": "201C9CAA43618670B3CBAC422CC9A64ACFD9E8A16CD6EB76044DA293784FC40D"
+  },
+  {
+    "source": "D:\\obsidian\\控制理论\\自动控制原理\\附录 常用e指数值速查.md",
+    "target": "D:\\obsidian\\控制理论\\附录\\附录 常用e指数值速查.md",
+    "sha256": "2CBE98268A02BE9B30BE2EBC4E9BDF7354554133895D26EBE9D2BB3902CAE381"
+  },
+  {
+    "source": "D:\\obsidian\\控制理论\\自动控制原理\\附录 非线性系统速查.md",
+    "target": "D:\\obsidian\\控制理论\\附录\\附录 非线性系统速查.md",
+    "sha256": "3E6A6964B4A9989F3A445BDA1366738B467586DFC54368597478EA1121CC45AA"
+  },
+  {
+    "source": "D:\\obsidian\\控制理论\\自动控制原理\\附录 幅相曲线速查.md",
+    "target": "D:\\obsidian\\控制理论\\附录\\附录 幅相曲线速查.md",
+    "sha256": "ADD2AF27C58B0195A9A08E5500D49619341CD9D57EB212FDFA9A325924B0FED9"
+  },
+  {
+    "source": "D:\\obsidian\\控制理论\\自动控制原理\\附录 根轨迹特殊点速查.md",
+    "target": "D:\\obsidian\\控制理论\\附录\\附录 根轨迹特殊点速查.md",
+    "sha256": "8BE76FD9D9CC5D02947429216582531CC7A1B429D4F812623D483DD3DDE4884E"
+  },
+  {
+    "source": "D:\\obsidian\\控制理论\\自动控制原理\\附录 教材对照与复习索引.md",
+    "target": "D:\\obsidian\\控制理论\\附录\\附录 教材对照与复习索引.md",
+    "sha256": "0C1988B80181FCE7AC08ED2248441ACF8CE4EF9E1814E73F498DF31387A16E39"
+  },
+  {
+    "source": "D:\\obsidian\\控制理论\\自动控制原理\\附录 开环增益与闭环增益.md",
+    "target": "D:\\obsidian\\控制理论\\附录\\附录 开环增益与闭环增益.md",
+    "sha256": "B9D7E056C1481186D5169933B1AC44D8212B8942D36817249088873C718E0231"
+  },
+  {
+    "source": "D:\\obsidian\\控制理论\\自动控制原理\\附录 拉氏变换表与z变换表.md",
+    "target": "D:\\obsidian\\控制理论\\附录\\附录 拉氏变换表与z变换表.md",
+    "sha256": "B6461FB8049629445868EEE2E5706B98C135E55CAC92E1D4C3F9B9885CD2A6B2"
+  },
+  {
+    "source": "D:\\obsidian\\控制理论\\自动控制原理\\附录 频域分析速查.md",
+    "target": "D:\\obsidian\\控制理论\\附录\\附录 频域分析速查.md",
+    "sha256": "569037F6D0A9E5071FB0EDA705A8C9C0DF58B40BFDE422F5D51FF7D001BD00EC"
+  },
+  {
+    "source": "D:\\obsidian\\控制理论\\自动控制原理\\附录 时域分析速查.md",
+    "target": "D:\\obsidian\\控制理论\\附录\\附录 时域分析速查.md",
+    "sha256": "327CDB74FA22949BDCD0408122574C6F943910823A52A816B39AF05B28B4206E"
+  },
+  {
+    "source": "D:\\obsidian\\控制理论\\自动控制原理\\附录 自控常用公式总表.md",
+    "target": "D:\\obsidian\\控制理论\\附录\\附录 自控常用公式总表.md",
+    "sha256": "98D9E85825F4031A9AEB20157310AEE611CE555707418E4B36BEDEC137165543"
+  },
+  {
+    "source": "D:\\obsidian\\控制理论\\自动控制原理\\附录 z变换与离散化速查.md",
+    "target": "D:\\obsidian\\控制理论\\附录\\附录 z变换与离散化速查.md",
+    "sha256": "5AED9B8C2A61EFC6E1147544B067A8D3A843C73B2E0113990B9466BFEB16F0D2"
+  },
+  {
+    "source": "D:\\obsidian\\控制理论\\现代控制理论\\附录 能控能观判别速查.md",
+    "target": "D:\\obsidian\\控制理论\\附录\\附录 能控能观判别速查.md",
+    "sha256": "B7D133255D980CF327D3551E69175C08AC3A0DBC2F53A4C3447D34F94905D4D7"
+  },
+  {
+    "source": "D:\\obsidian\\控制理论\\现代控制理论\\附录 现代控制教材对照与复习索引.md",
+    "target": "D:\\obsidian\\控制理论\\附录\\附录 现代控制教材对照与复习索引.md",
+    "sha256": "29CBE6C8225E5AE9AEEA26732E23A5B81CD6798AFA3ECE1A46FD1DF6A0A02EEA"
+  }
+]
