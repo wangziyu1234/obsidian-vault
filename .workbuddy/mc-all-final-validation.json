@@ -1,0 +1,123 @@
+{
+  "files": [
+    {
+      "file": "现控200题基础 第1章 控制系统的状态空间表达式（答案与解析）.md",
+      "exercises": 27,
+      "links": 111,
+      "images": 13,
+      "math_blocks": 195
+    },
+    {
+      "file": "现控200题基础 第1章 控制系统的状态空间表达式（题目）.md",
+      "exercises": 27,
+      "links": 86,
+      "images": 9,
+      "math_blocks": 19
+    },
+    {
+      "file": "现控200题基础 第2章 状态空间表达式的解（答案与解析）.md",
+      "exercises": 12,
+      "links": 51,
+      "images": 1,
+      "math_blocks": 130
+    },
+    {
+      "file": "现控200题基础 第2章 状态空间表达式的解（题目）.md",
+      "exercises": 12,
+      "links": 42,
+      "images": 1,
+      "math_blocks": 15
+    },
+    {
+      "file": "现控200题基础 第3章 能控性和能观性（答案与解析）.md",
+      "exercises": 27,
+      "links": 111,
+      "images": 1,
+      "math_blocks": 261
+    },
+    {
+      "file": "现控200题基础 第3章 能控性和能观性（题目）.md",
+      "exercises": 27,
+      "links": 89,
+      "images": 0,
+      "math_blocks": 26
+    },
+    {
+      "file": "现控200题基础 第4章 稳定性与李雅普诺夫（答案与解析）.md",
+      "exercises": 19,
+      "links": 79,
+      "images": 0,
+      "math_blocks": 97
+    },
+    {
+      "file": "现控200题基础 第4章 稳定性与李雅普诺夫（题目）.md",
+      "exercises": 19,
+      "links": 64,
+      "images": 0,
+      "math_blocks": 24
+    },
+    {
+      "file": "现控200题基础 第5章 线性定常系统的综合（答案与解析）.md",
+      "exercises": 34,
+      "links": 140,
+      "images": 7,
+      "math_blocks": 345
+    },
+    {
+      "file": "现控200题基础 第5章 线性定常系统的综合（题目）.md",
+      "exercises": 34,
+      "links": 111,
+      "images": 5,
+      "math_blocks": 43
+    },
+    {
+      "file": "现控200题强化 专题一 状态空间描述（答案与解析）.md",
+      "exercises": 31,
+      "links": 127,
+      "images": 15,
+      "math_blocks": 296
+    },
+    {
+      "file": "现控200题强化 专题一 状态空间描述（题目）.md",
+      "exercises": 31,
+      "links": 98,
+      "images": 10,
+      "math_blocks": 26
+    },
+    {
+      "file": "现控200题强化 专题三 线性系统的状态反馈与状态观测（答案与解析）.md",
+      "exercises": 33,
+      "links": 136,
+      "images": 5,
+      "math_blocks": 305
+    },
+    {
+      "file": "现控200题强化 专题三 线性系统的状态反馈与状态观测（题目）.md",
+      "exercises": 33,
+      "links": 108,
+      "images": 2,
+      "math_blocks": 39
+    },
+    {
+      "file": "现控200题强化 专题二 线性系统的能控能观性及稳定性分析（答案与解析）.md",
+      "exercises": 29,
+      "links": 119,
+      "images": 4,
+      "math_blocks": 246
+    },
+    {
+      "file": "现控200题强化 专题二 线性系统的能控能观性及稳定性分析（题目）.md",
+      "exercises": 29,
+      "links": 94,
+      "images": 2,
+      "math_blocks": 49
+    }
+  ],
+  "unique_exercises": 212,
+  "external_scan": {
+    "files": 651,
+    "references": 30,
+    "anchors": 3
+  },
+  "errors": []
+}

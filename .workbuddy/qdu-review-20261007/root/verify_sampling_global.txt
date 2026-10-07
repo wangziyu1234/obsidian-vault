@@ -1,0 +1,1 @@
+PASS: exact quadratic energy contraction M^T P M=qP; rational bounds exclude larger peaks for k>=5. First continuous maximum is 1+q+q^2 ln(q) at 3-ln(q).

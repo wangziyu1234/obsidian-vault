@@ -1,0 +1,522 @@
+[
+  {
+    "set": 1,
+    "answers": [
+      "B",
+      "C",
+      "C",
+      "C",
+      "B",
+      "D",
+      "B",
+      "A",
+      "A",
+      "D",
+      "D",
+      "C"
+    ],
+    "choices": [
+      {
+        "number": 1,
+        "source": "existing",
+        "group": 1,
+        "question": 1,
+        "answer": "B",
+        "topic": "劳斯全零行与左右半平面根数"
+      },
+      {
+        "number": 2,
+        "source": "existing",
+        "group": 1,
+        "question": 10,
+        "answer": "C",
+        "topic": "约当块含参能控性"
+      },
+      {
+        "number": 3,
+        "source": "existing",
+        "group": 2,
+        "question": 1,
+        "answer": "C",
+        "topic": "MATLAB zpk、高频斜率与右半平面零点"
+      },
+      {
+        "number": 4,
+        "source": "existing",
+        "group": 2,
+        "question": 9,
+        "answer": "C",
+        "topic": "非单位反馈偏差与输出端误差"
+      },
+      {
+        "number": 5,
+        "source": "existing",
+        "group": 3,
+        "question": 5,
+        "answer": "B",
+        "topic": "平移劳斯判据"
+      },
+      {
+        "number": 6,
+        "source": "existing",
+        "group": 3,
+        "question": 4,
+        "answer": "D",
+        "topic": "后向差分离散化"
+      },
+      {
+        "number": 7,
+        "source": "new",
+        "original_draft_question": 1,
+        "answer": "B"
+      },
+      {
+        "number": 8,
+        "source": "new",
+        "original_draft_question": 3,
+        "answer": "A"
+      },
+      {
+        "number": 9,
+        "source": "new",
+        "original_draft_question": 7,
+        "answer": "A"
+      },
+      {
+        "number": 10,
+        "source": "new",
+        "original_draft_question": 8,
+        "answer": "D"
+      },
+      {
+        "number": 11,
+        "source": "new",
+        "original_draft_question": 10,
+        "answer": "D"
+      },
+      {
+        "number": 12,
+        "source": "new",
+        "original_draft_question": 12,
+        "answer": "C"
+      }
+    ],
+    "points": 150
+  },
+  {
+    "set": 2,
+    "answers": [
+      "B",
+      "A",
+      "A",
+      "A",
+      "D",
+      "C",
+      "C",
+      "D",
+      "C",
+      "B",
+      "C",
+      "B"
+    ],
+    "choices": [
+      {
+        "number": 1,
+        "source": "existing",
+        "group": 1,
+        "question": 2,
+        "answer": "B",
+        "topic": "MATLAB conv/tf与截止频率、相角裕度"
+      },
+      {
+        "number": 2,
+        "source": "existing",
+        "group": 1,
+        "question": 7,
+        "answer": "A",
+        "topic": "非线性系统全部奇点分类"
+      },
+      {
+        "number": 3,
+        "source": "existing",
+        "group": 2,
+        "question": 2,
+        "answer": "A",
+        "topic": "零阶保持一阶对象精确离散化"
+      },
+      {
+        "number": 4,
+        "source": "existing",
+        "group": 2,
+        "question": 7,
+        "answer": "A",
+        "topic": "根轨迹渐近线"
+      },
+      {
+        "number": 5,
+        "source": "existing",
+        "group": 3,
+        "question": 8,
+        "answer": "D",
+        "topic": "非零初值二阶响应"
+      },
+      {
+        "number": 6,
+        "source": "existing",
+        "group": 3,
+        "question": 10,
+        "answer": "C",
+        "topic": "不可控不稳定模态与不可镇定"
+      },
+      {
+        "number": 7,
+        "source": "new",
+        "original_draft_question": 1,
+        "answer": "C"
+      },
+      {
+        "number": 8,
+        "source": "new",
+        "original_draft_question": 3,
+        "answer": "D"
+      },
+      {
+        "number": 9,
+        "source": "new",
+        "original_draft_question": 5,
+        "answer": "C"
+      },
+      {
+        "number": 10,
+        "source": "new",
+        "original_draft_question": 6,
+        "answer": "B"
+      },
+      {
+        "number": 11,
+        "source": "new",
+        "original_draft_question": 9,
+        "answer": "C"
+      },
+      {
+        "number": 12,
+        "source": "new",
+        "original_draft_question": 10,
+        "answer": "B"
+      }
+    ],
+    "points": 150
+  },
+  {
+    "set": 3,
+    "answers": [
+      "D",
+      "C",
+      "B",
+      "B",
+      "B",
+      "A",
+      "C",
+      "B",
+      "C",
+      "A",
+      "B",
+      "D"
+    ],
+    "choices": [
+      {
+        "number": 1,
+        "source": "existing",
+        "group": 1,
+        "question": 3,
+        "answer": "D",
+        "topic": "MATLAB tf系数、二阶参数与终值"
+      },
+      {
+        "number": 2,
+        "source": "existing",
+        "group": 1,
+        "question": 4,
+        "answer": "C",
+        "topic": "z变换初值及终值定理失效"
+      },
+      {
+        "number": 3,
+        "source": "existing",
+        "group": 2,
+        "question": 5,
+        "answer": "B",
+        "topic": "非线性全局渐近稳定与Lyapunov"
+      },
+      {
+        "number": 4,
+        "source": "existing",
+        "group": 2,
+        "question": 10,
+        "answer": "B",
+        "topic": "纯延迟与相角裕度"
+      },
+      {
+        "number": 5,
+        "source": "existing",
+        "group": 3,
+        "question": 2,
+        "answer": "B",
+        "topic": "含输入导数的一阶系统阶跃跃变"
+      },
+      {
+        "number": 6,
+        "source": "existing",
+        "group": 3,
+        "question": 7,
+        "answer": "A",
+        "topic": "约当矩阵零输入响应"
+      },
+      {
+        "number": 7,
+        "source": "new",
+        "original_draft_question": 1,
+        "answer": "C"
+      },
+      {
+        "number": 8,
+        "source": "new",
+        "original_draft_question": 5,
+        "answer": "B"
+      },
+      {
+        "number": 9,
+        "source": "new",
+        "original_draft_question": 6,
+        "answer": "C"
+      },
+      {
+        "number": 10,
+        "source": "new",
+        "original_draft_question": 7,
+        "answer": "A"
+      },
+      {
+        "number": 11,
+        "source": "new",
+        "original_draft_question": 9,
+        "answer": "B"
+      },
+      {
+        "number": 12,
+        "source": "new",
+        "original_draft_question": 12,
+        "answer": "D"
+      }
+    ],
+    "points": 150
+  },
+  {
+    "set": 4,
+    "answers": [
+      "D",
+      "A",
+      "A",
+      "D",
+      "B",
+      "C",
+      "B",
+      "C",
+      "A",
+      "C",
+      "D",
+      "A"
+    ],
+    "choices": [
+      {
+        "number": 1,
+        "source": "existing",
+        "group": 1,
+        "question": 5,
+        "answer": "D",
+        "topic": "MATLAB zpk、幅值裕度与分贝符号"
+      },
+      {
+        "number": 2,
+        "source": "existing",
+        "group": 1,
+        "question": 9,
+        "answer": "A",
+        "topic": "混合输入输出反求传递函数"
+      },
+      {
+        "number": 3,
+        "source": "existing",
+        "group": 2,
+        "question": 3,
+        "answer": "A",
+        "topic": "非单位直流增益二阶阶跃峰值"
+      },
+      {
+        "number": 4,
+        "source": "existing",
+        "group": 2,
+        "question": 8,
+        "answer": "D",
+        "topic": "含参能观性"
+      },
+      {
+        "number": 5,
+        "source": "existing",
+        "group": 3,
+        "question": 1,
+        "answer": "B",
+        "topic": "一拍延迟采样积分系统判稳"
+      },
+      {
+        "number": 6,
+        "source": "existing",
+        "group": 3,
+        "question": 6,
+        "answer": "C",
+        "topic": "滞后校正型别与斜坡误差"
+      },
+      {
+        "number": 7,
+        "source": "new",
+        "original_draft_question": 1,
+        "answer": "B"
+      },
+      {
+        "number": 8,
+        "source": "new",
+        "original_draft_question": 3,
+        "answer": "C"
+      },
+      {
+        "number": 9,
+        "source": "new",
+        "original_draft_question": 4,
+        "answer": "A"
+      },
+      {
+        "number": 10,
+        "source": "new",
+        "original_draft_question": 9,
+        "answer": "C"
+      },
+      {
+        "number": 11,
+        "source": "new",
+        "original_draft_question": 11,
+        "answer": "D"
+      },
+      {
+        "number": 12,
+        "source": "new",
+        "original_draft_question": 12,
+        "answer": "A"
+      }
+    ],
+    "points": 150
+  },
+  {
+    "set": 5,
+    "answers": [
+      "C",
+      "A",
+      "C",
+      "D",
+      "D",
+      "A",
+      "D",
+      "B",
+      "A",
+      "C",
+      "B",
+      "C"
+    ],
+    "choices": [
+      {
+        "number": 1,
+        "source": "existing",
+        "group": 1,
+        "question": 6,
+        "answer": "C",
+        "topic": "劳斯稳定范围与混合输入稳态误差"
+      },
+      {
+        "number": 2,
+        "source": "existing",
+        "group": 1,
+        "question": 8,
+        "answer": "A",
+        "topic": "非单位反馈正弦稳态响应"
+      },
+      {
+        "number": 3,
+        "source": "existing",
+        "group": 2,
+        "question": 4,
+        "answer": "C",
+        "topic": "根轨迹相角与模值条件"
+      },
+      {
+        "number": 4,
+        "source": "existing",
+        "group": 2,
+        "question": 6,
+        "answer": "D",
+        "topic": "不稳定闭环的稳态误差不存在"
+      },
+      {
+        "number": 5,
+        "source": "existing",
+        "group": 3,
+        "question": 3,
+        "answer": "D",
+        "topic": "超前装置最大超前角与参数"
+      },
+      {
+        "number": 6,
+        "source": "existing",
+        "group": 3,
+        "question": 9,
+        "answer": "A",
+        "topic": "频率轴缩放与裕度不变"
+      },
+      {
+        "number": 7,
+        "source": "new",
+        "original_draft_question": 7,
+        "answer": "D"
+      },
+      {
+        "number": 8,
+        "source": "new",
+        "original_draft_question": 8,
+        "answer": "B"
+      },
+      {
+        "number": 9,
+        "source": "new",
+        "original_draft_question": 9,
+        "answer": "A"
+      },
+      {
+        "number": 10,
+        "source": "new",
+        "original_draft_question": 10,
+        "answer": "C"
+      },
+      {
+        "number": 11,
+        "source": "new",
+        "original_draft_question": 11,
+        "answer": "B"
+      },
+      {
+        "number": 12,
+        "source": "new",
+        "original_draft_question": 12,
+        "answer": "C"
+      }
+    ],
+    "points": 150
+  }
+]

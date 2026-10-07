@@ -1,0 +1,35 @@
+PASS 34 checks
+Q2 step
+Q3 dominant poles
+Q3 damping exponent
+Q7 ZOH
+Q4 gain
+Q5 closed response
+Q8 roots
+Q10 derivative
+Q11 determinant
+Q12 transform
+Q13 desired polynomial
+Q13 error transform
+Q13 ramp final
+Q14 break point 1
+Q14 break gain 1
+Q14 break point -1
+Q14 break gain -1
+Q14 circle
+Q14 discriminant
+Q14 damping minimum
+Q14 optimal poles
+Q15 recurrence
+Q15 initial0
+Q15 initial1
+Q15 partial fraction
+Q16 first energy
+Q16 second energy
+Q17 transfer
+Q17 controllable
+Q17 observable
+Q17 state transition initial and ODE
+Q17 step
+02 青大825模拟卷（答案与解析）.md structural and source links
+02 青大825模拟卷（试题）.md structural and source links

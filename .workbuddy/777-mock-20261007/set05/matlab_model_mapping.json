@@ -1,0 +1,275 @@
+{
+  "set": "05",
+  "file": "D:/obsidian/控制理论/青岛大学825真题/777改编模拟卷/Markdown笔记/05 青大825模拟卷（试题）.md",
+  "parameter_policy": "In question text, all symbolic-looking parameters are preassigned finite numeric real values satisfying the specified conditions before execution. The provided test parameters are validation samples, not fixed values added to the exam.",
+  "mappings": [
+    {
+      "question": 1,
+      "old_model": "G(s)=K/[s(s+2)(s+4)], K>0",
+      "new_code": "G = zpk([], [0 -2 -4], K);",
+      "parameters": {
+        "K": 24
+      },
+      "expected": {
+        "num": [
+          24
+        ],
+        "den": [
+          1,
+          6,
+          8,
+          0
+        ],
+        "Ts": 0
+      }
+    },
+    {
+      "question": 2,
+      "old_model": "G(s)=2/(s+1), H(s)=2",
+      "new_code": "G = tf(2, [1 1]);\nH = tf(2, 1);",
+      "parameters": {},
+      "expected": {
+        "G": {
+          "num": [
+            2
+          ],
+          "den": [
+            1,
+            1
+          ],
+          "Ts": 0
+        },
+        "H": {
+          "num": [
+            2
+          ],
+          "den": [
+            1
+          ],
+          "Ts": 0
+        }
+      }
+    },
+    {
+      "question": 3,
+      "old_model": "G(s)=K/[s(s+2)(s+4)], K>0",
+      "new_code": "G = zpk([], [0 -2 -4], K);",
+      "parameters": {
+        "K": 6
+      },
+      "expected": {
+        "num": [
+          6
+        ],
+        "den": [
+          1,
+          6,
+          8,
+          0
+        ],
+        "Ts": 0
+      }
+    },
+    {
+      "question": 4,
+      "old_model": "G(s)=8/[s(s+1)(s+2)]",
+      "new_code": "G = zpk([], [0 -1 -2], 8);",
+      "parameters": {},
+      "expected": {
+        "num": [
+          8
+        ],
+        "den": [
+          1,
+          3,
+          2,
+          0
+        ],
+        "Ts": 0
+      }
+    },
+    {
+      "question": 5,
+      "old_model": "Gc(s)=(1+a*T*s)/(1+T*s), a>1,T>0",
+      "new_code": "Gc = tf([a*T 1], [T 1]);",
+      "parameters": {
+        "a": 3,
+        "T": 1
+      },
+      "expected": {
+        "num": [
+          3,
+          1
+        ],
+        "den": [
+          1,
+          1
+        ],
+        "Ts": 0
+      }
+    },
+    {
+      "question": 6,
+      "old_model": "G0(s)=k/[s(T*s+1)], k>0,T>0",
+      "new_code": "G0 = tf(k, [T 1 0]);",
+      "parameters": {
+        "k": 2,
+        "T": 3
+      },
+      "expected": {
+        "num": [
+          2
+        ],
+        "den": [
+          3,
+          1,
+          0
+        ],
+        "Ts": 0
+      }
+    },
+    {
+      "question": 8,
+      "old_model": "G(s)=K(s+4)/[s(s+1)(s+2)], K>0",
+      "new_code": "G = zpk(-4, [0 -1 -2], K);",
+      "parameters": {
+        "K": 2
+      },
+      "expected": {
+        "num": [
+          2,
+          8
+        ],
+        "den": [
+          1,
+          3,
+          2,
+          0
+        ],
+        "Ts": 0
+      }
+    },
+    {
+      "question": 14,
+      "old_model": "G(s)=k/[s(s+4)(s+6)], k>0",
+      "new_code": "G = zpk([], [0 -4 -6], k);",
+      "parameters": {
+        "k": 70
+      },
+      "expected": {
+        "num": [
+          70
+        ],
+        "den": [
+          1,
+          10,
+          24,
+          0
+        ],
+        "Ts": 0
+      }
+    },
+    {
+      "question": 15,
+      "old_model": "G(s)=k/[s(s+1)(s+2)], k>0; feedback e(t)=-c(t-tau) carries delay",
+      "new_code": "G = zpk([], [0 -1 -2], k);",
+      "parameters": {
+        "k": 1
+      },
+      "expected": {
+        "num": [
+          1
+        ],
+        "den": [
+          1,
+          3,
+          2,
+          0
+        ],
+        "Ts": 0,
+        "InputDelay": 0
+      },
+      "notes": "Do not put the feedback delay into G a second time."
+    },
+    {
+      "question": 16,
+      "old_model": "P(z)=z^-1(1+2z^-1)/[(1-z^-1)(1-(1/2)z^-1)]",
+      "new_code": "P = tf([1 2], [1 -3/2 1/2], 1);",
+      "parameters": {},
+      "expected": {
+        "num": [
+          1,
+          2
+        ],
+        "den": [
+          1,
+          -1.5,
+          0.5
+        ],
+        "Ts": 1
+      },
+      "notes": "Multiplying numerator and denominator by z^2 yields (z+2)/(z^2-(3/2)z+1/2); no extra numerator trailing zero. T=1 added without changing sequences."
+    },
+    {
+      "question": 17,
+      "old_model": "xdot=[-4 2;2 -4]x+[12;0]u, y=[2 2]x",
+      "new_code": "A = [-4 2; 2 -4];\nB = [12; 0];\nC = [2 2];\nD = 0;\nsys = ss(A, B, C, D);",
+      "parameters": {},
+      "expected": {
+        "A": [
+          [
+            -4,
+            2
+          ],
+          [
+            2,
+            -4
+          ]
+        ],
+        "B": [
+          [
+            12
+          ],
+          [
+            0
+          ]
+        ],
+        "C": [
+          [
+            2,
+            2
+          ]
+        ],
+        "D": 0,
+        "Ts": 0
+      }
+    }
+  ],
+  "unchanged": [
+    {
+      "question": 10,
+      "reason": "Keep the analytic ZOH formula for the exact first frequency zero; no rational approximation or unsuitable c2d replacement introduced."
+    },
+    {
+      "question": 11,
+      "reason": "Already MATLAB ctrb/rank."
+    },
+    {
+      "question": 13,
+      "reason": "Keep circuit and component values; requested unknown transfer function must not be supplied."
+    }
+  ],
+  "balance_review": {
+    "overall": "Moderate; Q15 delay inversion and Q16 nonminimum-phase two-step design are the harder portions.",
+    "budget_minutes": {
+      "choices": 35,
+      "Q13": 23,
+      "Q14": 23,
+      "Q15": 24,
+      "Q16": 27,
+      "Q17": 23,
+      "review": 25
+    },
+    "note": "Q16 has explicit substeps and a second-order plant; arithmetic stays rational. Q13/Q17 are lighter and compensate. No additional controller or observer design complexity introduced."
+  }
+}

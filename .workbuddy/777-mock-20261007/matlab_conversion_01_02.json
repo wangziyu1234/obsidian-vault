@@ -1,0 +1,163 @@
+{
+  "scope": "only final 01 and 02 question MD; parameters/options/questions/answers preserved",
+  "date": "2026-10-07",
+  "code_question_counts": {
+    "set01": 10,
+    "set02": 9
+  },
+  "changes": [
+    {
+      "set": 1,
+      "question": 2,
+      "code": "A = [-1 1; 0 -1];\nB = [b; 1];",
+      "original_formula": "A=[-1,1;0,-1],B=[b;1]",
+      "verification": "det([B,A*B])=-1",
+      "before": "连续系统 $\\dot x=Ax+Bu$ 中\n\n$$\nA=\\begin{bmatrix}-1&1\\\\0&-1\\end{bmatrix},\\qquad B=\\begin{bmatrix}b\\\\1\\end{bmatrix},\n$$\n\n其中 $b$ 为实数。系统完全能控的充要条件为（　）。",
+      "after": "连续系统满足 $\\dot x=Ax+Bu$，矩阵由以下 MATLAB 代码给出。待定实参数 $b$ 先赋数值，再执行代码。系统完全能控的充要条件为（　）。\n\n```matlab\nA = [-1 1; 0 -1];\nB = [b; 1];\n```"
+    },
+    {
+      "set": 1,
+      "question": 4,
+      "code": "G = tf(3,[1 1]);\nH = 2;",
+      "original_formula": "G(s)=3/(s+1),H(s)=2",
+      "verification": "feedback(G,H)=3/(s+7)",
+      "before": "负反馈系统的前向通道为 $G(s)=\\frac3{s+1}$，反馈通道为 $H(s)=2$，输入为单位阶跃。定义输入端偏差和输出端误差分别为",
+      "after": "负反馈系统的前向通道 G 与反馈通道 H 由以下 MATLAB 代码给出，输入为单位阶跃。\n\n```matlab\nG = tf(3,[1 1]);\nH = 2;\n```\n\n定义输入端偏差和输出端误差分别为"
+    },
+    {
+      "set": 1,
+      "question": 5,
+      "code": "G = zpk([], [0 -3 -5], K);",
+      "original_formula": "G(s)=K/[s(s+3)(s+5)]",
+      "verification": "den=[1,8,15,0],num=K",
+      "before": "单位负反馈系统的开环传递函数为\n\n$$\nG(s)=\\frac{K}{s(s+3)(s+5)},\\qquad K>0.\n$$",
+      "after": "单位负反馈系统的开环模型由以下 MATLAB 代码给出，待定参数 $K>0$ 先赋数值后执行。\n\n```matlab\nG = zpk([], [0 -3 -5], K);\n```"
+    },
+    {
+      "set": 1,
+      "question": 8,
+      "code": "Phi = tf(18,[1 6 18]);",
+      "original_formula": "Phi=18/(s^2+6s+18)",
+      "verification": "poles=-3+-3i",
+      "before": "标准二阶闭环传递函数为 $\\Phi(s)=18/(s^2+6s+18)$。单位阶跃响应的峰值时间为（　）。",
+      "after": "标准二阶闭环模型由以下 MATLAB 代码给出。单位阶跃响应的峰值时间为（　）。\n\n```matlab\nPhi = tf(18,[1 6 18]);\n```"
+    },
+    {
+      "set": 1,
+      "question": 14,
+      "code": "G = zpk([], [0 -3 -6], K);",
+      "original_formula": "G=K/[s(s+3)(s+6)]",
+      "verification": "den=[1,9,18,0],num=K",
+      "before": "单位负反馈系统开环传递函数为\n\n$$\nG(s)=\\frac K{s(s+3)(s+6)},\\qquad K>0.\n$$",
+      "after": "单位负反馈系统开环模型由以下 MATLAB 代码给出，待定参数 $K>0$ 先赋数值后执行。\n\n```matlab\nG = zpk([], [0 -3 -6], K);\n```"
+    },
+    {
+      "set": 1,
+      "question": 15,
+      "code": "G0 = tf(2,[1 1 0]);\nGc = tf([a*T 1],[T 1]);",
+      "original_formula": "G0=2/[s(s+1)];Gc=(1+aTs)/(1+Ts)",
+      "verification": "numGc=[a*T,1],denGc=[T,1]",
+      "before": "单位负反馈系统未校正开环传递函数为\n\n$$\nG_0(s)=\\frac2{s(s+1)}.\n$$\n\n采用串联超前校正装置\n\n$$\nG_c(s)=\\frac{1+aTs}{1+Ts},\\qquad a>1,\\quad T>0.\n$$",
+      "after": "单位负反馈系统未校正开环模型 G0 与串联超前校正装置 Gc 由下列 MATLAB 代码给出。待定参数 $a>1$、$T>0$ 先赋数值后执行。\n\n```matlab\nG0 = tf(2,[1 1 0]);\nGc = tf([a*T 1],[T 1]);\n```"
+    },
+    {
+      "set": 1,
+      "question": 16,
+      "code": "P = tf(1,[1 1]);\nT = log(2);",
+      "original_formula": "P=1/(s+1),T=ln2",
+      "verification": "continuous model only; c2d not supplied because discretization is asked",
+      "before": "对象为 $P(s)=1/(s+1)$，采样周期 $T=\\ln2\\,\\mathrm s$。每个采样时刻先读出 $c[k]=c(kT)$，计算",
+      "after": "连续对象 P 和采样周期 T（单位为秒）由以下 MATLAB 代码给出。\n\n```matlab\nP = tf(1,[1 1]);\nT = log(2);\n```\n\n每个采样时刻先读出 $c[k]=c(kT)$，计算"
+    },
+    {
+      "set": 1,
+      "question": 17,
+      "code": "A = [0 1; 0 0];\nB = [0; 1];\nC = [1 0];\nD = 0;\nsys = ss(A,B,C,D);",
+      "original_formula": "A=[0,1;0,0],B=[0;1],C=[1,0],D=0",
+      "verification": "tf(sys)=1/s^2, same state coordinates",
+      "before": "系统模型为\n\n$$\n\\dot x=\\begin{bmatrix}0&1\\\\0&0\\end{bmatrix}x+\\begin{bmatrix}0\\\\1\\end{bmatrix}u.\n$$\n\n$$\ny=\\begin{bmatrix}1&0\\end{bmatrix}x.\n$$",
+      "after": "系统的连续状态空间模型由以下 MATLAB 代码给出，状态向量按代码中的坐标顺序取值。\n\n```matlab\nA = [0 1; 0 0];\nB = [0; 1];\nC = [1 0];\nD = 0;\nsys = ss(A,B,C,D);\n```"
+    },
+    {
+      "set": 2,
+      "question": 3,
+      "code": "G = tf(1,[1 2]);\nT = 1;",
+      "original_formula": "G=1/(s+2),T=1",
+      "verification": "continuous object unchanged; no c2d supplied to avoid answering task",
+      "before": "连续对象 $G(s)=\\frac1{s+2}$ 前接零阶保持器，采样周期为 $T=1\\,\\mathrm{s}$。零初始条件下，从保持器输入序列到对象输出采样序列的脉冲传递函数为（　）。",
+      "after": "连续对象 G 与采样周期 T（单位为秒）由以下 MATLAB 代码给出。对象前接零阶保持器。零初始条件下，从保持器输入序列到对象输出采样序列的脉冲传递函数为（　）。\n\n```matlab\nG = tf(1,[1 2]);\nT = 1;\n```"
+    },
+    {
+      "set": 2,
+      "question": 4,
+      "code": "G = zpk(-1, [0 -2 -5], K);",
+      "original_formula": "G=K(s+1)/[s(s+2)(s+5)]",
+      "verification": "num=[K,K],den=[1,7,10,0]",
+      "before": "单位负反馈系统的开环传递函数为\n\n$$\nG(s)=\\frac{K(s+1)}{s(s+2)(s+5)},\\qquad K>0.\n$$",
+      "after": "单位负反馈系统的开环模型由以下 MATLAB 代码给出，待定参数 $K>0$ 先赋数值后执行。\n\n```matlab\nG = zpk(-1, [0 -2 -5], K);\n```"
+    },
+    {
+      "set": 2,
+      "question": 6,
+      "code": "A = [1 0; 0 -1];\nB = [0; 1];",
+      "original_formula": "A=diag(1,-1),B=[0;1]",
+      "verification": "closed A-BF has fixed eigenvalue 1",
+      "before": "系统\n\n$$\n\\dot x=\\begin{bmatrix}1&0\\\\0&-1\\end{bmatrix}x+\\begin{bmatrix}0\\\\1\\end{bmatrix}u\n$$",
+      "after": "系统满足 $\\dot x=Ax+Bu$，矩阵由以下 MATLAB 代码给出。\n\n```matlab\nA = [1 0; 0 -1];\nB = [0; 1];\n```"
+    },
+    {
+      "set": 2,
+      "question": 8,
+      "code": "Phi = tf(20,conv([1 10],[1 2 2]));",
+      "original_formula": "Phi=20/[(s+10)(s^2+2s+2)]",
+      "verification": "den=[1,12,22,20]",
+      "before": "闭环系统的传递函数为\n\n$$\n\\Phi(s)=\\frac{20}{(s+10)(s^2+2s+2)}.\n$$",
+      "after": "闭环系统的模型由以下 MATLAB 代码给出。\n\n```matlab\nPhi = tf(20,conv([1 10],[1 2 2]));\n```"
+    },
+    {
+      "set": 2,
+      "question": 9,
+      "code": "G = tf(2,[1 1]);",
+      "original_formula": "G=2/(s+1)",
+      "verification": "closed tf=2/(s+3)",
+      "before": "单位负反馈系统开环传递函数为 $G(s)=\\frac{2}{s+1}$，输入为 $r(t)=\\sin3t$。稳态输出为（　）。",
+      "after": "单位负反馈系统的开环模型由以下 MATLAB 代码给出，输入为 $r(t)=\\sin3t$。稳态输出为（　）。\n\n```matlab\nG = tf(2,[1 1]);\n```"
+    },
+    {
+      "set": 2,
+      "question": 13,
+      "code": "Gp = zpk([],[-1 -3],1);\nGc = tf([Kd Kp Ki],[1 0]);",
+      "original_formula": "Gp=1/[(s+1)(s+3)],Gc=Kp+Ki/s+Kd*s",
+      "verification": "improper ideal PID tf permitted; no feedback poles computed in question",
+      "before": "单位负反馈系统的被控对象为\n\n$$\nG_p(s)=\\frac{1}{(s+1)(s+3)}.\n$$\n\n在前向通道串联理想 PID 控制器\n\n$$\nG_c(s)=K_p+\\frac{K_i}{s}+K_ds.\n$$",
+      "after": "单位负反馈系统的被控对象 Gp 与前向通道串联的理想 PID 控制器 Gc 由下列 MATLAB 代码给出。待定实参数 Kp、Ki、Kd 分别对应 $K_p,K_i,K_d$，先赋数值后执行。\n\n```matlab\nGp = zpk([],[-1 -3],1);\nGc = tf([Kd Kp Ki],[1 0]);\n```"
+    },
+    {
+      "set": 2,
+      "question": 14,
+      "code": "G = zpk([-2 -3],[0 -1],K);",
+      "original_formula": "G=K(s+2)(s+3)/[s(s+1)]",
+      "verification": "num=K*[1,5,6],den=[1,1,0]",
+      "before": "单位负反馈系统的开环传递函数为\n\n$$\nG(s)=\\frac{K(s+2)(s+3)}{s(s+1)},\\qquad K>0.\n$$",
+      "after": "单位负反馈系统的开环模型由以下 MATLAB 代码给出，待定参数 $K>0$ 先赋数值后执行。\n\n```matlab\nG = zpk([-2 -3],[0 -1],K);\n```"
+    },
+    {
+      "set": 2,
+      "question": 17,
+      "code": "A = [-5 -1; 6 0];\nB = [0; 2];\nC = [0 1];\nD = 0;\nsys = ss(A,B,C,D);",
+      "original_formula": "A=[-5,-1;6,0],B=[0;2],C=[0,1],D=0",
+      "verification": "tf(sys)=2(s+5)/[(s+2)(s+3)]",
+      "before": "线性定常系统的状态空间表达式为\n\n$$\n\\dot x=\\begin{bmatrix}-5&-1\\\\6&0\\end{bmatrix}x+\\begin{bmatrix}0\\\\2\\end{bmatrix}u,\n$$\n\n$$\ny=\\begin{bmatrix}0&1\\end{bmatrix}x.\n$$",
+      "after": "线性定常系统的连续状态空间模型由以下 MATLAB 代码给出，状态坐标顺序保持不变。\n\n```matlab\nA = [-5 -1; 6 0];\nB = [0; 2];\nC = [0 1];\nD = 0;\nsys = ss(A,B,C,D);\n```"
+    }
+  ],
+  "existing_code_note": "02 Q1 numeric-parameter assignment prerequisite clarified. 01 Q3/Q12 and 02 Q1 pre-existing code retained.",
+  "preserved": [
+    "01 Q13 physical modeling no model revealed",
+    "02 Q15 difference equation retained because deriving H(z) is requested",
+    "01 Q16 and 02 Q3 supply continuous tf only; ZOH discretization remains to solve",
+    "nonlinear and physical equations retained",
+    "no symbolic objects passed to tf",
+    "all new tf and ss are continuous models, so no unspecified discrete sample periods"
+  ]
+}

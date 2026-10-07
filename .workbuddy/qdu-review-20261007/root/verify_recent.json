@@ -1,0 +1,152 @@
+[
+  {
+    "question": "2024 选择1",
+    "result": "pass",
+    "conclusion": "Routh first column: 1,4,2,-9,59/6,6; LHP=3"
+  },
+  {
+    "question": "2024 选择2",
+    "result": "pass",
+    "conclusion": "k=2,a=3/4; no offered choice"
+  },
+  {
+    "question": "2024 选择3",
+    "result": "pass",
+    "conclusion": "closed-loop interpretation: 1.04,0.1; open-loop: 0.52,0.1"
+  },
+  {
+    "question": "2024 选择4",
+    "result": "pass",
+    "conclusion": "stable; Kv=1; error=5"
+  },
+  {
+    "question": "2024 选择5",
+    "result": "pass",
+    "conclusion": "a=exp(-1); conjugate roots modulus exp(-3/2)"
+  },
+  {
+    "question": "2024 选择6",
+    "result": "pass",
+    "conclusion": "stable focus 0<a<2"
+  },
+  {
+    "question": "2024 选择7",
+    "result": "pass",
+    "conclusion": "h=8/5"
+  },
+  {
+    "question": "2024 选择8",
+    "result": "pass",
+    "conclusion": "exact derivative peak expression; option A"
+  },
+  {
+    "question": "2024 选择9",
+    "result": "pass",
+    "conclusion": "c6=0.894552064; A"
+  },
+  {
+    "question": "2024 选择10",
+    "result": "pass",
+    "conclusion": "9<k<24 by N=6/k"
+  },
+  {
+    "question": "2024 计算1",
+    "result": "pass",
+    "conclusion": "K0=18/pi; symbolic resistor gains retained"
+  },
+  {
+    "question": "2024 计算2",
+    "result": "pass",
+    "conclusion": "c=1-4e^-t+2e^-2t"
+  },
+  {
+    "question": "2024 计算3",
+    "result": "pass",
+    "conclusion": "stable 0<k<204/25; breakaway solves 4s^3+15s^2+16s+6=0"
+  },
+  {
+    "question": "2024 计算4",
+    "result": "pass",
+    "conclusion": "observer L=[120,-103,210]"
+  },
+  {
+    "question": "2024 计算5",
+    "result": "pass",
+    "conclusion": "K=1; stable repeated complex roots; Nyquist real/imag verified"
+  },
+  {
+    "question": "2025 1",
+    "result": "pass",
+    "conclusion": "two RHP roots counting multiplicity"
+  },
+  {
+    "question": "2025 2",
+    "result": "pass",
+    "conclusion": "sqrt(2)/4 sin(2t)"
+  },
+  {
+    "question": "2025 3",
+    "result": "pass",
+    "conclusion": "Kv=1; error=4"
+  },
+  {
+    "question": "2025 4",
+    "result": "pass",
+    "conclusion": "-60 dB/dec"
+  },
+  {
+    "question": "2025 5",
+    "result": "pass",
+    "conclusion": "final value=0; reference omitted factor"
+  },
+  {
+    "question": "2025 6",
+    "result": "pass",
+    "conclusion": "ZOH integrator pole 1-A; 0<A<2"
+  },
+  {
+    "question": "2025 7",
+    "result": "pass",
+    "conclusion": "gain margin 4/5"
+  },
+  {
+    "question": "2025 8",
+    "result": "pass",
+    "conclusion": "(0,0) unstable focus; (-1,0) saddle"
+  },
+  {
+    "question": "2025 9",
+    "result": "pass",
+    "conclusion": "rank=2"
+  },
+  {
+    "question": "2025 10",
+    "result": "pass",
+    "conclusion": "all transformed matrices verified"
+  },
+  {
+    "question": "2025 11",
+    "result": "pass",
+    "conclusion": "K=[25,5]; numerator 1 without prefilter"
+  },
+  {
+    "question": "2025 12",
+    "result": "pass",
+    "conclusion": "a=exp(-1); closed characteristic z^2-z+1-a"
+  },
+  {
+    "question": "2025 13",
+    "result": "pass",
+    "conclusion": "stable k<(T1+T2)/(T1*T2)"
+  },
+  {
+    "question": "2025 14",
+    "result": "pass",
+    "conclusion": "omega=4; both amplitude branches real; small unstable, large stable in DF approximation"
+  },
+  {
+    "question": "2025 15",
+    "result": "pass",
+    "conclusion": "reduced observer verified including y injection and recovery"
+  }
+]

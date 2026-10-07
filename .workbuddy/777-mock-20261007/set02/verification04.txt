@@ -1,0 +1,21 @@
+PASS 20 checks
+Q2 response
+Q3 RHP count
+Q4 centroid
+Q5 phase margin
+Q8 cubic sine coefficient
+Q10 minimum transfer
+Q11 energy
+Q13 full transfer
+Q13 intermediate transfer
+Q13 numeric
+Q14 error final
+Q14 marginal factor
+Q15 scaling
+Q15 original cutoff magnitude square
+Q16 ZOH integral and one step input
+Q17 realization
+Q17 observer poles
+Q17 error initial and ODE
+04 青大825模拟卷（答案与解析）.md structure scores and links
+04 青大825模拟卷（试题）.md structure scores and links

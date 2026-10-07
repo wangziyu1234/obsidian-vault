@@ -1,0 +1,456 @@
+{
+  "version": 1,
+  "date": "2026-10-07",
+  "source_directory": "D:/obsidian/控制理论/青岛大学825真题/Markdown笔记/选择题练习",
+  "policy": "30道既有自编题各使用一次，每套6道；保持题设、选项、答案，移除旧导航链接；最终每套另补6道新选择题。难度1基础、2常规计算、3多步或关键陷阱。",
+  "review": {
+    "count": 30,
+    "all_answers_verified": true,
+    "unique_answer": true,
+    "math_errors": [],
+    "notes": [
+      "这是独立数学复推，未重新核验旧答案中教材页码或全部777考点参考。",
+      "原题仅4道显式MATLAB、4道离散、4道现控及2道非线性；通过新增6题补齐每卷主题。",
+      "保留题源的考点参考/自编措辞，不宣称旧题是777原题。",
+      "第3组第2题需保留t=0-静止及输出跃变说明；第3组第8题必须保留非零初值。",
+      "第2组第10题需保留连续相角、延迟范围；第1组第4题和第2组第6题须保留终值不存在的解释。"
+    ]
+  },
+  "sets": [
+    {
+      "set": 1,
+      "old_question_count": 6,
+      "difficulty_sum": 11,
+      "questions": [
+        {
+          "source_group": 1,
+          "source_question": 1,
+          "suggested_number": 1,
+          "answer": "B",
+          "topic": "劳斯全零行与左右半平面根数",
+          "difficulty": 3,
+          "source_question_file": "01 第1组 选择题（题目）.md",
+          "source_answer_file": "01-a 第1组 选择题（答案与解析）.md",
+          "source_heading": "第1题",
+          "verification": "(s+3)(s-1)(s+1)(s^2+4): LHP2,RHP1,imag2"
+        },
+        {
+          "source_group": 1,
+          "source_question": 10,
+          "suggested_number": 2,
+          "answer": "C",
+          "topic": "约当块含参能控性",
+          "difficulty": 1,
+          "source_question_file": "01 第1组 选择题（题目）.md",
+          "source_answer_file": "01-a 第1组 选择题（答案与解析）.md",
+          "source_heading": "第10题",
+          "verification": "det[B AB]=-1"
+        },
+        {
+          "source_group": 2,
+          "source_question": 1,
+          "suggested_number": 3,
+          "answer": "C",
+          "topic": "MATLAB zpk、高频斜率与右半平面零点",
+          "difficulty": 1,
+          "source_question_file": "02 第2组 选择题（题目）.md",
+          "source_answer_file": "02-a 第2组 选择题（答案与解析）.md",
+          "source_heading": "第1题",
+          "verification": "four poles,one RHP zero -> -60dB/dec"
+        },
+        {
+          "source_group": 2,
+          "source_question": 9,
+          "suggested_number": 4,
+          "answer": "C",
+          "topic": "非单位反馈偏差与输出端误差",
+          "difficulty": 2,
+          "source_question_file": "02 第2组 选择题（题目）.md",
+          "source_answer_file": "02-a 第2组 选择题（答案与解析）.md",
+          "source_heading": "第9题",
+          "verification": "Phi=3/(s+7): c3/7,e1/7,eo1/14"
+        },
+        {
+          "source_group": 3,
+          "source_question": 5,
+          "suggested_number": 5,
+          "answer": "B",
+          "topic": "平移劳斯判据",
+          "difficulty": 3,
+          "source_question_file": "03 第3组 选择题（题目）.md",
+          "source_answer_file": "03-a 第3组 选择题（答案与解析）.md",
+          "source_heading": "第5题",
+          "verification": "D(q-1)=q^3+5q^2+2q+K-8 ->8<K<18"
+        },
+        {
+          "source_group": 3,
+          "source_question": 4,
+          "suggested_number": 6,
+          "answer": "D",
+          "topic": "后向差分离散化",
+          "difficulty": 1,
+          "source_question_file": "03 第3组 选择题（题目）.md",
+          "source_answer_file": "03-a 第3组 选择题（答案与解析）.md",
+          "source_heading": "第4题",
+          "verification": "3c[k]-2c[k-1]=r[k]"
+        }
+      ],
+      "suggested_new_topics": [
+        "非线性描述函数或奇点分类（必补）",
+        "自动控制基本概念",
+        "根轨迹相角或零点作用（避免再考平移劳斯）",
+        "二阶动态性能",
+        "采样定理（短概念）",
+        "状态反馈或观测器概念"
+      ]
+    },
+    {
+      "set": 2,
+      "old_question_count": 6,
+      "difficulty_sum": 10,
+      "questions": [
+        {
+          "source_group": 1,
+          "source_question": 2,
+          "suggested_number": 1,
+          "answer": "B",
+          "topic": "MATLAB conv/tf与截止频率、相角裕度",
+          "difficulty": 2,
+          "source_question_file": "01 第1组 选择题（题目）.md",
+          "source_answer_file": "01-a 第1组 选择题（答案与解析）.md",
+          "source_heading": "第2题",
+          "verification": "wc1,gamma45 -> a1,k=sqrt2"
+        },
+        {
+          "source_group": 1,
+          "source_question": 7,
+          "suggested_number": 2,
+          "answer": "A",
+          "topic": "非线性系统全部奇点分类",
+          "difficulty": 2,
+          "source_question_file": "01 第1组 选择题（题目）.md",
+          "source_answer_file": "01-a 第1组 选择题（答案与解析）.md",
+          "source_heading": "第7题",
+          "verification": "origin roots(-1+-j sqrt3)/2; other points roots1,-2"
+        },
+        {
+          "source_group": 2,
+          "source_question": 2,
+          "suggested_number": 3,
+          "answer": "A",
+          "topic": "零阶保持一阶对象精确离散化",
+          "difficulty": 2,
+          "source_question_file": "02 第2组 选择题（题目）.md",
+          "source_answer_file": "02-a 第2组 选择题（答案与解析）.md",
+          "source_heading": "第2题",
+          "verification": "sample ODE gives q=e^-2,Bd=(1-q)/2"
+        },
+        {
+          "source_group": 2,
+          "source_question": 7,
+          "suggested_number": 4,
+          "answer": "A",
+          "topic": "根轨迹渐近线",
+          "difficulty": 1,
+          "source_question_file": "02 第2组 选择题（题目）.md",
+          "source_answer_file": "02-a 第2组 选择题（答案与解析）.md",
+          "source_heading": "第7题",
+          "verification": "(0-2-5+1)/2=-3,angles90/270"
+        },
+        {
+          "source_group": 3,
+          "source_question": 8,
+          "suggested_number": 5,
+          "answer": "D",
+          "topic": "非零初值二阶响应",
+          "difficulty": 2,
+          "source_question_file": "03 第3组 选择题（题目）.md",
+          "source_answer_file": "03-a 第3组 选择题（答案与解析）.md",
+          "source_heading": "第8题",
+          "verification": "y=2-3e^-t/2+e^-3t/2,initial1/derivative0"
+        },
+        {
+          "source_group": 3,
+          "source_question": 10,
+          "suggested_number": 6,
+          "answer": "C",
+          "topic": "不可控不稳定模态与不可镇定",
+          "difficulty": 1,
+          "source_question_file": "03 第3组 选择题（题目）.md",
+          "source_answer_file": "03-a 第3组 选择题（答案与解析）.md",
+          "source_heading": "第10题",
+          "verification": "closed triangular diagonal1,-1-k2"
+        }
+      ],
+      "suggested_new_topics": [
+        "控制基本概念",
+        "闭环模型/传递函数",
+        "二阶动态性能",
+        "非线性描述函数（区别既有奇点分类）",
+        "PI与滞后区别",
+        "ZOH频率特性"
+      ]
+    },
+    {
+      "set": 3,
+      "old_question_count": 6,
+      "difficulty_sum": 12,
+      "questions": [
+        {
+          "source_group": 1,
+          "source_question": 3,
+          "suggested_number": 1,
+          "answer": "D",
+          "topic": "MATLAB tf系数、二阶参数与终值",
+          "difficulty": 2,
+          "source_question_file": "01 第1组 选择题（题目）.md",
+          "source_answer_file": "01-a 第1组 选择题（答案与解析）.md",
+          "source_heading": "第3题",
+          "verification": "den normalized s^2+3s+4 -> k1=10/9,k2=1,dc5/4"
+        },
+        {
+          "source_group": 1,
+          "source_question": 4,
+          "suggested_number": 2,
+          "answer": "C",
+          "topic": "z变换初值及终值定理失效",
+          "difficulty": 2,
+          "source_question_file": "01 第1组 选择题（题目）.md",
+          "source_answer_file": "01-a 第1组 选择题（答案与解析）.md",
+          "source_heading": "第4题",
+          "verification": "x[k]=(1-(-1)^k)/2"
+        },
+        {
+          "source_group": 2,
+          "source_question": 5,
+          "suggested_number": 3,
+          "answer": "B",
+          "topic": "非线性全局渐近稳定与Lyapunov",
+          "difficulty": 3,
+          "source_question_file": "02 第2组 选择题（题目）.md",
+          "source_answer_file": "02-a 第2组 选择题（答案与解析）.md",
+          "source_heading": "第5题",
+          "verification": "V=(x1^2+x2^2)/2,Vdot=-(x1^2+x2^2)^2,radially unbounded"
+        },
+        {
+          "source_group": 2,
+          "source_question": 10,
+          "suggested_number": 4,
+          "answer": "B",
+          "topic": "纯延迟与相角裕度",
+          "difficulty": 2,
+          "source_question_file": "02 第2组 选择题（题目）.md",
+          "source_answer_file": "02-a 第2组 选择题（答案与解析）.md",
+          "source_heading": "第10题",
+          "verification": "wc1,gamma=pi/4-tau -> tau pi/12"
+        },
+        {
+          "source_group": 3,
+          "source_question": 2,
+          "suggested_number": 5,
+          "answer": "B",
+          "topic": "含输入导数的一阶系统阶跃跃变",
+          "difficulty": 2,
+          "source_question_file": "03 第3组 选择题（题目）.md",
+          "source_answer_file": "03-a 第3组 选择题（答案与解析）.md",
+          "source_heading": "第2题",
+          "verification": "c(t)=1+e^(-t/2)/2,includes initial jump3/2"
+        },
+        {
+          "source_group": 3,
+          "source_question": 7,
+          "suggested_number": 6,
+          "answer": "A",
+          "topic": "约当矩阵零输入响应",
+          "difficulty": 1,
+          "source_question_file": "03 第3组 选择题（题目）.md",
+          "source_answer_file": "03-a 第3组 选择题（答案与解析）.md",
+          "source_heading": "第7题",
+          "verification": "exp(At)=e^-t[[1,2t],[0,1]]"
+        }
+      ],
+      "suggested_new_topics": [
+        "控制基本概念",
+        "根轨迹概念或渐近线（必补）",
+        "传递函数短计算",
+        "频率响应幅相（避免再考裕度）",
+        "PI与滞后区别",
+        "能控/能观概念（不要再加重型Lyapunov题）"
+      ]
+    },
+    {
+      "set": 4,
+      "old_question_count": 6,
+      "difficulty_sum": 11,
+      "questions": [
+        {
+          "source_group": 1,
+          "source_question": 5,
+          "suggested_number": 1,
+          "answer": "D",
+          "topic": "MATLAB zpk、幅值裕度与分贝符号",
+          "difficulty": 2,
+          "source_question_file": "01 第1组 选择题（题目）.md",
+          "source_answer_file": "01-a 第1组 选择题（答案与解析）.md",
+          "source_heading": "第5题",
+          "verification": "phase crossing sqrt11,G=-2 -> h1/2"
+        },
+        {
+          "source_group": 1,
+          "source_question": 9,
+          "suggested_number": 2,
+          "answer": "A",
+          "topic": "混合输入输出反求传递函数",
+          "difficulty": 2,
+          "source_question_file": "01 第1组 选择题（题目）.md",
+          "source_answer_file": "01-a 第1组 选择题（答案与解析）.md",
+          "source_heading": "第9题",
+          "verification": "C/R=(s+2)/(s+4)"
+        },
+        {
+          "source_group": 2,
+          "source_question": 3,
+          "suggested_number": 3,
+          "answer": "A",
+          "topic": "非单位直流增益二阶阶跃峰值",
+          "difficulty": 2,
+          "source_question_file": "02 第2组 选择题（题目）.md",
+          "source_answer_file": "02-a 第2组 选择题（答案与解析）.md",
+          "source_heading": "第3题",
+          "verification": "dc9/4,relative overshoot e^-pi"
+        },
+        {
+          "source_group": 2,
+          "source_question": 8,
+          "suggested_number": 4,
+          "answer": "D",
+          "topic": "含参能观性",
+          "difficulty": 2,
+          "source_question_file": "02 第2组 选择题（题目）.md",
+          "source_answer_file": "02-a 第2组 选择题（答案与解析）.md",
+          "source_heading": "第8题",
+          "verification": "det Qo=(1-c)(1-2c)"
+        },
+        {
+          "source_group": 3,
+          "source_question": 1,
+          "suggested_number": 5,
+          "answer": "B",
+          "topic": "一拍延迟采样积分系统判稳",
+          "difficulty": 2,
+          "source_question_file": "03 第3组 选择题（题目）.md",
+          "source_answer_file": "03-a 第3组 选择题（答案与解析）.md",
+          "source_heading": "第1题",
+          "verification": "closed z^2-z+KT -> Jury 0<KT<1"
+        },
+        {
+          "source_group": 3,
+          "source_question": 6,
+          "suggested_number": 6,
+          "answer": "C",
+          "topic": "滞后校正型别与斜坡误差",
+          "difficulty": 1,
+          "source_question_file": "03 第3组 选择题（题目）.md",
+          "source_answer_file": "03-a 第3组 选择题（答案与解析）.md",
+          "source_heading": "第6题",
+          "verification": "one origin pole,Kv10,ess1/10"
+        }
+      ],
+      "suggested_new_topics": [
+        "非线性奇点或继电器（必补）",
+        "控制基本概念",
+        "根轨迹判据（必补）",
+        "相角裕度短计算",
+        "状态转移矩阵概念",
+        "采样定理（选短题，已有两拍判稳）"
+      ]
+    },
+    {
+      "set": 5,
+      "old_question_count": 6,
+      "difficulty_sum": 12,
+      "questions": [
+        {
+          "source_group": 1,
+          "source_question": 6,
+          "suggested_number": 1,
+          "answer": "C",
+          "topic": "劳斯稳定范围与混合输入稳态误差",
+          "difficulty": 2,
+          "source_question_file": "01 第1组 选择题（题目）.md",
+          "source_answer_file": "01-a 第1组 选择题（答案与解析）.md",
+          "source_heading": "第6题",
+          "verification": "0<K<48 and 24/K<=1"
+        },
+        {
+          "source_group": 1,
+          "source_question": 8,
+          "suggested_number": 2,
+          "answer": "A",
+          "topic": "非单位反馈正弦稳态响应",
+          "difficulty": 2,
+          "source_question_file": "01 第1组 选择题（题目）.md",
+          "source_answer_file": "01-a 第1组 选择题（答案与解析）.md",
+          "source_heading": "第8题",
+          "verification": "Phi=2/(s+5) and Phi(j5)=(1-j)/5"
+        },
+        {
+          "source_group": 2,
+          "source_question": 4,
+          "suggested_number": 3,
+          "answer": "C",
+          "topic": "根轨迹相角与模值条件",
+          "difficulty": 2,
+          "source_question_file": "02 第2组 选择题（题目）.md",
+          "source_answer_file": "02-a 第2组 选择题（答案与解析）.md",
+          "source_heading": "第4题",
+          "verification": "D(-1+j)=-6-2j -> K not real"
+        },
+        {
+          "source_group": 2,
+          "source_question": 6,
+          "suggested_number": 4,
+          "answer": "D",
+          "topic": "不稳定闭环的稳态误差不存在",
+          "difficulty": 2,
+          "source_question_file": "02 第2组 选择题（题目）.md",
+          "source_answer_file": "02-a 第2组 选择题（答案与解析）.md",
+          "source_heading": "第6题",
+          "verification": "Routh first column +,+,-,+ and no cancellation"
+        },
+        {
+          "source_group": 3,
+          "source_question": 3,
+          "suggested_number": 5,
+          "answer": "D",
+          "topic": "超前装置最大超前角与参数",
+          "difficulty": 2,
+          "source_question_file": "03 第3组 选择题（题目）.md",
+          "source_answer_file": "03-a 第3组 选择题（答案与解析）.md",
+          "source_heading": "第3题",
+          "verification": "sin30=(a-1)/(a+1),wm=1/(T sqrt a)"
+        },
+        {
+          "source_group": 3,
+          "source_question": 9,
+          "suggested_number": 6,
+          "answer": "A",
+          "topic": "频率轴缩放与裕度不变",
+          "difficulty": 2,
+          "source_question_file": "03 第3组 选择题（题目）.md",
+          "source_answer_file": "03-a 第3组 选择题（答案与解析）.md",
+          "source_heading": "第9题",
+          "verification": "Gnew(jw)=Gold(jw/2)"
+        }
+      ],
+      "suggested_new_topics": [
+        "MATLAB tf系数或feedback命令（必补）",
+        "离散系统概念或ZOH（必补）",
+        "现控能控能观/矩阵指数（必补）",
+        "非线性奇点或描述函数（必补）",
+        "控制基本概念",
+        "二阶动态性能（简单题；旧题已有两个稳定性前提计算）"
+      ]
+    }
+  ]
+}

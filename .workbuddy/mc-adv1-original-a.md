@@ -1,0 +1,1487 @@
+---
+create: 2026-10-01
+modify: 2026-10-01
+tags:
+  - 777习题集
+  - 考研真题
+  - 现代控制理论
+book: 现控200题强化
+chapter: 1
+type: exam-solutions
+---
+
+> 返回：[[777习题集目录]] ｜ 题目：[[现控200题强化 专题一 状态空间描述（题目）]] ｜ 勘误：[[777习题集官方勘误摘录]]
+
+# 现控200题强化 专题一 状态空间描述（答案与解析）
+
+> [!abstract] 答案与解析
+> 本专题 31 题（1-1—1-31）的答案与解析，按题号连续排列。原书答案册（现控册）只给**考点**与**本题总结**、不标难度星级，本页一并保留（总结按库内口径压缩为一两句）。
+>
+> **本页已录 1-1—1-31 全部 31 题**（题型 1—10）。
+>
+> **本批落实的官方勘误 4 条**（均经复算确认）：
+> **1-2**（删掉负号）——原书状态方程 $\dot x_4$ 印 $-\frac{B_1}{M_2}x_3$，与同页矩阵形式 $A_{(4,3)}=+\frac{B_1}{M_2}$ 自相矛盾；官方删负号，本页按 $\frac{B_1}{M_2}x_3$ 转写。
+> **1-3**（改图）——题干「输出 $y$ 是 $R_2$ 上的支路电压」与图不符，官方改 $R_3$（题目页已落实），本页按 $y=R_3(x_1+x_2)$ 解析，与原书答案一致。
+> **1-4**（改为一阶导）——原书输出条件印 $y_1=C_1=x_3$，官方改为 $\dot y_1=C_1=x_3$（弹簧伸长度的一阶导即速率）。
+> **1-8**——原书印 $G(s)=\frac{-3(s+1)}{s^3+2s^2+4s+1}$ 并判「BIBO 稳定」；官方勘误图为 $\frac{s+1}{s^3+2s^2+4s-1}$（分子、常数项、结论三处都改），复算确认，有一个正实根 $0.2225$ ⇒ **不是 BIBO 稳定**。
+> **1-9**——原书分母印 $s^4+5s^3+9s^2+7s+2$（漏了 $s(s+3)$ 项），复算与勘误图一致为 $s^4+5s^3+10s^2+10s+2$。
+> **1-10**（(1)(2) 问修改）——官方给修订版：补「又 $y_1=u_2=x_{11}$，故」的推理链，并把传函分母写成展开式 $s^3-7s-6$。
+>
+> 全批矩阵结论均经 sympy/numpy 独立复算（见各题尾注）。
+
+## 答案速查
+
+| 题号  | 答案                                                                                                                                                                                                                                                                                              | 题号   | 答案                                                                                                                                                                                                               |
+| :-- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :--- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1-1 | $\dot x=\begin{bmatrix}-\frac{1}{R_2C}&\frac{1}{C}\\\frac{1}{L}&-\frac{R_1}{L}\end{bmatrix}x+\begin{bmatrix}\frac{1}{R_2C}&0\\\frac{1}{L}&\frac{1}{L}\end{bmatrix}u$，$y=[-1\ \ 0]x+[1\ \ 0]u$                                                                                                   | 1-9  | $\dot x=\begin{bmatrix}0&1&0&0\\-2&-3&0&-1\\0&0&0&1\\3&1&-1&-2\end{bmatrix}x+\begin{bmatrix}0\\1\\0\\0\end{bmatrix}u$，$W(s)=\frac{s^3+5s^2+7s+3}{s^4+5s^3+10s^2+10s+2}$ ⚠️                                       |
+| 1-2 | $\dot x=\begin{bmatrix}0&0&1&0\\0&0&0&1\\-\frac{K}{M_1}&0&-\frac{B_1}{M_1}&\frac{B_1}{M_1}\\0&0&\frac{B_1}{M_2}&-\frac{B_1+B_2}{M_2}\end{bmatrix}x+\begin{bmatrix}0\\0\\0\\\frac{1}{M_2}\end{bmatrix}u$ ⚠️                                                                                      | 1-10 | $\dot x=\begin{bmatrix}0&1&0\\-2&-3&0\\2&0&3\end{bmatrix}x+\begin{bmatrix}0\\1\\0\end{bmatrix}u$，$y=[0\ \ 0\ \ 1]x$，$W(s)=\frac{2}{s^3-7s-6}$ ⚠️                                                                 |
+| 1-3 | $\dot x=\begin{bmatrix}-\frac{R_1+R_3}{L_1}&-\frac{R_3}{L_1}\\-\frac{R_3}{L_2}&-\frac{R_2+R_3}{L_2}\end{bmatrix}x+\begin{bmatrix}\frac{R_1}{L_1}\\0\end{bmatrix}u$，$y=[R_3\ \ R_3]x$ ⚠️                                                                                                         | 1-11 | $W(s)=\frac{3s-1}{s^3-3s^2+2s}$；能控Ⅰ型 $A=\begin{bmatrix}0&1&0\\0&0&1\\0&-2&3\end{bmatrix}$、$y=[-1\ \ 3\ \ 0]x$；能观Ⅱ型 $A=\begin{bmatrix}0&0&0\\1&0&-2\\0&1&3\end{bmatrix}$、$B=\begin{bmatrix}-1\\3\\0\end{bmatrix}$ |
+| 1-4 | $A=\begin{bmatrix}0&0&1&0\\0&0&0&1\\-\frac{k_1}{M_1}&\frac{k_1}{M_1}&-\frac{B_1}{M_1}&\frac{B_1}{M_1}\\\frac{k_1}{M_2}&-\frac{k_1+k_2}{M_2}&\frac{B_1}{M_2}&-\frac{B_1+B_2}{M_2}\end{bmatrix}$，$B=\begin{bmatrix}0&0\\0&0\\\frac{1}{M_1}&0\\0&\frac{1}{M_2}\end{bmatrix}$，$y=[x_3\ \ x_4]^T$ ⚠️ | 1-12 | $A=\begin{bmatrix}0&1\\-2&-3\end{bmatrix}$；$\lambda_1=-1,\lambda_2=-2$；$W(s)=\frac{-s-2}{s^2+3s+2}$；不完全能控、完全能观                                                                                                   |
+| 1-5 | $A=\begin{bmatrix}0&1&0&0\\-12&-0.02&12&0\\0&0&0&1\\120&0&-120&-0.2\end{bmatrix}$，$B=[0\ \ 0\ \ 0\ \ 20]^T$，$y=[1\ \ 0\ \ 0\ \ 0]x$；rank $Q_c=4$ 完全能控                                                                                                                                           | 1-13 | 最小实现 $\dot x=\begin{bmatrix}-1&0\\0&-6\end{bmatrix}x+\begin{bmatrix}1\\1\end{bmatrix}u$，$y=[\frac15\ \ -\frac15]x+2u$                                                                                            |
+| 1-6 | $\dot x=\begin{bmatrix}\alpha_1&1&0\\0&\alpha_2&1\\0&0&\alpha_3\end{bmatrix}x+\begin{bmatrix}0\\0\\1\end{bmatrix}u$，$y=[1\ \ 0\ \ 0]x+du$                                                                                                                                                       | 1-14 | 能控标准型 $A=\begin{bmatrix}0&1&0\\0&0&1\\3&1&-3\end{bmatrix}$，$y=[-1\ \ 1\ \ 0]x$；最小实现 $A=\begin{bmatrix}0&1\\-3&-4\end{bmatrix}$、$B=[0\ \ 1]^T$、$y=[1\ \ 0]x$                                                      |
+| 1-7 | $\dot x=\begin{bmatrix}-2&-1&0\\1&-1&-1\\0&-1&-2\end{bmatrix}x+\begin{bmatrix}1&0\\-1&1\\0&0\end{bmatrix}u$，$c=\begin{bmatrix}1&1&0\\-1&-1&1\end{bmatrix}x+\begin{bmatrix}0&0\\1&0\end{bmatrix}u$；极点 $-1,-2,-2$                                                                                 | 1-15 | (1) $a=1$ 或 $a=2$ 时不完全能控或不完全能观；(2) $a=1$ 时最小实现 $A=\begin{bmatrix}0&1\\-2&-3\end{bmatrix}$、$B=[0\ \ 1]^T$、$y=[1\ \ 0]x$                                                                                           |
+| 1-8 | $\dot x=\begin{bmatrix}-2&-1&1\\2&-1&0\\-3&0&1\end{bmatrix}x+\begin{bmatrix}0\\0\\1\end{bmatrix}v$，$y=[1\ \ 0\ \ 0]x$；$G(s)=\frac{s+1}{s^3+2s^2+4s-1}$，**不是 BIBO 稳定** ⚠️                                                                                                                    | 1-16 | 对角型 $A=\mathrm{diag}(-4,-1,-2)$、$B=[1\ \ 1\ \ 1]^T$、$y=[-\frac16\ \ \frac83\ \ -\frac32]x$；$e^{At}=\mathrm{diag}(e^{-4t},e^{-t},e^{-2t})$                                                                        |
+
+## 【题型1】数学建模列写状态空间表达式
+
+**1-1　答案**（考点：机理法建模求取电网络系统的状态空间表达式）
+
+由电路图可知
+
+$$
+y=R_2x_2+L\frac{\mathrm dx_2}{\mathrm dt}+u_2
+$$
+
+$$
+u_1=x_1+y
+$$
+
+$$
+C\frac{\mathrm dx_1}{\mathrm dt}=\frac{y}{R_2}+x_2
+$$
+
+整理成矩阵形式得
+
+$$
+\dot x=\begin{bmatrix}-\frac{1}{R_2C}&\frac{1}{C}\\[4pt]\frac{1}{L}&-\frac{R_1}{L}\end{bmatrix}x+\begin{bmatrix}\frac{1}{R_2C}&0\\[4pt]\frac{1}{L}&\frac{1}{L}\end{bmatrix}u
+$$
+
+$$
+y=[-1\ \ 0]x+[1\ \ 0]u
+$$
+
+> [!note] 本题总结
+> 机理法建模电网络：从基尔霍夫电压/电流定律出发，选独立的储能元件变量（电容电压、电感电流）为状态变量，按电路拓扑与元件约束列写方程组，最后规范化为标准矩阵形式。
+
+**1-2　答案**（考点：机理法建模求取力学系统的状态空间表达式）
+
+令 $f(t)$ 为输入量，即 $u=f$；$M_1$、$M_2$ 的位移量 $y_1$、$y_2$ 为输出量，选择状态变量
+
+$$
+x_1=y_1,\quad x_2=y_2,\quad x_3=\dot y_1,\quad x_4=\dot y_2
+$$
+
+对 $M_1$ 受力分析，有 $M_1\ddot y_1=B_1(\dot x_2-\dot x_1)-Kx_1$，即
+
+$$
+M_1\dot x_3=B_1(x_4-x_3)-Kx_1
+$$
+
+对 $M_2$ 受力分析，有 $M_2\ddot y_2=f(t)-B_1(\dot x_2-\dot x_1)-B_2\dot x_2$，即
+
+$$
+M_2\dot x_4=f(t)-B_1(x_4-x_3)-B_2x_4
+$$
+
+整理得状态方程
+
+$$
+\begin{cases}
+\dot x_1=x_3 \\[4pt]
+\dot x_2=x_4 \\[4pt]
+\dot x_3=-\frac{K}{M_1}x_1-\frac{B_1}{M_1}x_3+\frac{B_1}{M_1}x_4 \\[4pt]
+\dot x_4=\frac{B_1}{M_2}x_3-\left(\frac{B_1}{M_2}+\frac{B_2}{M_2}\right)x_4+\frac{1}{M_2}u
+\end{cases}
+$$
+
+输出方程为 $y_1=x_1$、$y_2=x_2$。写成矩阵形式
+
+$$
+\begin{aligned}
+\dot x&=\begin{bmatrix}0&0&1&0\\0&0&0&1\\-\frac{K}{M_1}&0&-\frac{B_1}{M_1}&\frac{B_1}{M_1}\\0&0&\frac{B_1}{M_2}&-\left(\frac{B_1}{M_2}+\frac{B_2}{M_2}\right)\end{bmatrix}x\\
+&\quad+\begin{bmatrix}0\\0\\0\\\frac{1}{M_2}\end{bmatrix}u
+\end{aligned}
+$$
+
+> [!warning] ⚠️ 勘误（官方：删掉负号）
+> 原书状态方程第 4 行印 $\dot x_4=-\frac{B_1}{M_2}x_3-\left(\frac{B_1}{M_2}+\frac{B_2}{M_2}\right)x_4+\frac{1}{M_2}u$，与**同一页**矩阵形式里 $A_{(4,3)}=+\frac{B_1}{M_2}$ 自相矛盾。
+>
+> 按牛顿第二定律，$M_2\dot x_4=f-B_1(x_4-x_3)-B_2x_4$ 展开后 $x_3$ 项系数为 $+\frac{B_1}{M_2}$，故官方「删掉负号」正确，本页按修正版转写。
+>
+> 另注：原书把阻尼 $B_2$ 计入 $M_2$ 方程（$A_{(4,4)}=-\left(\frac{B_1}{M_2}+\frac{B_2}{M_2}\right)$），而图中 $B_2$、$K$ 并联画在固定端与 $M_1$ 之间；若按图建模，$M_1$ 方程还应含 $-B_2\dot y_1$ 项。本页**照录原书口径**，此差异仅作提示。
+
+> [!note] 本题总结
+> 机理法建模力学系统：由牛顿第二定律对每个质量块受力分析，选「位移 + 速率」为状态变量（$x_3=\dot x_1$、$x_4=\dot x_2$ 的伴随形式），列写微分方程组后规范化为标准矩阵。
+
+**1-3　答案**（考点：机理法建模求取电网络系统的状态空间表达式）
+
+采用机理分析法。由电路原理可得微分方程
+
+$$
+(x_1+x_2)R_1=-R_2x_2-L_2\dot x_2
+$$
+
+$$
+u=x_1+\left[L_1\dot x_1+(x_1+x_2)R_3\right]/R_1
+$$
+
+$$
+y=(x_1+x_2)R_3
+$$
+
+整理得状态空间表达式
+
+$$
+\dot x=\begin{bmatrix}-\frac{R_1+R_3}{L_1}&-\frac{R_3}{L_1}\\[4pt]-\frac{R_3}{L_2}&-\frac{R_2+R_3}{L_2}\end{bmatrix}x+\begin{bmatrix}\frac{R_1}{L_1}\\[4pt]0\end{bmatrix}u
+$$
+
+$$
+y=[R_3\ \ R_3]\begin{bmatrix}x_1\\x_2\end{bmatrix}
+$$
+
+> [!warning] ⚠️ 勘误（官方改图）
+> 原书题干印「输出 $y$ 是 $R_2$ 上的支路电压」，与图中 $y$ 标注在 $R_3$ 处不符；官方改为 $R_3$ 并给 $R_3$ 加电流箭头（题目页已按勘误转写）。本页解析取 $y=(x_1+x_2)R_3$、$C=[R_3\ \ R_3]$，与原书答案一致。
+
+> [!note] 本题总结
+> 与 1-1 同型（电网络机理建模），差别只在拓扑复杂、输入端为恒流源：仍按基尔霍夫定律列方程再规范化即可。
+
+**1-4　答案**（考点：机理法建模求取力学系统的状态空间表达式）
+
+以弹簧的伸长度 $y_1,y_2$、质量块 $M_1,M_2$ 的速率 $c_1,c_2$ 作为状态变量，即
+
+$$
+x_1=y_1,\quad x_2=y_2,\quad x_3=c_1,\quad x_4=c_2
+$$
+
+输入变量为 $u_1=f_1$、$u_2=f_2$。根据牛顿第二定律，对 $M_1$ 有
+
+$$
+M_1\frac{\mathrm dc_1}{\mathrm dt}=f_1-k_1(y_1-y_2)-B_1(c_1-c_2)
+$$
+
+对 $M_2$ 有
+
+$$
+M_2\frac{\mathrm dc_2}{\mathrm dt}=f_2+k_1(y_1-y_2)+B_1(c_1-c_2)-k_2y_2-B_2c_2
+$$
+
+将 $x_1,x_2,x_3,x_4$ 代入，得
+
+$$
+\begin{cases}
+M_1\dot x_3=f_1-k_1(x_1-x_2)-B_1(x_3-x_4) \\[4pt]
+M_2\dot x_4=f_2+k_1(x_1-x_2)+B_1(x_3-x_4)-k_2x_2-B_2x_4
+\end{cases}
+$$
+
+且
+
+$$
+\dot y_1=C_1=x_3,\qquad \dot y_2=C_2=x_4
+$$
+
+整理得
+
+$$
+\begin{cases}
+\dot x_1=x_3 \\[4pt]
+\dot x_2=x_4 \\[4pt]
+\dot x_3=-\frac{k_1}{M_1}x_1+\frac{k_1}{M_1}x_2-\frac{B_1}{M_1}x_3+\frac{B_1}{M_1}x_4+\frac{1}{M_1}f_1 \\[4pt]
+\dot x_4=\frac{k_1}{M_2}x_1-\frac{k_1+k_2}{M_2}x_2+\frac{B_1}{M_2}x_3-\frac{B_1+B_2}{M_2}x_4+\frac{1}{M_2}f_2
+\end{cases}
+$$
+
+写成矩阵形式
+
+$$
+\begin{aligned}
+\dot x&=\begin{bmatrix}0&0&1&0\\0&0&0&1\\-\frac{k_1}{M_1}&\frac{k_1}{M_1}&-\frac{B_1}{M_1}&\frac{B_1}{M_1}\\\frac{k_1}{M_2}&-\frac{k_1+k_2}{M_2}&\frac{B_1}{M_2}&-\frac{B_1+B_2}{M_2}\end{bmatrix}x\\
+&\quad+\begin{bmatrix}0&0\\0&0\\\frac{1}{M_1}&0\\0&\frac{1}{M_2}\end{bmatrix}\begin{bmatrix}f_1\\f_2\end{bmatrix}
+\end{aligned}
+$$
+
+$$
+y=\begin{bmatrix}0&0&1&0\\0&0&0&1\end{bmatrix}x
+$$
+
+> [!warning] ⚠️ 勘误（官方：改为一阶导）
+> 原书输出条件印 $y_1=C_1=x_3$、$y_2=C_2=x_4$；官方改为 $\dot y_1=C_1=x_3$、$\dot y_2=C_2=x_4$。物理上 $C_1,C_2$ 是速率，等于伸长度的一阶导，勘误正确。
+
+> [!note] 本题总结
+> 与 1-2 同为力学系统机理建模，差别是**双输入 + 弹簧伸长度作状态**：注意输出取速率 $x_3,x_4$，且方程里 $C=c$ 的记号要按一阶导理解。
+
+**1-5　答案**（考点：机理法建模求取力学系统的状态空间表达式）
+
+取状态变量 $x_1=\theta_L$，$x_2=\dot\theta_L$，$x_3=\theta_m$，$x_4=\dot\theta_m$，则 $\dot x_1=x_2$、$\dot x_3=x_4$。由题给模型
+
+$$
+J_L\ddot\theta_L+B_L\dot\theta_L+K(\theta_L-\theta_m)=0
+$$
+
+$$
+J_m\ddot\theta_m+B_m\dot\theta_m-K(\theta_L-\theta_m)=u
+$$
+
+得
+
+$$
+\begin{cases}
+\dot x_1=x_2 \\[4pt]
+\dot x_2=-\frac{K}{J_L}x_1-\frac{B_L}{J_L}x_2+\frac{K}{J_L}x_3 \\[4pt]
+\dot x_3=x_4 \\[4pt]
+\dot x_4=\frac{K}{J_m}x_1-\frac{K}{J_m}x_3-\frac{B_m}{J_m}x_4+\frac{1}{J_m}u
+\end{cases}
+$$
+
+代入 $J_m=0.05$、$J_L=0.5$、$B_m=B_L=0.01$、$K=6$，得
+
+$$
+A=\begin{bmatrix}0&1&0&0\\-12&-0.02&12&0\\0&0&0&1\\120&0&-120&-0.2\end{bmatrix},\quad B=\begin{bmatrix}0\\0\\0\\20\end{bmatrix},\quad C=[1\ \ 0\ \ 0\ \ 0]
+$$
+
+（2）能控性判据
+
+$$
+Q_c=[B\ \ AB\ \ A^2B\ \ A^3B]=\begin{bmatrix}0&0&0&240\\0&0&240&-52.8\\0&20&-4&-2399.2\\20&-4&-2399.2&959.84\end{bmatrix},\quad \mathrm{rank}\,Q_c=4
+$$
+
+故系统完全能控。
+
+（3）输出可观测、状态不可观测时，可构造**全维状态观测器**重构状态：设 $\dot{\hat x}=(A-GC)\hat x+Bu+Gy$，选增益 $G$ 使 $A-GC$ 的极点（观测器极点）配置在期望位置（一般取系统极点的 2~5 倍），再用重构状态 $\hat x$ 代替真实状态实现状态反馈。
+
+> [!note] 复算
+> $Q_c$ 第四行末元：原书印 $950.84$，复算为 $959.84$（即 $A^3B$ 的第四分量）。现控基础册 5-25 同一类笔误（该书该处也印 $950.84$），官方勘误未列此条，本页按复算值给出。
+
+> [!note] 本题总结
+> 由机器人动力学方程建状态空间：先按「位置 + 速度」配对设状态变量，再把含惯量/阻尼/刚度系数的方程整理成矩阵、代入具体参数；能控性用秩判据，观测器设计用极点配置思路。
+
+## 【题型2】由微分方程、方框图、传递函数列写状态空间表达式
+
+**1-6　答案**（考点：由系统模拟结构图化状态空间表达式）
+
+图中每个积分器的输出即为状态变量。着眼于求和点（1）、（2）、（3），有
+
+$$
+\dot x_1=\alpha_1x_1+x_2
+$$
+
+$$
+\dot x_2=\alpha_2x_2+x_3
+$$
+
+$$
+\dot x_3=\alpha_3x_3+u
+$$
+
+输出为 $y=x_1+du$，故
+
+$$
+\dot x=\begin{bmatrix}\alpha_1&1&0\\0&\alpha_2&1\\0&0&\alpha_3\end{bmatrix}x+\begin{bmatrix}0\\0\\1\end{bmatrix}u
+$$
+
+$$
+y=[1\ \ 0\ \ 0]\begin{bmatrix}x_1\\x_2\\x_3\end{bmatrix}+du
+$$
+
+> [!note] 本题总结
+> 状态变量图的关键：$s$ 为微分环节（$sx=\dot x$）、$\frac1s$ 为积分环节（$\frac1s x=x$）。按每个积分器的输出列状态方程，按输出列列输出方程，整理即得。
+
+**1-7　答案**（考点：由系统模拟结构图化状态空间表达式）
+
+由题意，
+
+$$
+(s+1)x_1(s)=u_1(s)-\left(x_1(s)+x_2(s)\right)
+$$
+
+$$
+(s+2)x_2(s)=u_2(s)-\left(x_1(s)+u_1(s)-\left(x_1(s)+x_2(s)\right)\right)
+$$
+
+$$
+(s+2)x_3(s)=-x_2(s)
+$$
+
+$$
+c_1(s)=x_1(s)+x_2(s)
+$$
+
+$$
+c_2(s)=u_1(s)-x_1(s)-x_2(s)+x_3(s)
+$$
+
+整理得
+
+$$
+\dot x_1=-2x_1-x_2+u_1
+$$
+
+$$
+\dot x_2=x_1-x_2-x_3-u_1+u_2
+$$
+
+$$
+\dot x_3=-x_2-2x_3
+$$
+
+$$
+c_1=x_1+x_2
+$$
+
+$$
+c_2=-x_1-x_2+x_3+u_1
+$$
+
+系统的状态空间表达式为
+
+$$
+\dot x=\begin{bmatrix}-2&-1&0\\1&-1&-1\\0&-1&-2\end{bmatrix}x+\begin{bmatrix}1&0\\-1&1\\0&0\end{bmatrix}u
+$$
+
+$$
+c=\begin{bmatrix}1&1&0\\-1&-1&1\end{bmatrix}x+\begin{bmatrix}0&0\\1&0\end{bmatrix}u
+$$
+
+系统的极点即 $A$ 的特征根
+
+$$
+\lvert\lambda I-A\rvert=\begin{vmatrix}\lambda+2&1&0\\-1&\lambda+1&1\\0&1&\lambda+2\end{vmatrix}=\lambda^3+5\lambda^2+8\lambda+4=0
+$$
+
+得到 $\lambda_{1,2}=-2$、$\lambda_3=-1$。
+
+> [!note] 本题总结
+> 与 1-6 同型（状态变量图→状态空间），但本题为**双输入双输出**且含交叉反馈：先按各求和点列代数式，再统一整理成矩阵，最后求特征根得极点。
+
+**1-8　答案**（考点：①由系统模拟结构图化状态空间表达式 ②公式法求系统传递函数 ③BIBO 稳定性判据）
+
+（1）由结构图
+
+$$
+\frac{x_1}{x_3-x_2}=\frac{1}{s+2}\ \Rightarrow\ \dot x_1+2x_1=x_3-x_2
+$$
+
+$$
+\frac{x_2}{x_1}=\frac{2}{s+1}\ \Rightarrow\ \dot x_2+x_2=2x_1
+$$
+
+$$
+\frac{x_3}{v-3x_1}=\frac{1}{s-1}\ \Rightarrow\ \dot x_3-x_3=v-3x_1
+$$
+
+即
+
+$$
+\begin{cases}
+\dot x_1=-2x_1-x_2+x_3 \\[4pt]
+\dot x_2=2x_1-x_2 \\[4pt]
+\dot x_3=-3x_1+x_3+v \\[4pt]
+y=x_1
+\end{cases}
+$$
+
+状态空间描述
+
+$$
+\dot x=\begin{bmatrix}-2&-1&1\\2&-1&0\\-3&0&1\end{bmatrix}x+\begin{bmatrix}0\\0\\1\end{bmatrix}v,\qquad y=[1\ \ 0\ \ 0]x
+$$
+
+（2）
+
+$$
+G(s)=C(sI-A)^{-1}b=[1\ \ 0\ \ 0]\begin{bmatrix}s+2&1&-1\\-2&s+1&0\\3&0&s-1\end{bmatrix}^{-1}\begin{bmatrix}0\\0\\1\end{bmatrix}=\frac{s+1}{s^3+2s^2+4s-1}
+$$
+
+（3）分母 $s^3+2s^2+4s-1=0$ 的根为 $s\approx0.2225$ 与 $s\approx-1.1112\pm\mathrm{j}1.8054$，**存在正实部极点**，故系统**不是 BIBO 稳定**。
+
+> [!warning] ⚠️ 勘误（官方改图，本批最重要一条）
+> 原书印 $G(s)=\frac{-3(s+1)}{s^3+2s^2+4s+1}$，并据此判「所有极点均具有负实部，故系统 BIBO 稳定」——**分子、分母常数项、结论三处都错**。
+>
+> 官方勘误图给修正版 $G(s)=\frac{s+1}{s^3+2s^2+4s-1}$。复算：$(sI-A)^{-1}$ 的 $(1,3)$ 元 $=\frac{s+1}{\det}$，其中 $\det(sI-A)=s^3+2s^2+4s-1$，与勘误图一致。
+>
+> 该分母含一个正实根 $0.2225$（另两根为 $-1.1112\pm\mathrm{j}1.8054$），**结论应为「不是 BIBO 稳定」**。
+
+> [!note] 本题总结
+> 状态变量图→状态空间→传函 $[W(s)=C(sI-A)^{-1}B]$→BIBO 判据一条链。BIBO 只看传函极点是否全在左半平面；「渐近稳定」要求 $A$ 全部特征根负实部，两者不是一回事。
+
+## 【题型3】求系统传递函数
+
+**1-9　答案**（考点：①反馈组合子系统状态空间表达式的公式 ②反馈组合子系统传递函数的公式）
+
+（1）由题可知，子系统 $S_1$ 和子系统 $S_2$ 为反馈连接。则系统状态空间描述为
+
+$$
+\begin{bmatrix}\dot x_1\\\dot x_2\end{bmatrix}=\begin{bmatrix}A_1&-B_1C_2\\B_2C_1&A_2\end{bmatrix}\begin{bmatrix}x_1\\x_2\end{bmatrix}+\begin{bmatrix}B_1\\0\end{bmatrix}U
+$$
+
+$$
+y=[C_1\ \ 0]\begin{bmatrix}x_1\\x_2\end{bmatrix}
+$$
+
+即
+
+$$
+\dot x=\begin{bmatrix}0&1&0&0\\-2&-3&0&-1\\0&0&0&1\\3&1&-1&-2\end{bmatrix}x+\begin{bmatrix}0\\1\\0\\0\end{bmatrix}u
+$$
+
+$$
+y=[3\ \ 1\ \ 0\ \ 0]x
+$$
+
+（2）
+
+$$
+W_1(s)=C_1(sI-A_1)^{-1}B_1=\frac{s+3}{s^2+3s+2}
+$$
+
+$$
+W_2(s)=C_2(sI-A_2)^{-1}B_2=\frac{s}{s^2+2s+1}
+$$
+
+而总系统传函
+
+$$
+W(s)=W_1(s)\left[I+W_2(s)W_1(s)\right]^{-1}=\frac{s^3+5s^2+7s+3}{s^4+5s^3+10s^2+10s+2}
+$$
+
+> [!warning] ⚠️ 勘误（官方改图，复算确认）
+> 原书印分母 $s^4+5s^3+9s^2+7s+2$。
+>
+> 复算：$W=\frac{W_1}{1+W_1W_2}$，其中 $1+W_1W_2=\frac{(s+1)^3(s+2)+s(s+3)}{(s+1)^3(s+2)}$——分母 $(s+1)^3(s+2)=s^4+5s^3+9s^2+7s+2$ 之外还须加 $s(s+3)=s^2+3s$，故应为 $s^4+5s^3+10s^2+10s+2$（与官方勘误图一致）。
+
+> [!note] 本题总结
+> 反馈组合子系统：先按分块公式组装状态空间（$A=\begin{bmatrix}A_1&-B_1C_2\\B_2C_1&A_2\end{bmatrix}$），再用 $W=W_1(I+W_2W_1)^{-1}$ 回代求传函。
+
+**1-10　答案**（考点：①串联组合子系统状态空间表达式的公式 ②串联组合子系统传递函数的公式 ③线性定常连续系统的李一法）
+
+（1）由题可知
+
+$$
+\begin{pmatrix}\dot x_{11}\\\dot x_{12}\end{pmatrix}=\begin{pmatrix}0&1\\-2&-3\end{pmatrix}\begin{pmatrix}x_{11}\\x_{12}\end{pmatrix}+\begin{pmatrix}0\\1\end{pmatrix}u_1
+$$
+
+$$
+y_1=(1\ \ 0)\begin{pmatrix}x_{11}\\x_{12}\end{pmatrix}
+$$
+
+$$
+\begin{cases}\dot x_2=3x_2+2u_2\\y_2=x_2\end{cases}
+$$
+
+又 $y_1=u_2=x_{11}$，故
+
+$$
+\begin{pmatrix}\dot x_{11}\\\dot x_{12}\\\dot x_2\end{pmatrix}=\begin{pmatrix}0&1&0\\-2&-3&0\\2&0&3\end{pmatrix}\begin{pmatrix}x_{11}\\x_{12}\\x_2\end{pmatrix}+\begin{pmatrix}0\\1\\0\end{pmatrix}u
+$$
+
+$$
+y=(0\ \ 0\ \ 1)\begin{pmatrix}x_{11}\\x_{12}\\x_2\end{pmatrix}
+$$
+
+（2）
+
+$$
+W(s)=C(sI-A)^{-1}B=(0\ \ 0\ \ 1)(sI-A)^{-1}\begin{pmatrix}0\\1\\0\end{pmatrix}=\frac{2}{(s+1)(s+2)(s-3)}=\frac{2}{s^3-7s-6}
+$$
+
+（3）李一法。求特征值 $\lvert\lambda I-A\rvert=0$，即
+
+$$
+\begin{vmatrix}\lambda&-1&0\\2&\lambda+3&0\\-2&0&\lambda-3\end{vmatrix}=0
+$$
+
+展开得
+
+$$
+(\lambda-3)(\lambda^2+3\lambda+2)=0
+$$
+
+故特征值为 $\lambda_1=3$、$\lambda_2=-2$、$\lambda_3=-1$。因为存在具有正实部的特征值 $\lambda_1=3$，所以系统不是李雅普诺夫意义下的渐近稳定。
+
+> [!warning] ⚠️ 勘误（官方：(1)(2) 问修改）
+> 官方修订版：(1) 补一步推理「又 $y_1=u_2=x_{11}$，故」（原书只写「$\because u_2=y_1$」）；(2) 把传函分母写成展开式 $s^3-7s-6$。本页按修订版转写。复算 $(s+1)(s+2)(s-3)=s^3-7s-6$ ✓；$y_1=x_{11}$ 由 $C_1=[1\ \ 0]$ 得 ✓。
+
+> [!note] 本题总结
+> 串联组合子系统：$u_2=y_1$ 代入即得组合状态空间；传函用公式法；稳定性用李一法（看 $A$ 的特征值实部）。
+
+**1-11　答案**（考点：①公式法求线性定常系统的传递函数（矩阵） ②由系统传递函数（矩阵）化能控标准Ⅰ型和能观标准Ⅱ型）
+
+（1）公式法求系统开环传递函数
+
+$$
+W(s)=C(sI-A)^{-1}B=[1\ \ 0\ \ 0]\begin{bmatrix}s-1&-2&-3\\0&s-1&-1\\0&-1&s-1\end{bmatrix}^{-1}\begin{bmatrix}0\\0\\1\end{bmatrix}=\frac{3s-1}{s^3-3s^2+2s}
+$$
+
+（2）①判断该系统的能控性
+
+$$
+Q_c=[B\ \ AB\ \ A^2B]=\begin{bmatrix}0&3&8\\0&1&2\\1&1&2\end{bmatrix}
+$$
+
+则 $\mathrm{rank}\,Q_c=3$，故系统完全能控。
+
+②判断该系统的能观性
+
+$$
+Q_o=\begin{bmatrix}C\\CA\\CA^2\end{bmatrix}=\begin{bmatrix}1&0&0\\1&2&3\\1&7&8\end{bmatrix}
+$$
+
+则 $\mathrm{rank}\,Q_o=3$，故系统完全能观。综上所述，该系统完全能控且完全能观。
+
+（3）由（1）可知 $W(s)=\frac{3s-1}{s^3-3s^2+2s}$，则 $\alpha_0=0$、$\alpha_1=2$、$\alpha_2=-3$；$\beta_0=-1$、$\beta_1=3$、$\beta_2=0$。
+
+故该系统的能控标准Ⅰ型为
+
+$$
+\begin{cases}\dot x=\begin{bmatrix}0&1&0\\0&0&1\\-\alpha_0&-\alpha_1&-\alpha_2\end{bmatrix}x+\begin{bmatrix}0\\0\\1\end{bmatrix}u\\[6pt]y=[\beta_0\ \ \beta_1\ \ \beta_2]x\end{cases}
+$$
+
+即
+
+$$
+\begin{cases}\dot x=\begin{bmatrix}0&1&0\\0&0&1\\0&-2&3\end{bmatrix}x+\begin{bmatrix}0\\0\\1\end{bmatrix}u\\[6pt]y=[-1\ \ 3\ \ 0]x\end{cases}
+$$
+
+能观标准Ⅱ型为
+
+$$
+\begin{cases}\dot x=\begin{bmatrix}0&0&-\alpha_0\\1&0&-\alpha_1\\0&1&-\alpha_2\end{bmatrix}x+\begin{bmatrix}\beta_0\\\beta_1\\\beta_2\end{bmatrix}u\\[6pt]y=[0\ \ 0\ \ 1]x\end{cases}
+$$
+
+即
+
+$$
+\begin{cases}\dot x=\begin{bmatrix}0&0&0\\1&0&-2\\0&1&3\end{bmatrix}x+\begin{bmatrix}-1\\3\\0\end{bmatrix}u\\[6pt]y=[0\ \ 0\ \ 1]x\end{cases}
+$$
+
+> [!note] 本题总结
+> 两类核心描述形式互换：一是公式法由状态空间求传函（矩阵），二是由传函反向构造能控标准Ⅰ型与能观标准Ⅱ型。
+
+## 【题型4】求系统特征多项式和特征值
+
+**1-12　答案**（考点：①已知状态转移矩阵反求系统矩阵 ②公式法求系统传递函数 ③线性定常连续系统的能控秩判据和能观秩判据）
+
+（1）
+
+$$
+\Phi(t)=e^{At}=\begin{bmatrix}2e^{-t}-e^{-2t}&e^{-t}-e^{-2t}\\-2e^{-t}+2e^{-2t}&-e^{-t}+2e^{-2t}\end{bmatrix}
+$$
+
+$$
+\dot\Phi(t)=e^{At}A=\begin{bmatrix}-2e^{-t}+2e^{-2t}&-e^{-t}+2e^{-2t}\\2e^{-t}-4e^{-2t}&e^{-t}-4e^{-2t}\end{bmatrix}
+$$
+
+令 $t=0$ 得
+
+$$
+A=\begin{bmatrix}0&1\\-2&-3\end{bmatrix}
+$$
+
+（2）
+
+$$
+\lvert\lambda I-A\rvert=\begin{vmatrix}\lambda&-1\\2&\lambda+3\end{vmatrix}=(\lambda+1)(\lambda+2)=0,\qquad \lambda_1=-1,\ \lambda_2=-2
+$$
+
+（3）
+
+$$
+W(s)=C(sI-A)^{-1}B=[0\ \ 1]\begin{bmatrix}s&-1\\2&s+3\end{bmatrix}^{-1}\begin{bmatrix}1\\-1\end{bmatrix}
+$$
+
+$$
+=\frac{1}{s^2+3s+2}[0\ \ 1]\begin{bmatrix}s+3&1\\-2&s\end{bmatrix}\begin{bmatrix}1\\-1\end{bmatrix}=\frac{-s-2}{s^2+3s+2}
+$$
+
+（4）由题可知 $B=\begin{bmatrix}1\\-1\end{bmatrix}$，$C=[0\ \ 1]$。
+
+$$
+\mathrm{rank}\,Q_c=\mathrm{rank}[B\ \ AB]=1<n
+$$
+
+故系统不完全能控。
+
+$$
+\mathrm{rank}\,Q_o=\mathrm{rank}\begin{bmatrix}C\\CA\end{bmatrix}=2=n
+$$
+
+故系统完全能观。
+
+> [!note] 本题总结
+> 三个要点：$\Phi(t)$ 求导代入 $t=0$ 即得 $A$（$\dot\Phi(0)=A$）；公式法求传函；能控/能观秩判据（满秩才完全能控/能观）。
+
+## 【题型5】求系统最小实现
+
+**1-13　答案**（考点：线性定常连续系统的最小实现）
+
+$$
+G(s)=\frac{2s^3+20s^2+55s+39}{s^3+10s^2+27s+18}=2+\frac{s+3}{s^3+10s^2+27s+18}
+$$
+
+$$
+G(s)=2+\frac{\frac15}{s+1}+\frac{-\frac15}{s+6}+\frac{0}{s+3}
+$$
+
+故对角型为
+
+$$
+\dot x=\begin{pmatrix}-1&&\\&-6&\\&&-3\end{pmatrix}x+\begin{pmatrix}1\\1\\1\end{pmatrix}u,\qquad y=\left(\frac15\ \ -\frac15\ \ 0\right)x+2u
+$$
+
+显然 $s=-3$ 极点不可观。取子集
+
+$$
+s'=(b'\ \ A'b')=\begin{pmatrix}1&-1\\1&-6\end{pmatrix},\qquad \mathrm{rank}\,s'=2\ \text{（可控）}
+$$
+
+$$
+v'=\begin{pmatrix}\frac15&-\frac15\\-\frac15&\frac65\end{pmatrix},\qquad \mathrm{rank}\,v'=2\ \text{（可观）}
+$$
+
+系统最小实现为
+
+$$
+\dot x=\begin{pmatrix}-1&0\\0&-6\end{pmatrix}x+\begin{pmatrix}1\\1\end{pmatrix}u,\qquad y=\left(\frac15\ \ -\frac15\right)x+2u
+$$
+
+> [!note] 本题总结
+> 最小实现 = 既能控又能观的实现；由对角型里剔除不可观测（或不可控）的模态即可，最小实现不唯一。
+
+**1-14　答案**（考点：①线性定常连续系统的最小实现 ②由系统状态空间表达式绘制模拟结构图）
+
+（1）由
+
+$$
+G(s)=\frac{s-1}{(s^2-1)(s+3)}=\frac{s-1}{s^3+3s^2-s-3}
+$$
+
+得系统能控标准型
+
+$$
+\begin{cases}\dot x=\begin{bmatrix}0&1&0\\0&0&1\\3&1&-3\end{bmatrix}x+\begin{bmatrix}0\\0\\1\end{bmatrix}u\\[6pt]y=[-1\ \ 1\ \ 0]x\end{cases}
+$$
+
+即
+
+$$
+\begin{cases}\dot x_1=x_2\\\dot x_2=x_3\\\dot x_3=3x_1+x_2-3x_3+u\\y=-x_1+x_2\end{cases}
+$$
+
+（2）上述实现的系统模拟结构图如下图所示
+
+![[附件/现控强化1-14-ans-模拟结构图.png|520]]
+
+（3）
+
+$$
+N=\begin{bmatrix}C\\CA\\CA^2\end{bmatrix}=\begin{bmatrix}-1&1&0\\0&-1&1\\3&1&-4\end{bmatrix}\ \Rightarrow\ r(N)=2
+$$
+
+取
+
+$$
+P=\begin{bmatrix}-1&1&0\\0&-1&1\\1&0&0\end{bmatrix},\qquad P^{-1}=\begin{bmatrix}0&0&1\\1&0&1\\1&1&1\end{bmatrix}
+$$
+
+$$
+\begin{aligned}
+\bar A&=PAP^{-1}=\begin{bmatrix}-1&1&0\\0&-1&1\\1&0&0\end{bmatrix}\begin{bmatrix}0&1&0\\0&0&1\\3&1&-3\end{bmatrix}\begin{bmatrix}0&0&1\\1&0&1\\1&1&1\end{bmatrix}\\
+&=\begin{bmatrix}0&1&0\\-3&-4&0\\1&0&1\end{bmatrix}
+\end{aligned}
+$$
+
+$$
+\bar b=Pb=\begin{bmatrix}0\\1\\0\end{bmatrix},\qquad \bar c=cP^{-1}=[1\ \ 0\ \ 0]
+$$
+
+最小实现为
+
+$$
+\begin{cases}\dot x=\begin{bmatrix}0&1\\-3&-4\end{bmatrix}x+\begin{bmatrix}0\\1\end{bmatrix}u\\[6pt]y=[1\ \ 0]x\end{cases}
+$$
+
+> [!note] 本题总结
+> 先按能控标准型实现，再由能观性矩阵的秩判定是否最小；秩小于阶数时作非奇异变换约去不可观模态，得最小实现。
+
+**1-15　答案**（考点：①SISO 线性定常连续系统无零极点对消时同阶实现完全能控且完全能观 ②系统最小实现）
+
+（1）由题可知
+
+$$
+W(s)=\frac{s+a}{(s+1)^2(s+2)}
+$$
+
+当 $W(s)$ 出现零极点相消时，系统不完全能控或不完全能观。故 $a=1$ 或 $a=2$ 时，该系统不完全能控或不完全能观。
+
+（2）当 $a=1$ 时
+
+$$
+W(s)=\frac{s+1}{(s+1)^2(s+2)}=\frac{1}{(s+1)(s+2)}=\frac{1}{s^2+3s+2}
+$$
+
+则 $\alpha_0=2$、$\alpha_1=3$；$\beta_0=1$、$\beta_1=0$。故该二阶传函对应的能控标准Ⅰ型为
+
+$$
+\begin{cases}\dot x=\begin{bmatrix}0&1\\-\alpha_0&-\alpha_1\end{bmatrix}x+\begin{bmatrix}0\\1\end{bmatrix}u\\[6pt]y=[\beta_0\ \ \beta_1]x\end{cases}
+$$
+
+即
+
+$$
+\begin{cases}\dot x=\begin{bmatrix}0&1\\-2&-3\end{bmatrix}x+\begin{bmatrix}0\\1\end{bmatrix}u\\[6pt]y=[1\ \ 0]x\end{cases}
+$$
+
+判断系统能观性：$\mathrm{rank}\,Q_o=\mathrm{rank}\begin{bmatrix}C\\CA\end{bmatrix}=2$。综上所述，该系统完全能控且完全能观，所求二阶能控标准Ⅰ型即为题目所要求的二阶最小实现。
+
+> [!note] 本题总结
+> 传函无零极点对消 ⟺ 同阶状态空间实现完全能控且完全能观 ⟺ 该实现就是最小实现。
+
+## 【题型6】状态转移矩阵的求取以及性质
+
+**1-16　答案**（考点：①并联型实现化对角标准型 ②拉氏反变换法求系统状态转移矩阵）
+
+$$
+\frac{s^2+8s+15}{s^3+7s^2+14s+8}=\frac{A}{s+4}+\frac{B}{s+1}+\frac{C}{s+2}
+$$
+
+根据待定系数法，解得 $A=-\frac16$、$B=\frac83$、$C=-\frac32$。所以
+
+$$
+\dot x=\begin{bmatrix}-4&0&0\\0&-1&0\\0&0&-2\end{bmatrix}x+\begin{bmatrix}1\\1\\1\end{bmatrix}u,\qquad y=\left[-\frac16\ \ \frac83\ \ -\frac32\right]x
+$$
+
+$$
+e^{At}=\mathcal{L}^{-1}\left[(sI-A)^{-1}\right]=\begin{bmatrix}e^{-4t}&0&0\\0&e^{-t}&0\\0&0&e^{-2t}\end{bmatrix}
+$$
+
+> [!note] 本题总结
+> 并联实现化对角标准型（部分分式展开 → 对角 $A$、系数进 $C$）；对角型的状态转移矩阵就是各对角元的指数。
+
+## 【题型6】状态转移矩阵的求取以及性质（续）
+
+**1-17　答案**（考点：①由系统状态空间表达式绘制模拟结构图 ②公式法求系统传递函数 ③拉氏反变换法求系统状态转移矩阵 ④线性定常连续系统的能控秩判据和能观秩判据 ⑤求非齐次状态方程的输出响应）
+
+（1）系统状态变量图如下所示
+
+![[附件/现控强化1-17-ans-状态变量图.png|520]]
+
+（2）由题可知
+
+$$
+(sI-A)^{-1}=\begin{pmatrix}s+5&1\\-6&s\end{pmatrix}^{-1}=\frac{1}{s^2+5s+6}\begin{pmatrix}s&-1\\6&s+5\end{pmatrix}
+$$
+
+$$
+G(s)=C(sI-A)^{-1}B=\frac{2s+10}{s^2+5s+6}
+$$
+
+（3）状态转移矩阵为
+
+$$
+\Phi(t)=\mathcal L^{-1}\left[(sI-A)^{-1}\right]=\begin{bmatrix}-2e^{-2t}+3e^{-3t}&-e^{-2t}+e^{-3t}\\6e^{-2t}-6e^{-3t}&3e^{-2t}-2e^{-3t}\end{bmatrix}
+$$
+
+（4）由上题解可知 $S=[b\ \ Ab]$，$\mathrm{rank}\,S=2$；$V=\begin{bmatrix}C\\CA\end{bmatrix}$，$\mathrm{rank}\,V=2$，所以系统可控可观。
+
+（5）
+
+$$
+x(t)=\Phi(t)x(0)+\int_0^t\Phi(t-\tau)Bu\,\mathrm d\tau=e^{At}x(0)=\begin{bmatrix}-3e^{-2t}+3e^{-3t}\\9e^{-2t}-6e^{-3t}\end{bmatrix}
+$$
+
+∴ 输出为 $y(t)=x_2(t)=[0\ \ 1]x(t)=9e^{-2t}-6e^{-3t}$。
+
+> [!note] 本题总结
+> 五个知识点串一条链：由状态空间画模拟结构图（每个状态取一个积分器输出）→ 公式法 $W(s)=C(sI-A)^{-1}B+D$ 求传函 → $e^{At}=\mathcal L^{-1}[(sI-A)^{-1}]$ → 能控/能观秩判据 → 非齐次状态方程的状态响应与输出响应。
+
+**1-18　答案**（考点：①线性定常连续系统模拟结构图与状态空间表达式的转化 ②拉氏反变换法求取系统状态转移矩阵 $\Phi(t)$）
+
+（1）由题可知
+
+$$
+\begin{cases}
+(u-2x_2-3x_1)\dfrac1s=x_1 \\[6pt]
+(y+u)\dfrac1s=x_2 \\[6pt]
+y=x_1
+\end{cases}
+$$
+
+即
+
+$$
+\begin{cases}
+\dot x_1=-3x_1-2x_2+u \\[4pt]
+\dot x_2=x_1+u \\[4pt]
+y=x_1
+\end{cases}
+$$
+
+化为矩阵形式得该系统的状态空间表达式
+
+$$
+\begin{cases}
+\dot x=\begin{bmatrix}-3&-2\\1&0\end{bmatrix}x+\begin{bmatrix}1\\1\end{bmatrix}u \\[6pt]
+y=[1\ \ 0]x
+\end{cases}
+$$
+
+判断系统能控性
+
+$$
+\mathrm{rank}\,Q_c=\mathrm{rank}[B\ \ AB]=\begin{bmatrix}1&-5\\1&1\end{bmatrix}=2
+$$
+
+故该系统完全能控。
+
+（2）由（1）得
+
+$$
+(sI-A)=\begin{bmatrix}s+3&2\\-1&s\end{bmatrix}
+$$
+
+$$
+(sI-A)^{-1}=\frac{1}{(s+2)(s+1)}\begin{bmatrix}s&-2\\1&s+3\end{bmatrix}
+$$
+
+$$
+=\begin{bmatrix}\frac{-1}{s+1}+\frac{2}{s+2}&\frac{-2}{s+1}+\frac{2}{s+2}\\[6pt]\frac{1}{s+1}-\frac{1}{s+2}&\frac{2}{s+1}-\frac{1}{s+2}\end{bmatrix}
+$$
+
+由拉氏反变换法可求该系统的状态转移矩阵为
+
+$$
+\Phi(t)=\mathcal L^{-1}\left[(sI-A)^{-1}\right]=\begin{bmatrix}-e^{-t}+2e^{-2t}&-2e^{-t}+2e^{-2t}\\e^{-t}-e^{-2t}&2e^{-t}-e^{-2t}\end{bmatrix}
+$$
+
+> [!note] 本题总结
+> 模拟结构图与状态空间表达式互化 + 拉氏反变换求 $e^{At}$ 两个核心方法的综合题。
+
+## 【题型7】线性定常连续系统动态方程的解
+
+**1-19　答案**（考点：①线性定常连续系统的李一法 ②线性定常连续系统的 BIBO 稳定判据 ③求非齐次状态方程的状态响应）
+
+（1）系统特征方程
+
+$$
+D(s)=|sI-A|=\begin{vmatrix}s&-1\\-3&s+2\end{vmatrix}=s^2+2s-3=0\Rightarrow s_1=-3,\ s_2=1
+$$
+
+故系统不是渐近稳定系统。系统传递函数为
+
+$$
+G(s)=C(sI-A)^{-1}B=[-1\ \ 1]\begin{bmatrix}s&-1\\-3&s+2\end{bmatrix}^{-1}\begin{bmatrix}0\\1\end{bmatrix}=\frac{1}{s+3}
+$$
+
+传递函数极点均在左半平面，故系统是 BIBO 稳定的。
+
+> [!tip] 关键辨析：渐近稳定 vs BIBO 稳定
+> $A$ 的特征根含 $s_2=1$（右半平面）⇒ **不是渐近稳定**；但 $G(s)=\frac{s-1}{(s+3)(s-1)}$ 发生**零极点对消**后为 $\frac{1}{s+3}$，极点全在左半平面 ⇒ **是 BIBO 稳定**。两者判据不同：渐近稳定看 $A$ 的全部特征根，BIBO 只看传函极点。
+
+（2）状态转移矩阵
+
+$$
+\Phi(t)=\mathcal L^{-1}\left[(sI-A)^{-1}\right]=\begin{bmatrix}\frac14e^{-3t}+\frac34e^{t}&-\frac14e^{-3t}+\frac14e^{t}\\[6pt]-\frac34e^{-3t}+\frac34e^{t}&\frac34e^{-3t}+\frac14e^{t}\end{bmatrix}
+$$
+
+$$
+x(t)=\Phi(t)x(0)+\int_0^t\Phi(\tau)Bu(t-\tau)\mathrm d\tau=\begin{bmatrix}\frac{7}{12}e^{-3t}+\frac34e^t-\frac13\\[6pt]-\frac74e^{-3t}+\frac34e^t\end{bmatrix}
+$$
+
+> [!note] 本题总结
+> 三个知识点：李一法（特征值均负实部才渐近稳定）；BIBO 判据（传函无零极点对消时看传函极点）；非齐次状态方程状态响应公式。
+
+**1-20　答案**（考点：①由题目已知条件求解矩阵 B ②线性定常连续系统的能控秩判据）
+
+（1）
+
+$$
+e^{At}=\mathcal L^{-1}\left[(sI-A)^{-1}\right]=\mathcal L^{-1}\begin{bmatrix}\frac{s+3}{(s+1)(s+2)}&\frac{1}{(s+1)(s+2)}\\[6pt]\frac{-2}{(s+1)(s+2)}&\frac{s}{(s+1)(s+2)}\end{bmatrix}
+$$
+
+$$
+=\begin{bmatrix}2e^{-t}-e^{-2t}&e^{-t}-e^{-2t}\\-2e^{-t}+2e^{-2t}&-e^{-t}+2e^{-2t}\end{bmatrix}
+$$
+
+$$
+x(t)=\begin{bmatrix}1-e^{-t}\\-1+e^{-t}\end{bmatrix}=\int_0^t\Phi(\tau)Bu(t-\tau)\mathrm d\tau\Rightarrow B=\begin{bmatrix}1\\-1\end{bmatrix}
+$$
+
+（2）
+
+$$
+S_c=[b\ \ Ab]=\begin{bmatrix}1&-1\\-1&1\end{bmatrix},\qquad \mathrm{rank}\,S_c=1\neq n=2
+$$
+
+所以系统不能控。
+
+> [!note] 本题总结
+> 把状态转移矩阵与阶跃输入回代零状态响应公式即可反解 $B$；能控性用秩判据（满秩才完全能控）。
+
+**1-21　答案**（考点：①线性定常连续系统的李一法 ②BIBO 稳定性判据 ③求非齐次状态方程的输出响应）
+
+（1）
+
+$$
+|\lambda I-A|=\begin{vmatrix}\lambda&-1&0\\0&\lambda&-1\\-4&-4&\lambda+1\end{vmatrix}=\lambda^3+\lambda^2-4\lambda-4=0
+$$
+
+$$
+\lambda_1=2,\quad \lambda_2=-1,\quad \lambda_3=-2
+$$
+
+存在右半平面的根，系统不是渐近稳定的。
+
+$$
+G(s)=C(sI-A)^{-1}b=\frac{1}{(s-2)(s+1)}
+$$
+
+存在右半平面的根，系统不是 BIBO 稳定的。
+
+（2）$x(0)=0$、$u(t)=\delta(t)$，由拉氏反变换法得
+
+$$
+x(t)=\mathcal L^{-1}\left[(sI-A)^{-1}\right]\left[x(0)+B\cdot1\right]
+$$
+
+$$
+=\begin{bmatrix}-\frac13e^{-t}+\frac{1}{12}e^{2t}+\frac14e^{-2t}\\[6pt]\frac13e^{-t}+\frac16e^{2t}-\frac12e^{-2t}\\[6pt]-\frac13e^{-t}+\frac13e^{2t}+e^{-2t}\end{bmatrix}
+$$
+
+$$
+y(t)=C\cdot x(t)=-\frac23e^{-t}+\frac16e^{2t}+\frac12e^{-2t}+\frac13e^{-t}+\frac16e^{2t}-\frac12e^{-2t}=-\frac13e^{-t}+\frac13e^{2t}
+$$
+
+> [!note] 复算
+> 原书 $(sI-A)^{-1}$ 展开时把分母写作 $-s^3-4s^2+4s+4$，而 $|\lambda I-A|$ 给出的是 $\lambda^3+\lambda^2-4\lambda-4$（即 $s^3+s^2-4s-4$）。
+>
+> 复算 $x(t)$ 在 $t=0$ 处 $=[0\ \ 0\ \ 1]^T=B$，与零初始、$\delta$ 输入的物理结果一致，故 $x(t)$ 与 $y(t)$ 均正确。
+
+> [!note] 本题总结
+> 与 1-19 同型（李一法 + BIBO + 非齐次解），差别是本题含 $\delta$ 输入、$y=Cx$。
+
+**1-22　答案**（考点：①线性定常连续系统的能观性判别 ②状态转移矩阵 $\Phi(t)$ 的性质 ③线性定常连续系统非齐次状态方程的解）
+
+（1）由状态转移矩阵性质可知
+
+$$
+\Phi(-t)\Phi(-2t)=\Phi(-3t)
+$$
+
+又
+
+$$
+\Phi(-t)\Phi(-2t)=\Phi(-3t)=\begin{bmatrix}e^{-3t}&-6te^{-3t}\\0&e^{-3t}\end{bmatrix}
+$$
+
+故
+
+$$
+\Phi(3t)=\begin{bmatrix}e^{3t}&-6te^{3t}\\0&e^{3t}\end{bmatrix}
+$$
+
+作变量代换，得
+
+$$
+\Phi(t)=\begin{pmatrix}e^{-t}&-2te^{-t}\\0&e^{-t}\end{pmatrix}
+$$
+
+（2）设该系统的初始状态为 $x(0)=\begin{pmatrix}a\\b\end{pmatrix}$，则系统状态响应为
+
+$$
+x(t)=\Phi(t)x_0+A^{-1}[\Phi(t)-I]B
+$$
+
+$$
+=\begin{bmatrix}ae^{-t}-2bte^{-t}\\be^{-t}\end{bmatrix}+\begin{bmatrix}-1&2\\0&-1\end{bmatrix}\begin{bmatrix}e^{-t}-1&-2te^{-t}\\0&e^{-t}-1\end{bmatrix}\begin{bmatrix}1\\0\end{bmatrix}
+$$
+
+$$
+=\begin{bmatrix}ae^{-t}-2bte^{-t}\\be^{-t}\end{bmatrix}+\begin{bmatrix}1-e^{-t}\\0\end{bmatrix}=\begin{bmatrix}1+(a-1)e^{-t}-2bte^{-t}\\be^{-t}\end{bmatrix}
+$$
+
+故系统输出响应为
+
+$$
+y(t)=cx(t)=[1\ \ 0]\begin{bmatrix}1+(a-1)e^{-t}-2bte^{-t}\\be^{-t}\end{bmatrix}=1+(a-1)e^{-t}-2bte^{-t}
+$$
+
+又
+
+$$
+\begin{cases}
+y(1)=1-2e^{-1} \\[4pt]
+y(2)=1-4e^{-2}
+\end{cases}
+\Rightarrow
+\begin{cases}
+1+(a-1)e^{-1}-2be^{-1}=1-2e^{-1} \\[4pt]
+1+(a-1)e^{-2}-4be^{-2}=1-4e^{-2}
+\end{cases}
+$$
+
+解得 $a=1$、$b=1$。故 $y(t)=1-2te^{-t}$，则 $y(3)=1-6e^{-3}$。
+
+> [!note] 本题总结
+> 三个知识点：能观性判别（$Q_o$ 满秩）；状态转移矩阵的**半群性质** $\Phi(t_1)\Phi(t_2)=\Phi(t_1+t_2)$（本题首次用来还原 $\Phi(t)$）；非齐次状态方程解 $x(t)=\Phi(t)x_0+A^{-1}[\Phi(t)-I]B$。
+
+## 【题型8】模拟结构图画图题
+
+**1-23　答案**（考点：①线性定常连续系统的能控秩判据和能观秩判据 ②全维状态观测器的设计）
+
+解：由题意 $A=\begin{pmatrix}0&0&5\\1&0&1\\0&1&-3\end{pmatrix}$，$B=\begin{pmatrix}-2&0\\1&-2\\0&1\end{pmatrix}$，$C=(0\ \ 0\ \ 1)$。
+
+（1）系统能控性判别矩阵
+
+$$
+\mathrm{rank}\,M=\mathrm{rank}\begin{bmatrix}-2&0&0&5&5&-25\\1&-2&-2&1&1&0\\0&1&1&-5&-5&16\end{bmatrix}
+$$
+
+$r(M)=3$，则系统完全可控。
+
+系统能观性判别矩阵
+
+$$
+N=\begin{bmatrix}C\\CA\\CA^2\end{bmatrix}=\begin{bmatrix}0&0&1\\0&1&-3\\1&-3&10\end{bmatrix}
+$$
+
+$r(N)=3$，所系统是能观的。
+
+（2）$n=3$、$q=1$，所以输出反馈向量为（3×1）向量 $h=\begin{bmatrix}h_0\\h_1\\h_2\end{bmatrix}$。
+
+全维状态观测器系统矩阵为
+
+$$
+[A-hc]=\begin{bmatrix}0&0&5-h_0\\1&0&1-h_1\\0&1&-3-h_2\end{bmatrix}
+$$
+
+特征方程为
+
+$$
+|sI-A+hc|=\begin{vmatrix}\lambda&0&h_0-5\\-1&\lambda&h_1-1\\0&-1&\lambda+h_2+3\end{vmatrix}=\lambda^3+(3+h_2)\lambda^2+(h_1-1)\lambda+h_0-5
+$$
+
+而希望的特征方程为
+
+$$
+(\lambda+0.57)(\lambda+0.22-1.3\mathrm j)(\lambda+0.22+1.3\mathrm j)=0
+$$
+
+$$
+\lambda^3+1.01\lambda^2+1.98\lambda+0.9861=0
+$$
+
+$$
+\Rightarrow
+\begin{cases}
+3+h_2=1.01 \\[4pt]
+h_1-1=1.98 \\[4pt]
+h_0-5=0.99
+\end{cases}
+\Rightarrow
+\begin{cases}
+h_0=5.99 \\[4pt]
+h_1=2.98 \\[4pt]
+h_2=-1.99
+\end{cases}
+$$
+
+（3）系统全维状态观测器结构图如下
+
+![[附件/现控强化1-23-ans-观测器结构图.png|430]]
+
+> [!note] 本题总结
+> 能控/能观秩判据满秩才完全能控/完全能观；观测器设计：由 $A-hc$ 列特征式 → 与期望多项式对比系数 → 解出 $h$。
+
+**1-24　答案**（考点：状态反馈极点配置）
+
+解：系统可控判别阵
+
+$$
+S_c=[B,AB]=\begin{bmatrix}0&1\\1&0\end{bmatrix},\qquad \mathrm{rank}\,S_c=2
+$$
+
+故系统可控。设反馈矩阵 $K=[k_1\ \ k_2]$，$u=v-Kx$ 可得特征多项式为
+
+$$
+D(s)=|sI-A-BK|=\begin{vmatrix}s+2&-1\\k_1+1&s+k_2\end{vmatrix}=s^2+(k_2+2)s+k_1+2k_2+1
+$$
+
+希望特征多项式
+
+$$
+D^*(s)=(s+3+\mathrm j3)(s+3-\mathrm j3)=s^2+6s+18
+$$
+
+故
+
+$$
+\begin{cases}
+k_2+2=6 \\[4pt]
+k_1+2k_2+1=18
+\end{cases}
+\Rightarrow
+\begin{cases}
+k_1=9 \\[4pt]
+k_2=4
+\end{cases}
+$$
+
+故 $K=[9,\ 4]$。闭环系统结构图如下
+
+![[附件/现控强化1-24-ans-闭环结构图.png|520]]
+
+> [!note] 本题总结
+> 求反馈矩阵与观测器之前，**先判能控/能观**；注意 $u=v-Kx$ 与 $u=v+Kx$ 对应的特征多项式不同。
+
+**1-25　答案**（考点：①状态反馈极点配置 ②全维状态观测器的设计）
+
+解：本题主要考察全维观测器的极点配置和状态反馈控制器的极点配置。
+
+（1）系统能观判别矩阵
+
+$$
+Q_o=\begin{pmatrix}c\\cA\end{pmatrix}=\begin{pmatrix}1&1\\2&-2\end{pmatrix}
+$$
+
+$\mathrm{rank}\,Q_o=2$，因此系统可观测，可任意配置极点。
+
+设观测矩阵 $h=\begin{pmatrix}h_1\\h_2\end{pmatrix}$，则闭环系统特征多项式为
+
+$$
+f(\lambda)=|\lambda I-(A-hc)|=\begin{vmatrix}\lambda-2+h_1&h_1-1\\h_2&\lambda+3+h_2\end{vmatrix}=\lambda^2+(1+h_1+h_2)\lambda+(3h_1-h_2-6)
+$$
+
+根据给定极点值，得期望特征多项式
+
+$$
+f^*(\lambda)=(\lambda+4)(\lambda+5)=\lambda^2+9\lambda+20
+$$
+
+比较 $f(\lambda)$ 与 $f^*(\lambda)$ 各对应的系数，可得 $h_1=8.5$、$h_2=-0.5$。
+
+∴ 状态观测阵为 $h=\begin{pmatrix}8.5\\-0.5\end{pmatrix}$
+
+> [!warning] ⚠️ 复算提示
+> 原书此处印常数项为 $3h_1+h_2-6$，但将其与 $1+h_1+h_2=9$ 联立只能得 $h_1=9$、$h_2=-1$，与原书给出的 $h_1=8.5$、$h_2=-0.5$ 矛盾。
+>
+> 复算 $\det[\lambda I-(A-hc)]$ 的常数项为 $3h_1-h_2-6$（代 $h_1=8.5,h_2=-0.5$ 得 $25.5+0.5-6=20$ ✓），本页按 $3h_1-h_2-6$ 转写。
+
+（2）∵ 状态反馈 $u=k\hat x+v$（原书记作 $u=k\hat x+u$，即 $v$ 为参考输入），∴ 闭环系统的状态空间表达式为
+
+$$
+\begin{pmatrix}\dot x(t)\\\dot{\hat x}(t)\end{pmatrix}=\begin{pmatrix}A&bk\\hc&A+bk-hc\end{pmatrix}\begin{pmatrix}x(t)\\\hat x(t)\end{pmatrix}+\begin{pmatrix}b\\b\end{pmatrix}u(t)
+$$
+
+$$
+=\begin{pmatrix}2&1&-3&-4\\0&-3&0&0\\8.5&8.5&-9.5&-11.5\\-0.5&-0.5&0.5&-2.5\end{pmatrix}\begin{pmatrix}x(t)\\\hat x(t)\end{pmatrix}+\begin{pmatrix}1\\0\\1\\0\end{pmatrix}u(t)
+$$
+
+$$
+y(t)=(1,1,0,0)\begin{pmatrix}x(t)\\\hat x(t)\end{pmatrix}
+$$
+
+（3）结构图为
+
+![[附件/现控强化1-25-ans-闭环结构图.png|430]]
+
+> [!note] 说明
+> 原书 (2) 问只列了闭环状态空间表达式、未展开传递函数与不可控/不可观模态的分析，本页照录；两者的传递函数与模态归属可由上式闭环矩阵直接求出。
+
+> [!note] 本题总结
+> 观测器（下半）与原系统（上半）并置：观测器极点在 $-4,-5$，速度反馈增益取 $K=[-3,-4]$；闭环矩阵的左上块仍是原系统 $A$（不可控模态），模态归属由分块结构直接读出。
+
+## 【题型9】化约当标准型、对角标准型
+
+**1-26　答案**（考点：①由线性定常连续系统传递函数（矩阵）化能控标准1型 ②并联型实现法化系统的对角标准型）
+
+解：（1）由题可知
+
+$$
+W(s)=\frac{s^2+6s+8}{s^2+4s+3}=1+\frac{2s+5}{s^2+4s+3}
+$$
+
+则 $\alpha_0=3$、$\alpha_1=4$；$\beta_0=5$、$\beta_1=2$；$D=1$。故该系统的能控标准Ⅰ型
+
+$$
+\begin{cases}
+\dot x=\begin{bmatrix}0&1\\-\alpha_0&-\alpha_1\end{bmatrix}x+\begin{bmatrix}0\\1\end{bmatrix}u \\[6pt]
+y=[\beta_0\ \ \beta_1]x+Du
+\end{cases}
+$$
+
+即
+
+$$
+\begin{cases}
+\dot x=\begin{bmatrix}0&1\\-3&-4\end{bmatrix}x+\begin{bmatrix}0\\1\end{bmatrix}u \\[6pt]
+y=[5\ \ 2]x+u
+\end{cases}
+$$
+
+（2）由题可知
+
+$$
+W(s)=\frac{s^2+6s+8}{s^2+4s+3}=1+\frac{2s+5}{s^2+4s+3}=1+\frac{2s+5}{(s+1)(s+3)}=1+\frac{c_1}{s+1}+\frac{c_2}{s+3}
+$$
+
+而
+
+$$
+c_1=\lim_{s\to-1}\frac{2s+5}{s+3}=\frac{-2+5}{2}=\frac32
+$$
+
+$$
+c_2=\lim_{s\to-3}\frac{2s+5}{s+1}=\frac{-6+5}{-2}=\frac12
+$$
+
+故该系统的对角标准型
+
+$$
+\begin{cases}
+\dot x=\begin{bmatrix}-1&0\\0&-3\end{bmatrix}x+\begin{bmatrix}1\\1\end{bmatrix}u \\[6pt]
+y=[c_1\ \ c_2]x+Du
+\end{cases}
+$$
+
+即
+
+$$
+\begin{cases}
+\dot x=\begin{bmatrix}-1&0\\0&-3\end{bmatrix}x+\begin{bmatrix}1\\1\end{bmatrix}u \\[6pt]
+y=\left[\frac32\ \ \frac12\right]x+u
+\end{cases}
+$$
+
+> [!note] 本题总结
+> 两种标准型实现方法：由传函构造能控标准Ⅰ型（分子分母系数直接进矩阵）；用并联型实现法化对角标准型（部分分式展开，留数进 $C$）。
+
+**1-27　答案**（考点：①由系统微分方程化能控标准型、能观标准型 ②特征向量法化对角标准型）
+
+解：（1）$\ddot y+3\dot y+2y=2\dot u+u$ 的 Laplace 变换为
+
+$$
+s^2Y(s)+3sY(s)+2Y(s)=2sU(s)+U(s)
+$$
+
+∴
+
+$$
+G_i(s)=\frac{Y(s)}{U(s)}=\frac{2s+1}{s^2+3s+2}
+$$
+
+能控标准Ⅰ型
+
+$$
+\dot x=\begin{pmatrix}0&1\\-2&-3\end{pmatrix}x+\begin{pmatrix}0\\1\end{pmatrix}u,\qquad y=(1\ \ 2)x
+$$
+
+能观标准Ⅱ型
+
+$$
+\dot x=\begin{pmatrix}0&-2\\1&-3\end{pmatrix}x+\begin{pmatrix}1\\2\end{pmatrix}u,\qquad y=(0\ \ 1)x
+$$
+
+当系统为能控标准形时，$|\lambda I-A|=\lambda^2+3\lambda+2$ 得 $\lambda_1=-1$、$\lambda_2=-2$。
+
+由 $A_1P_i=\lambda_iP_i$（$i=1,2$）得相应的特征向量 $P_1=(1\ \ -1)^T$、$P_2=(1\ \ -2)^T$。
+
+设
+
+$$
+T=(P_1\ \ P_2)=\begin{pmatrix}1&1\\-1&-2\end{pmatrix},\qquad T^{-1}=\begin{pmatrix}2&1\\-1&-1\end{pmatrix}
+$$
+
+则 $b_n=T^{-1}b=\begin{pmatrix}1\\-1\end{pmatrix}$，$C_n=CT=(-1\ \ -3)$。
+
+所以对角形为
+
+$$
+\dot x=\begin{pmatrix}-1&0\\0&-2\end{pmatrix}x+\begin{pmatrix}1\\-1\end{pmatrix}u,\qquad y=(-1\ \ -3)x
+$$
+
+> [!note] 本题总结
+> 由微分方程作拉氏变换求传函 → 分子分母系数直接写能控Ⅰ型/能观Ⅱ型；再由特征值、特征向量拼线性变换阵 $T$ 化对角型（特征值两两互异时可对角化，否则化约当型）。
+
+**1-28　答案**（考点：特征向量法化约当标准型）
+
+解：由题设
+
+$$
+A=\begin{pmatrix}-2&2&-1\\0&-2&0\\1&4&0\end{pmatrix},\qquad |\lambda E-A|=\begin{vmatrix}\lambda+2&-2&+1\\0&\lambda+2&0\\-1&-4&\lambda\end{vmatrix}=(\lambda+1)^2(\lambda+2)
+$$
+
+故 $\lambda_{1,2}=-1$、$\lambda_3=-2$。
+
+又由
+
+$$
+AP_1=\lambda_1P_1\Rightarrow P_1=\begin{pmatrix}-1\\0\\1\end{pmatrix}
+$$
+
+$$
+\lambda_2P_2-AP_2=-P_1\Rightarrow P_2=\begin{pmatrix}\frac34\\0\\-\frac12\end{pmatrix}
+$$
+
+$$
+\lambda_3P_3=AP_3\Rightarrow P_3=\begin{pmatrix}-4\\\frac12\\1\end{pmatrix}
+$$
+
+故 $T=(P_1\ \ P_2\ \ P_3)$，$\bar A=T^{-1}AT$，$\bar B=T^{-1}B$，$\bar C=CT$
+
+$$
+\dot{\bar x}=\begin{pmatrix}-1&1&0\\0&-1&0\\0&0&-2\end{pmatrix}\bar x+\begin{pmatrix}3\\4\\0\end{pmatrix}u,\qquad y=\left(-1\ \ \frac34\ \ -4\right)x
+$$
+
+> [!warning] ⚠️ 复算提示（原书 $P_2$ 与 $\bar A$ 印值不自洽）
+> 按原书给出的关系式 $\lambda_2P_2-AP_2=-P_1$（即 $(A+I)P_2=P_1$）解广义特征向量，应得 $P_2=\left(\frac34,0,\frac14\right)^T$；原书印 $-\frac12$。
+>
+> 用原书印值验算：$(A+I)P_2=\left(-\frac14,0,\frac14\right)^T=\frac14P_1$，故 $T^{-1}AT$ 的 $(1,2)$ 元应为 $\frac14$，而印值为 $1$。
+>
+> $\bar B=T^{-1}B=(3,4,0)^T$ 与印值一致（复算 ✓），$\bar C=(-1,\frac34,-4)$ 亦与 $T$ 的第一行一致（复算 ✓）。本页照录原书，仅提示此处不自洽。
+
+> [!note] 本题总结
+> 求特征值、特征向量；遇重根需求广义特征向量，将特征向量拼成 $T$ 即化约当标准型。
+
+## 【题型10】线性定常系统的离散化
+
+**1-29　答案**（考点：①拉氏反变换法求状态转移矩阵 $\Phi(t)$ ②线性定常连续系统的离散化）
+
+解：（1）
+
+$$
+\Phi(t)=\mathcal L^{-1}\left[(sI-A)^{-1}\right]=\mathcal L^{-1}\begin{bmatrix}\frac{1}{s+2}&\frac{1}{(s+2)^2}&0&0\\0&\frac{1}{s+2}&0&0\\0&0&\frac1s&\frac{1}{s^2}\\0&0&0&\frac1s\end{bmatrix}
+$$
+
+$$
+=\begin{bmatrix}e^{-2t}&te^{-2t}&0&0\\0&e^{-2t}&0&0\\0&0&1&t\\0&0&0&1\end{bmatrix}
+$$
+
+（2）采样周期 $T=1\,\mathrm s$
+
+$$
+G=\Phi(t)\big|_{t=T}=\begin{bmatrix}e^{-2}&e^{-2}&0&0\\0&e^{-2}&0&0\\0&0&1&1\\0&0&0&1\end{bmatrix}
+$$
+
+$$
+H=\left[\int_0^T\varphi(t)\mathrm dt\right]B=\begin{bmatrix}\frac12(1-e^{-2})\\0\\0\\0\end{bmatrix}
+$$
+
+故原系统离散化后的线性定常离散系统的状态方程如下
+
+$$
+x(k+1)=\begin{bmatrix}e^{-2}&e^{-2}&0&0\\0&e^{-2}&0&0\\0&0&1&1\\0&0&0&1\end{bmatrix}x(k)+\begin{bmatrix}\frac12(1-e^{-2})\\0\\0\\0\end{bmatrix}u(k)
+$$
+
+> [!note] 本题总结
+> 离散化两件套：$G=\Phi(T)=e^{AT}$、$H=\left[\int_0^Te^{At}\mathrm dt\right]B$；连续系统的特征值 $\lambda$ 对应离散极点为 $e^{\lambda T}$。
+
+**1-30　答案**（考点：①公式法求取系统传递函数 ②拉氏反变换法求取系统状态转移矩阵 ③线性定常连续系统的离散化）
+
+解：（1）系统传递函数
+
+$$
+G(s)=c(sI-A)^{-1}b=[1\ \ 4]\frac{1}{s^2+3s+2}\begin{bmatrix}s&-2\\1&s+3\end{bmatrix}\begin{bmatrix}0\\1\end{bmatrix}=\frac{4s+10}{s^2+3s+2}
+$$
+
+（2）系统状态转移矩阵
+
+$$
+e^{At}=\mathcal L^{-1}\left[(sI-A)^{-1}\right]=\mathcal L^{-1}\left[\frac{1}{s^2+3s+2}\begin{bmatrix}s&-2\\1&s+3\end{bmatrix}\right]
+$$
+
+$$
+=\begin{bmatrix}-e^{-t}+2e^{-2t}&-2e^{-t}+2e^{-2t}\\e^{-t}-e^{-2t}&2e^{-t}-e^{-2t}\end{bmatrix}
+$$
+
+（3）若采样周期 $T=0.1\,\mathrm s$，求系统离散化模型
+
+$$
+G=e^{AT}=\begin{bmatrix}-e^{-0.1}+2e^{-0.2}&-2e^{-0.1}+2e^{-0.2}\\e^{-0.1}-e^{-0.2}&2e^{-0.1}-e^{-0.2}\end{bmatrix}=\begin{bmatrix}0.74&-0.16\\0.08&0.98\end{bmatrix}
+$$
+
+$$
+H=\left[\int_0^Te^{AT}\mathrm dt\right]b=\begin{bmatrix}-1+2e^{-T}-e^{-2T}\\\frac32-2e^{-T}+\frac12e^{-2T}\end{bmatrix}
+$$
+
+所以系统离散化模型
+
+$$
+\begin{cases}
+x(k+1)=Gx(k)+Hu(k) \\[4pt]
+y(k)=cx(k)
+\end{cases}
+$$
+
+> [!note] 复算（数值矩阵取近似）
+> 原书给 $G=\begin{bmatrix}0.74&-0.16\\0.08&0.98\end{bmatrix}$；代入精确值 $e^{-0.1}=0.904837$、$e^{-0.2}=0.818731$ 复算得 $\begin{bmatrix}0.733&-0.172\\0.086&0.991\end{bmatrix}$。原书为两位有效数字的粗略近似，结论口径不变。
+
+> [!note] 本题总结
+> 三个公式：$W(s)=C(sI-A)^{-1}B+D$；$e^{At}=\mathcal L^{-1}[(sI-A)^{-1}]$；$\begin{cases}G=e^{AT}\\H=\left[\int_0^Te^{At}\mathrm dt\right]b\end{cases}$。
+
+**1-31　答案**（与 1-30 是同一道题的重复出现，两题共用同一套解析）
+
+解：（1）
+
+$$
+g(s)=C[sI-A]^{-1}B=(1\ \ 4)\begin{pmatrix}s+3&2\\-1&s\end{pmatrix}^{-1}\begin{pmatrix}0\\1\end{pmatrix}=\frac{4s+10}{(s+1)(s+2)}
+$$
+
+（2）
+
+$$
+e^{At}=\mathcal L^{-1}[sI-A]^{-1}=\mathcal L^{-1}\begin{pmatrix}\frac{s}{(s+1)(s+2)}&\frac{-2}{(s+1)(s+2)}\\\frac{1}{(s+1)(s+2)}&\frac{s+3}{(s+1)(s+2)}\end{pmatrix}
+$$
+
+$$
+=\mathcal L^{-1}\begin{pmatrix}\frac{-1}{s+1}+\frac{2}{s+2}&\frac{-2}{s+1}+\frac{2}{s+2}\\\frac{1}{s+1}-\frac{1}{s+2}&\frac{2}{s+1}-\frac{1}{s+2}\end{pmatrix}
+$$
+
+$$
+=\begin{pmatrix}-e^{-t}+2e^{-2t}&-2e^{-t}+2e^{-2t}\\e^{-t}-e^{-2t}&2e^{-t}-e^{-2t}\end{pmatrix}
+$$
+
+（3）
+
+$$
+G=e^{AT}=\begin{pmatrix}-e^{-0.1}+2e^{-0.2}&-2e^{-0.1}+2e^{-0.2}\\e^{-0.1}-e^{-0.2}&2e^{-0.1}-e^{-0.2}\end{pmatrix}
+$$
+
+$$
+$$
+H=\left[\int_0^{0.1}e^{At}\mathrm dt\right]B=\begin{pmatrix}0\\0.1\end{pmatrix}\qquad\left(\text{即}\ \int_0^{0.1}(2e^{-t}-e^{-2t})\mathrm dt\approx0.1\right)
+$$
+
+> [!note] 说明
+> 原书先列出 $2\times2$ 的积分矩阵再右乘 $B=[0\ \ 1]^T$；因 $B$ 只有第二分量非零，故只剩 $\int_0^{0.1}(2e^{-t}-e^{-2t})\mathrm dt\approx0.1$，本页直接给出结果。
+$$
+
+∴ $x(k+1)=Gx(k)+Hu(k)$，$y(k)=Cx(k)$
+
+> [!note] 本题总结
+> 与 1-30 同题（原书分别标 2014、2016 年合肥工业大学），解法、结论完全一致，此处不再重复讲解要点。
+
+## 录入说明
+
+> [!note] 覆盖范围（专题一全 31 题已录完）
+> 本页已录 **1-1—1-31** 全部 31 题（题型 1—10），2026-10-01 分四批完成。
+>
+> **官方勘误 14 条已全部处理**：文字/解析类 6 条（1-2、1-3、1-4、1-8、1-9、1-10）逐条落实，其中 **1-8、1-9** 是答案册本身的数值/结论错误（1-8 连 BIBO 结论都翻转）。
+>
+> 改图类 11 条：1-3（题面，已改）；1-8/1-9/1-12/1-17/1-19/1-22/1-23/1-25/1-28/1-30/1-31 经逐条对照勘误图与复算，本次印刷批次的答案侧内容均无需改动（其中 1-12、1-17、1-19、1-22、1-23、1-25 的勘误图为答案册题解页截图）。
+>
+> **复算核出 4 处**（非官方勘误）：
+>
+> 1-5 的 $Q_c$ 末元 $959.84$（原书 950.84）；1-21 的 $(sI-A)^{-1}$ 分母书写与 $|\lambda I-A|$ 不一致（结论正确）。
+>
+> 1-25 的观测器特征式常数项应为 $3h_1-h_2-6$（原书印式与其结论矛盾）；1-28 的 $P_2$ 与 $\bar A$ 印值不自洽（复算 $(1,2)$ 元应为 $\frac14$）。另 1-30 的 $G$ 数值矩阵系两位有效数字粗近似（精确值已注）。
+

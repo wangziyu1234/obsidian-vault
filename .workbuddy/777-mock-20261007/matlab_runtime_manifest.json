@@ -1,0 +1,257 @@
+[
+  {
+    "set": 1,
+    "question": 2,
+    "transfer_checked": false
+  },
+  {
+    "set": 1,
+    "question": 3,
+    "transfer_checked": true
+  },
+  {
+    "set": 1,
+    "question": 4,
+    "transfer_checked": true
+  },
+  {
+    "set": 1,
+    "question": 5,
+    "transfer_checked": true
+  },
+  {
+    "set": 1,
+    "question": 8,
+    "transfer_checked": true
+  },
+  {
+    "set": 1,
+    "question": 12,
+    "transfer_checked": true
+  },
+  {
+    "set": 1,
+    "question": 14,
+    "transfer_checked": true
+  },
+  {
+    "set": 1,
+    "question": 15,
+    "transfer_checked": true
+  },
+  {
+    "set": 1,
+    "question": 16,
+    "transfer_checked": true
+  },
+  {
+    "set": 1,
+    "question": 17,
+    "transfer_checked": true
+  },
+  {
+    "set": 2,
+    "question": 1,
+    "transfer_checked": true
+  },
+  {
+    "set": 2,
+    "question": 3,
+    "transfer_checked": true
+  },
+  {
+    "set": 2,
+    "question": 4,
+    "transfer_checked": true
+  },
+  {
+    "set": 2,
+    "question": 6,
+    "transfer_checked": false
+  },
+  {
+    "set": 2,
+    "question": 8,
+    "transfer_checked": true
+  },
+  {
+    "set": 2,
+    "question": 9,
+    "transfer_checked": true
+  },
+  {
+    "set": 2,
+    "question": 13,
+    "transfer_checked": true
+  },
+  {
+    "set": 2,
+    "question": 14,
+    "transfer_checked": true
+  },
+  {
+    "set": 2,
+    "question": 17,
+    "transfer_checked": true
+  },
+  {
+    "set": 3,
+    "question": 1,
+    "transfer_checked": true
+  },
+  {
+    "set": 3,
+    "question": 4,
+    "transfer_checked": true
+  },
+  {
+    "set": 3,
+    "question": 6,
+    "transfer_checked": false
+  },
+  {
+    "set": 3,
+    "question": 8,
+    "transfer_checked": true
+  },
+  {
+    "set": 3,
+    "question": 10,
+    "transfer_checked": true
+  },
+  {
+    "set": 3,
+    "question": 12,
+    "transfer_checked": false
+  },
+  {
+    "set": 3,
+    "question": 13,
+    "transfer_checked": true
+  },
+  {
+    "set": 3,
+    "question": 15,
+    "transfer_checked": true
+  },
+  {
+    "set": 3,
+    "question": 16,
+    "transfer_checked": true
+  },
+  {
+    "set": 3,
+    "question": 17,
+    "transfer_checked": true
+  },
+  {
+    "set": 4,
+    "question": 1,
+    "transfer_checked": true
+  },
+  {
+    "set": 4,
+    "question": 3,
+    "transfer_checked": true
+  },
+  {
+    "set": 4,
+    "question": 4,
+    "transfer_checked": false
+  },
+  {
+    "set": 4,
+    "question": 6,
+    "transfer_checked": true
+  },
+  {
+    "set": 4,
+    "question": 9,
+    "transfer_checked": true
+  },
+  {
+    "set": 4,
+    "question": 11,
+    "transfer_checked": false
+  },
+  {
+    "set": 4,
+    "question": 14,
+    "transfer_checked": true
+  },
+  {
+    "set": 4,
+    "question": 15,
+    "transfer_checked": true
+  },
+  {
+    "set": 4,
+    "question": 16,
+    "transfer_checked": true
+  },
+  {
+    "set": 4,
+    "question": 17,
+    "transfer_checked": true
+  },
+  {
+    "set": 5,
+    "question": 1,
+    "transfer_checked": true
+  },
+  {
+    "set": 5,
+    "question": 2,
+    "transfer_checked": true
+  },
+  {
+    "set": 5,
+    "question": 3,
+    "transfer_checked": true
+  },
+  {
+    "set": 5,
+    "question": 4,
+    "transfer_checked": true
+  },
+  {
+    "set": 5,
+    "question": 5,
+    "transfer_checked": true
+  },
+  {
+    "set": 5,
+    "question": 6,
+    "transfer_checked": true
+  },
+  {
+    "set": 5,
+    "question": 8,
+    "transfer_checked": true
+  },
+  {
+    "set": 5,
+    "question": 11,
+    "transfer_checked": false
+  },
+  {
+    "set": 5,
+    "question": 14,
+    "transfer_checked": true
+  },
+  {
+    "set": 5,
+    "question": 15,
+    "transfer_checked": true
+  },
+  {
+    "set": 5,
+    "question": 16,
+    "transfer_checked": true
+  },
+  {
+    "set": 5,
+    "question": 17,
+    "transfer_checked": true
+  }
+]
