@@ -1,0 +1,59 @@
+% figure: 现控强化3-20-完整闭环结构图.png
+\documentclass[border=12pt]{standalone}
+\usepackage{fontspec}
+\setmainfont{Cambria}
+\usepackage{unicode-math}
+\setmathfont{Cambria Math}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,calc}
+\begin{document}
+\begin{tikzpicture}[>=Stealth,line width=.9pt,
+ b/.style={draw,minimum width=1cm,minimum height=.7cm,fill=blue!4},
+ s/.style={draw,circle,minimum size=.42cm,inner sep=0pt}]
+\node[s] (u) at (0,0) {$+$};
+\node[b] (bp) at (2,0) {$B$};
+\node[s] (sp) at (4,0) {$+$};
+\node[b] (ip) at (6,0) {$\dfrac{E_2}{s}$};
+\node[b] (cp) at (9,0) {$C$};
+\node[b] (ap) at (6,1.7) {$A$};
+\node[b] (bo) at (2,-4) {$B$};
+\node[s] (so) at (4,-4) {$+$};
+\node[b] (io) at (6,-4) {$\dfrac{E_2}{s}$};
+\node[b] (co) at (9,-4) {$C$};
+\node[b] (ao) at (6,-2.3) {$A$};
+\node[s] (err) at (11,-4) {$+$};
+\node[b] (h) at (7,-5.8) {$G$};
+\node[b] (k) at (1,-7.4) {$K$};
+\draw[->] (-1.5,0) -- node[above] {$v$} (u);
+\draw[->] (u) -- node[above] {$u$} (bp);
+\fill (1,0) circle(1.4pt);
+\draw[->] (1,0) |- (bo);
+\draw[->] (bp) -- (sp);
+\draw[->] (sp) -- node[above] {$\dot x$} (ip);
+\draw[->] (ip) -- node[pos=.22,above] {$x$} (cp);
+\fill (7.5,0) circle(1.4pt);
+\draw[->] (7.5,0) |- (ap.east);
+\draw[->] (ap.west) -| (sp.north);
+\draw[->] (cp) -- node[above] {$y$} (12.2,0);
+\fill (11,0) circle(1.4pt);
+\draw[->] (11,0) -- (err.north);
+\node at (11.32,-3.65) {$+$};
+\draw[->] (bo) -- (so);
+\draw[->] (so) -- node[above] {$\dot{\hat x}$} (io);
+\draw[->] (io) -- node[pos=.22,above] {$\hat x$} (co);
+\fill (7.5,-4) circle(1.4pt);
+\draw[->] (7.5,-4) |- (ao.east);
+\draw[->] (ao.west) -| (so.north);
+\draw[->] (co) -- node[above] {$\hat y$} (err);
+\node at (10.6,-4.28) {$-$};
+\draw[->] (err.south) |- node[pos=.22,right] {$y-\hat y$} (h.east);
+\draw[->] (h.west) -| (so.south);
+\node at (4.3,-4.45) {$+$};
+\draw[->,preaction={draw=white,line width=3pt}] (7.5,-4) -- (8,-4.7) -- (8,-7.4) -- (k.east);
+\draw[->] (k.west) -- (0,-7.4) -- (u.south);
+\node at (.32,-.42) {$-$};
+\node[anchor=north] at (5.2,-8.2) {$A=\begin{bmatrix}-1&1\\-2&-4\end{bmatrix},\quad B=\begin{bmatrix}0\\1\end{bmatrix},\quad C=\begin{bmatrix}1&0\end{bmatrix}$};
+\node[anchor=north] at (5.2,-9.6) {$K=\begin{bmatrix}10&4\end{bmatrix},\quad G=\begin{bmatrix}13\\22\end{bmatrix},\quad A-GC=\begin{bmatrix}-14&1\\-24&-4\end{bmatrix}$};
+\node[anchor=north] at (5.2,-11) {$u=v-10\hat x_1-4\hat x_2,\qquad x,\hat x\in\mathbb R^2$};
+\end{tikzpicture}
+\end{document}
