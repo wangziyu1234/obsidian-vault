@@ -32,7 +32,7 @@
 .EXAMPLE
   .\check-notes.ps1
   .\check-notes.ps1 -Dir 数学
-  .\check-notes.ps1 -File "数学\高等数学\11 第11讲….md"
+  .\check-notes.ps1 -File "数学\高等数学\01 第1讲 函数极限与连续\01-1 函数概念与性质.md"
   .\check-notes.ps1 -Fix      # 自动修复同步冲突改名后再校验
 #>
 param(
