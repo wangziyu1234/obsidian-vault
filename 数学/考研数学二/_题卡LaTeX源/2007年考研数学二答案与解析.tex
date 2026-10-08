@@ -159,6 +159,8 @@ $$
 
 \Needspace{5\baselineskip}\textbf{4.（2007.4）答案：D。}
 
+\begingroup\color{gray}错题：2007-4 对称差商存在推不出可导\par\endgroup
+
 这里“极限存在”指有限的两侧极限。题目要求选错误命题，下面前三项都能由连续性或导数定义推出。
 
 A 中若 $f(x)/x$ 有有限极限，则 $f(x)\to0$，再由连续性得 $f(0)=0$。
@@ -184,30 +186,57 @@ D的差式只保留了函数的奇对称部分，偶对称部分可能不可导�
 
 \Needspace{5\baselineskip}\textbf{5.（2007.5）答案：D，共3条。}
 
-\Needspace{6\baselineskip}\textbf{按有限奇点、正无穷和负无穷三个方向检查。}
+\begingroup\color{gray}错题：2007-5 斜渐近线卡在无穷减无穷\par\endgroup
 
-$\ln(1+\mathrm e^x)$ 在整个实轴连续，$1/x$ 仅在0处无定义，所以有限处只可能出现竖直渐近线 $x=0$。无穷远处则分别寻找直线 $y=kx+b$，使函数与该直线的差趋于零。
+\Needspace{6\baselineskip}\textbf{第一步：竖直渐近线——先看有限奇点。}
 
-在 $x=0$ 处，$1/x$ 无界而另一项有限，所以有竖直渐近线 $x=0$。
+$\ln(1+\mathrm e^x)$ 在整个实轴连续，$1/x$ 只在 $x=0$ 无定义；$x\to0$ 时 $\frac1x$ 无界而另一项有限，所以 $x=0$ 是竖直渐近线。
 
-当 $x\to+\infty$ 时，
+\Needspace{6\baselineskip}\textbf{第二步：$x\to+\infty$ 按斜率、截距两步求。}
 
-$$
-f(x)-x=\frac1x+\ln(1+\mathrm e^{-x})\longrightarrow0,
-$$
-
-所以有斜渐近线 $y=x$。
-
-当 $x\to-\infty$ 时，两项都趋于零，所以有水平渐近线 $y=0$。总共3条。
-
-正无穷处用到的恒等式是
+先求斜率
 
 $$
-\ln(1+\mathrm e^x)=\ln[\mathrm e^x(1+\mathrm e^{-x})]
-=x+\ln(1+\mathrm e^{-x}).
+k=\lim_{x\to+\infty}\frac{f(x)}x
+=\lim_{x\to+\infty}\left(\frac1{x^2}+\frac{\ln(1+\mathrm e^x)}x\right)
+=1,
 $$
 
-负无穷处则 $1/x\to0$、$\mathrm e^x\to0$，直接得到 $f(x)\to0$。每一端的渐近直线由 $k=\lim f(x)/x$ 和 $b=\lim[f(x)-kx]$ 唯一确定，所以没有遗漏其他斜渐近线。
+其中 $\dfrac{\ln(1+\mathrm e^x)}x$ 是 $\dfrac\infty\infty$，用洛必达得 $\dfrac{\mathrm e^x}{1+\mathrm e^x}\to1$。
+
+再求截距，把 $x$ 写成 $\ln \mathrm e^x$，两项合成一个对数：
+
+$$
+\begin{aligned}
+b&=\lim_{x\to+\infty}\left[\frac1x+\ln(1+\mathrm e^x)-x\right]\\
+&=\lim_{x\to+\infty}\left[\frac1x+\ln\frac{1+\mathrm e^x}{\mathrm e^x}\right]\\
+&=\lim_{x\to+\infty}\left[\frac1x+\ln(1+\mathrm e^{-x})\right]=0.
+\end{aligned}
+$$
+
+$k=1,\ b=0$，所以这一端有斜渐近线 $y=x$。
+
+\Needspace{6\baselineskip}\textbf{第三步：$x\to-\infty$ 同样两步走。}
+
+$x\to-\infty$ 时 $\frac1x\to0$、$\mathrm e^x\to0$，故 $f(x)\to0$。于是
+
+$$
+k=\lim_{x\to-\infty}\frac{f(x)}x=\frac{0}{-\infty}=0,
+$$
+
+$$
+b=\lim_{x\to-\infty}\left[f(x)-0\cdot x\right]=\lim_{x\to-\infty}f(x)=0.
+$$
+
+$k=0$ 说明这一端是水平渐近线 $y=0$——水平线是斜线的特例，同一套公式照样管用，不是"求不出斜渐近线"。
+
+\Needspace{6\baselineskip}\textbf{结论：$x=0$、$y=x$、$y=0$，共 3 条，选 D。}
+
+\Needspace{4\baselineskip}
+{\bfseries 化简 $\infty-\infty$ 用的恒等式\par}
+$\ln(1+\mathrm e^x)=\ln[\mathrm e^x(1+\mathrm e^{-x})]=x+\ln(1+\mathrm e^{-x})$，所以 $\ln(1+\mathrm e^x)-x=\ln(1+\mathrm e^{-x})\to0$。
+
+两端必须\textbf{分别}求 $k,b$；$k$ 有限（含 $k=0$）才有渐近线。把 $k=0$ 误当成"求不出斜渐近线"，就会漏掉左端的 $y=0$，答案掉进 C。
 
 \clearpage
 
