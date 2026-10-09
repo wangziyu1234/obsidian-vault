@@ -1,5 +1,5 @@
 # 标注落点探针：打印绘图脚本里所有标注/图例的**数据坐标** bbox（配合 _check_fig_layout.py）。
-# 用法：D:\miniconda3\python.exe _probe_layout.py ch5-h-inf.py [更多脚本...]
+# 用法：D:\envs\figures\Scripts\python.exe _probe_layout.py ch5-h-inf.py [更多脚本...]
 """改标注位置前先看数，别用眼睛估。
 
 `sanity check 排布` 的三件套：① 本脚本 → 标注现在落在数据坐标的哪块矩形；

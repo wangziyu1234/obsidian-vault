@@ -25,6 +25,10 @@
 .PARAMETER NoPdf
     只想看 PDF 时用：跳过栅格化。
 
+.PARAMETER Python
+    .py 图源使用的解释器。留空则自动选用 uv 建的 figures 环境
+    （D:\envs\figures\Scripts\python.exe），该环境不存在时回落到 PATH 里的 python。
+
 .EXAMPLE
     .\build.ps1 -File .\circuit-RC.tex
 .EXAMPLE
@@ -43,7 +47,10 @@ param(
 
     [int]$Dpi = 600,
 
-    [switch]$NoPdf
+    [switch]$NoPdf,
+
+    # .py 图源使用的解释器；留空则自动选用 uv 建的 figures 环境
+    [string]$Python = ''
 )
 
 $ErrorActionPreference = 'Stop'
@@ -54,6 +61,13 @@ $ScriptRoot = $PSScriptRoot
 $RepoRoot = Split-Path (Split-Path $ScriptRoot -Parent) -Parent
 $OutDir = Join-Path $RepoRoot '附件'
 if (-not (Test-Path -LiteralPath $OutDir)) { throw "找不到附件目录：$OutDir" }
+
+# .py 图源的解释器：优先用 uv 建的 figures 环境（2026-10-09 起；实测与原 conda
+# base 环境的渲染结果逐字节一致），该环境不存在时回落到 PATH 里的 python。
+if (-not $Python) {
+    $figuresPython = 'D:\envs\figures\Scripts\python.exe'
+    if (Test-Path -LiteralPath $figuresPython) { $Python = $figuresPython } else { $Python = 'python' }
+}
 
 function Get-Sources {
     param([string]$Path)
@@ -125,7 +139,7 @@ foreach ($src in $sources) {
     if ($src.Extension -eq '.py') {
         $env:FIGURE_OUT = $png
         $env:PYTHONIOENCODING = 'utf-8'      # 否则脚本里的中文路径打印成乱码
-        & python $src.FullName
+        & $Python $src.FullName
         if ($LASTEXITCODE -ne 0) { throw "python 构建失败：$($src.Name)" }
         $results += [pscustomobject]@{ Source = $src.Name; Output = $png; Ok = (Test-Path -LiteralPath $png) }
         continue

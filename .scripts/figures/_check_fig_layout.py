@@ -1,5 +1,5 @@
 # 无视觉核验时的排版自检：跑一遍绘图脚本，检查图内文字是否互相压字 / 压住曲线 / 跑出画布。
-# 用法：D:\miniconda3\python.exe _check_fig_layout.py ch5-ex530-krange.py [...]
+# 用法：D:\envs\figures\Scripts\python.exe _check_fig_layout.py ch5-ex530-krange.py [...]
 """代替肉眼看图。
 
 本机 `Read` 读 PNG 会返回 "current model does not support images"，成图无法目视核对。
