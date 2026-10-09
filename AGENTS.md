@@ -100,12 +100,13 @@
 | 用途 | 解释器 | 环境内已有 |
 |:--|:--|:--|
 | 笔记绘图（图源 `.py`） | `D:\envs\figures\Scripts\python.exe` | numpy · scipy · matplotlib · **control** · **slycot** · sympy · pillow（**`build.ps1` 会自动选它**，无需手工指定） |
-| 文档 / OCR / PDF / Office | `D:\envs\docs\Scripts\python.exe` | python-docx · python-pptx · openpyxl · XlsxWriter · pymupdf · pdfplumber · **pdf2docx** · markitdown · rapidocr-onnxruntime · opencv · onnxruntime · shapely · pyclipper · **pandas** · **matplotlib** |
+| 文档 / OCR / PDF / Office | `D:\envs\docs\Scripts\python.exe` | python-docx · python-pptx · openpyxl · XlsxWriter · pymupdf · pdfplumber · pypdf · pdf2docx · img2table · markitdown · rapidocr-onnxruntime · opencv（三变体共存，见下）· onnxruntime · shapely · pyclipper · pandas · matplotlib · seaborn |
 | 临时脚本、不想建环境 | DSH 自带：`C:\Users\23720\.dsh\dsh-runtimes\dsh-primary-runtime\dependencies\python\python.exe` | numpy · pandas · python-docx/pptx · openpyxl · Pillow · lxml · XlsxWriter |
 
 - **装包**：`uv pip install --python D:\envs\<env>\Scripts\python.exe <包>`；新项目用 `uv venv <目录> --python 3.12` 再 `uv add`。
 - **slycot 已装**（figures，2026-10-10）：`control.slycot_check()` 返回 True；`balred`（模型降阶）、`h2syn`/`hinfsyn`/`mixsyn`（H2/H∞ 综合）、`minimal_realization` 这些**需要 slycot 子程序**的函数现在可用。不需要 slycot 的 `lqr`/`lqe`/`care`/`dare`/`dlqr`/`place`/`acker`/`ctrb`/`obsv`/频域/根轨迹/`margin` 一直可用。⚠ `hinfsyn` 在病态或随机对象上 γ 迭代可能极慢（实测烧了 590 s CPU），复核时先给合理对象或限时。
-- **pdf2docx 已装**（docs）：PDF→Word 用 `pdf2docx.Converter(pdf).convert(docx)`；实测 1 页 PDF → 36 KB DOCX、文字正确。它依赖 `opencv-python-headless`，与 `rapidocr` 需要的 `opencv-python` 同名模块共存（同版本 5.0.0.93，`uv pip check` 通过、`cv2` 导入正常）。
+- **pdf2docx / pypdf / img2table / seaborn 已装**（docs，2026-10-10）：`pdf2docx.Converter(pdf).convert(docx)`（实测 1 页 → 36 KB DOCX、文字正确）；`pypdf.PdfReader(pdf)`（实测读出 `习题册\2007…pdf` 35 页，与 xelatex 输出一致）；`seaborn` 出图正常；`img2table` 实测能检出表格**结构**，但**取文字需要 OCR 后端**（Tesseract 二进制未装、PaddleOCR/EasyOCR 也没有）——**有文字层的 PDF 直接用 `pdfplumber.extract_tables()` 就够**，img2table 留给扫描件/图片表格。
+- ⚠ **docs 里有三个 opencv 变体共存**：`opencv-python`（rapidocr 要）· `opencv-python-headless`（pdf2docx 要）· `opencv-contrib-python`（img2table 要），同版本 5.0.0.93、共用同一个 `cv2` 模块目录。实测 `cv2 5.0.0` 导入正常、contrib 模块（`ximgproc`/`aruco`/`face`）在位、rapidocr 与 pdf2docx 均正常、`uv pip check` 报 63 个包全兼容——因为安装顺序上 contrib 最后、文件覆盖在最上层（超集）。**风险**：将来单独重装/升级 `opencv-python` 或 `opencv-python-headless` 会把 contrib 的文件盖掉，可能让 img2table 失效；**要动 opencv 就三个一起升**，或改用 `opencv-contrib-python-headless` 单一变体（需接受另两个包的元数据依赖不再满足）。
 - **别信赖 PATH 里的 `python`**：现在它解析到 Windows 商店的 0 字节占位符（执行返回 9009）。一律写全路径，或交给 `build.ps1` 自动选。
 - **PyPI 走清华镜像**（已写入 `%APPDATA%\uv\uv.toml`）：实测官方 `files.pythonhosted.org` 只有 **8 KB/s**，镜像 **4586 KB/s**；镜像尚未同步的新包临时加 `--index-url https://pypi.org/simple`。
 - uv 本体由 winget 管理（`astral-sh.uv`，0.12.24）；迁移与回滚方案见 `D:\backup\uv-migration\uv迁移方案-20261009.md`，旧 base 的包清单见 `D:\backup\conda-base-backup-20261009-203913\`。
