@@ -1,8 +1,12 @@
 # figure: 奈氏-例512.png
 """Frequency-domain figures reproduced from the transfer functions in the notes.
 
-K/(s+1)^3 for example 5-12; 9/[s(1+Ts)] with T = 2/27 for example 5-15;
-10(1+0.456s)/[s(1+0.114s)(1+s)] for the lead-compensation example 6-4.
+本脚本只产出两张：`奈氏-例512.png`（例5-12 的幅相图）与 `校正-例64超前.png`（例6-4 的串联超前校正）。
+
+例5-12 / 例5-15 的**伯德图**（`伯德-例512.png` / `伯德-例515.png`）由 `ch5-legacy-bode.py` 独家产出，
+本脚本不再重写（2026-10-10 清理重名输出：此前两个脚本都写同一文件名，`-All` 的结果取决于枚举顺序，
+且会覆盖 legacy 脚本"上下两层"的统一风格）。
+
 Chinese labels sit inside $\\mathrm{...}$ (see figures_style.use_style).
 """
 from __future__ import annotations
@@ -23,12 +27,6 @@ def gain_phase(system, w=W):
     mag = np.abs(resp.fresp[0, 0]).squeeze()
     phase = np.unwrap(np.angle(resp.fresp[0, 0].squeeze())) * 180 / np.pi
     return mag, phase
-
-
-def crossover(mag, phase, w=W):
-    """Return (omega_c where |G| = 1, gamma = 180 + phase there)."""
-    idx = int(np.argmin(np.abs(mag - 1.0)))
-    return w[idx], 180.0 + phase[idx]
 
 
 def bode_axes(figsize=(7.6, 5.6)):
@@ -52,30 +50,6 @@ def add_bode(axm, axp, system, colour, label, linestyle="-", lw=2.0):
                  label=label)
     axp.semilogx(W, phase, color=colour, lw=lw, ls=linestyle)
     return mag, phase
-
-
-def mark_gamma(axm, axp, system, colour, note_xy=(-96, -34)):
-    mag, phase = gain_phase(system)
-    wc, gamma = crossover(mag, phase)
-    axp.plot(wc, phase[int(np.argmin(np.abs(W - wc)))], "o", color=colour, ms=7,
-             zorder=7)
-    axm.axvline(wc, color=colour, lw=0.9, ls=(0, (4, 4)), alpha=0.8)
-    axp.axvline(wc, color=colour, lw=0.9, ls=(0, (4, 4)), alpha=0.8)
-    axp.annotate(rf"$\omega_c={wc:.2f}$, $\gamma={gamma:.1f}^\circ$", (wc, -180),
-                 xytext=note_xy, textcoords="offset points", fontsize=10,
-                 color=colour, bbox=dict(facecolor="white", edgecolor="none",
-                                         alpha=0.95, pad=1.5), zorder=8)
-    return wc, gamma
-
-
-def save(fig, name, title=None):
-    if title:
-        fig.suptitle(title, fontsize=13, y=0.97)
-    fig.tight_layout(rect=(0.005, 0.02, 0.995, 0.95 if title else 0.99))
-    out = fs.ATTACH_DIR / name
-    fig.savefig(str(out), dpi=fs.DPI)
-    plt.close(fig)
-    print("saved", out)
 
 
 # ---------------------------------------------------------------- 例5-12
@@ -128,39 +102,6 @@ def fig_nyquist_512():
     plt.close(fig)
 
 
-def fig_bode_512():
-    """同一系统的伯德图：读数应与奈氏判稳一致。"""
-    s = ct.tf("s")
-    fig, (axm, axp) = bode_axes()
-    add_bode(axm, axp, 4 / (s + 1) ** 3, fs.MAG, r"$K=4$")
-    add_bode(axm, axp, 10 / (s + 1) ** 3, fs.PHA, r"$K=10$", linestyle=(0, (6, 3)))
-    mark_gamma(axm, axp, 4 / (s + 1) ** 3, fs.MAG, note_xy=(-104, 16))
-    mark_gamma(axm, axp, 10 / (s + 1) ** 3, fs.PHA, note_xy=(-104, -18))
-    axm.axhline(0, color=fs.SUB, lw=0.8)
-    axp.axhline(-180, color=fs.SUB, lw=0.8, ls=(0, (4, 4)))
-    axm.legend(loc="lower left", fontsize=10, framealpha=0.95,
-               facecolor="white", edgecolor=fs.GRID)
-    save(fig, "伯德-例512.png",
-         r"$\mathrm{例5-12}\ \ G(s)=K/(s+1)^3$")
-
-
-# ---------------------------------------------------------------- 例5-15
-def fig_bode_515():
-    """9/[s(1+Ts)]，T=2/27 由 gamma=60° 反求。"""
-    s = ct.tf("s")
-    T = 2.0 / 27.0
-    system = 9 / (s * (1 + T * s))
-    fig, (axm, axp) = bode_axes()
-    add_bode(axm, axp, system, fs.MAG, r"$G(s)=9/[s(1+Ts)]$")
-    mark_gamma(axm, axp, system, fs.PHA, note_xy=(-118, 14))
-    axm.axhline(0, color=fs.SUB, lw=0.8)
-    axp.axhline(-180, color=fs.SUB, lw=0.8, ls=(0, (4, 4)))
-    axm.legend(loc="lower left", fontsize=10, framealpha=0.95,
-               facecolor="white", edgecolor=fs.GRID)
-    save(fig, "伯德-例515.png",
-         r"$\mathrm{例5-15}\ \ T=2/27,\ \omega_c=9\sqrt{3}/2,\ \gamma=60^\circ$")
-
-
 # ---------------------------------------------------------------- 例6-4
 def fig_bode_64():
     """串联超前校正前后：L0 与 L0*(4Gc)。"""
@@ -211,6 +152,4 @@ if __name__ == "__main__":
         fig_bode_64()
     else:
         fig_nyquist_512()
-        fig_bode_512()
-        fig_bode_515()
         fig_bode_64()
