@@ -40,7 +40,7 @@
 - 观测器极点倍数统一「2~5 倍」；MATLAB 用函数句柄 `@fun`
 - 跨章主线符号一致：$r(t)$ 参考输入、$e=r-b$ 偏差、$\zeta$ 阻尼比、$\omega_n$ 自然频率、$A^T$ 转置、$E$ 单位阵、$r(A)$ 秩
 - **频域符号按教材原文（长期遵守，胡寿松第八版）**：$\omega_c$ 截止频率、**$\omega_x$ 穿越频率**（课本全章不用 $\omega_g$，部分资料与 825 真题写 $\omega_g$ 是同一个量，笔记统一写 $\omega_x$）、$\omega_r$ 谐振频率、$\omega_b$ 带宽频率、$\omega_d$ 阻尼自然频率、$\gamma$ 相角裕度、$h$ 幅值裕度、$M(\omega)$ 闭环幅频、$M_r$ 谐振峰值。分贝值课本写作 **$h(\mathrm{dB})$、$M_r(\mathrm{dB})$**（不写 $h_{\mathrm{dB}}$）；**$h$ 是倍率且恒为正**，正负只出现在 dB 形式上。
-- **公式符号一律以教材原 PDF 为准**：`教材OCR\` 的文字层对数学符号有系统性丢失（分数线、下标、单字符变量），凡涉及符号口径或公式细节，**必须把对应页渲染出来看原文**（PDF 页 = 书内页 + 8，渲染命令见 `.workbuddy` 临时脚本），不要凭 OCR 片段裁定。
+- **公式符号一律以教材原 PDF 为准**：`教材OCR\` 的 OCR 文字层对数学符号有系统性丢失（分数线、下标、单字符变量），凡涉及符号口径或公式细节，**必须把对应页渲染出来看原文**，不要凭 OCR 片段裁定。**页码偏移各书不同，别套用 +8**：自控（胡寿松）**+8**、现控（刘豹）**+8**、张宇高数 **+6**、张宇线代 **−7**，一律以 `教材OCR\README.md` 的表为准。渲染原页的现成脚本在 `.workbuddy\`（如 `_ocr_batch_qh*.py` 里的 PyMuPDF 渲染段、`tmp_render\_render_all.py`；该目录被 `check-notes.ps1` 排除、不入库）。
 - **真题/真题解析不参与符号统一（长期遵守，用户 2026-09-17 明确）**：`控制理论\青岛大学825真题\` 里的 $\omega_x$ / $\omega_g$、$h_{\mathrm{dB}}$ 等写法**保持试卷与解析原样**，不要为了让全库一致去改真题；真题内部各年份本来就不统一，这是刻意保留的。符号统一只作用于笔记类文件。
 - **下标统一用 `\mathrm{}`，不写 `_{\rm xx}`**：`\rm` 会泄漏作用域（`\Phi_{\rm r}x` 会把 $x$ 也变成正体），多字母下标写 `t_{\mathrm{on}}`、`k_{\mathrm{eq}}`、$T_{\mathrm{exact}}$。
 - **行内公式含 `^*` 上标（$\omega_c^*$、$h^*$、$e^*(t)$、$\zeta^*$ 这类）时，禁止放进 `*…*` 斜体或 `**…**` 加粗包裹**：Markdown 会先把公式里的 `*` 当定界符吃掉，公式残成 `$\omega_c^=…$` 裸奔、后续 `$` 配对全错位（06-1-c 例1(II) 题注实测，2026-09-28 修）。包裹内一律写 `^{\ast}`（MathJax 渲染 ∗，与 `*` 视觉无差）；无包裹的正文可照常写 `^*`
@@ -80,7 +80,7 @@
 ### 已知误报与豁免（不要重复报告）
 - `05 第5章` 表格内 `![[…png\|220]]`：转义正确，勿改
 - `\leftrightarrow` → `\left/\right` 计数误报
-- `copilot\copilot-custom-prompts\*.md` 无 H1 正常；`AGENTS.md` 自身、`.venv\` 不参与检查
+- `copilot\copilot-custom-prompts\*.md` 无 H1 正常；`AGENTS.md` 自身、环境目录（`.venv\`、`D:\envs\` 等，若存在）不参与检查
 - 表格内 `![[…png\|220]]` 与 README/AGENTS 的占位示例不算「图片缺失」
 - >250 行的 `type: index` 目录/索引页、`附录 *` 速查表与 `long-form: true` 统计页**只报「提示」不列待修**，别再当缺陷报
 
@@ -103,7 +103,7 @@
 | 文档 / OCR / PDF / Office | `D:\envs\docs\Scripts\python.exe` | python-docx · python-pptx · openpyxl · XlsxWriter · pymupdf · pdfplumber · pypdf · pdf2docx · img2table · markitdown · rapidocr-onnxruntime · opencv（三变体共存，见下）· onnxruntime · shapely · pyclipper · pandas · matplotlib · seaborn |
 | 临时脚本、不想建环境 | DSH 自带：`C:\Users\23720\.dsh\dsh-runtimes\dsh-primary-runtime\dependencies\python\python.exe` | numpy · pandas · python-docx/pptx · openpyxl · Pillow · lxml · XlsxWriter |
 
-- **装包**：`uv pip install --python D:\envs\<env>\Scripts\python.exe <包>`；新项目用 `uv venv <目录> --python 3.12` 再 `uv add`。
+- **装包**：`uv pip install --python D:\envs\<env>\Scripts\python.exe <包>`；新项目用 `uv venv <目录> --python 3.12` 再 `uv add`。**禁止 `pip install --system` / `uv pip install --system`** 指向共享环境——这正是把原 conda base 写脏的元凶。临时依赖用 `uv run --with <包> 脚本.py`（落在 uv 缓存，不污染环境，实测 137 ms 装好 5 个包）；一次性工具用 `uvx <工具>`（实测 `uvx ruff` 秒下秒跑、不装进任何环境）。
 - **slycot 已装**（figures，2026-10-10）：`control.slycot_check()` 返回 True；`balred`（模型降阶）、`h2syn`/`hinfsyn`/`mixsyn`（H2/H∞ 综合）、`minimal_realization` 这些**需要 slycot 子程序**的函数现在可用。不需要 slycot 的 `lqr`/`lqe`/`care`/`dare`/`dlqr`/`place`/`acker`/`ctrb`/`obsv`/频域/根轨迹/`margin` 一直可用。⚠ `hinfsyn` 在病态或随机对象上 γ 迭代可能极慢（实测烧了 590 s CPU），复核时先给合理对象或限时。
 - **pdf2docx / pypdf / img2table / seaborn 已装**（docs，2026-10-10）：`pdf2docx.Converter(pdf).convert(docx)`（实测 1 页 → 36 KB DOCX、文字正确）；`pypdf.PdfReader(pdf)`（实测读出 `习题册\2007…pdf` 35 页，与 xelatex 输出一致）；`seaborn` 出图正常；`img2table` 实测能检出表格**结构**，但**取文字需要 OCR 后端**（Tesseract 二进制未装、PaddleOCR/EasyOCR 也没有）——**有文字层的 PDF 直接用 `pdfplumber.extract_tables()` 就够**，img2table 留给扫描件/图片表格。
 - ⚠ **docs 里有三个 opencv 变体共存**：`opencv-python`（rapidocr 要）· `opencv-python-headless`（pdf2docx 要）· `opencv-contrib-python`（img2table 要），同版本 5.0.0.93、共用同一个 `cv2` 模块目录。实测 `cv2 5.0.0` 导入正常、contrib 模块（`ximgproc`/`aruco`/`face`）在位、rapidocr 与 pdf2docx 均正常、`uv pip check` 报 63 个包全兼容——因为安装顺序上 contrib 最后、文件覆盖在最上层（超集）。**风险**：将来单独重装/升级 `opencv-python` 或 `opencv-python-headless` 会把 contrib 的文件盖掉，可能让 img2table 失效；**要动 opencv 就三个一起升**，或改用 `opencv-contrib-python-headless` 单一变体（需接受另两个包的元数据依赖不再满足）。
@@ -125,11 +125,12 @@
 - 子代理处理大文件（>3000 行）需较长时间，可先发消息要部分结果
 
 ### 教材 OCR 与裁定
-- 教材提取存 `教材OCR\`（不入库；索引 README 入库）：`张宇基础30讲-高数/线代 2027`、`胡寿松自动控制原理-第八版`（**书内页 → PDF 页偏移 +8**）、`刘豹现代控制理论-第三版`
-- OCR 文本有系统性丢字符（分数线、撇号、下标），凡引用例题须用答案反推校验
-- OCR 路线：旧 .doc/.ppt 二进制含公式图片 → Word COM `SaveAs(FileFormat=17)` 转 PDF → PyMuPDF 渲染 → RapidOCR；中文路径用 `os.listdir` 枚举；控制台 GBK 打印 emoji/✓ 报错 → 写 UTF-8 文件或纯 ASCII；pip 装 RapidOCR 默认源极慢，改清华镜像 `-i https://pypi.tuna.tsinghua.edu.cn/simple`
+- 教材提取存 `教材OCR\`（不入库；索引 README 入库）：`张宇基础30讲-高数/线代 2027`、`胡寿松自动控制原理-第八版`、`刘豹现代控制理论-第三版`。**页码偏移各书不同**（自控 +8、现控 +8、高数 +6、线代 −7），一律以 `教材OCR\README.md` 的表为准，**别套用 +8**
+- **三通道分工（长期遵守，2026-10-10 定）**：① **有文字层的 PDF → `pymupdf.get_text()`**（零 OCR 误差、秒级、带页码；胡寿松那本 692 页就是这样提取的，**不是 OCR**）；② **纯扫描/图片 → RapidOCR 批量**（产出可 grep、可入库、可引页码的语料；张宇、刘豹属此类）；③ **手绘/图形/版式 → 视觉 `read_image`**（OCR 读不了拓扑与版式，如 825 手绘原卷）。**OCR 只负责"批量产出可检索文本"，不当公式权威**
+- OCR 文本有系统性丢字符（分数线、撇号、下标、单字符变量），凡引用例题须用答案反推校验
+- OCR 路线：旧 .doc/.ppt 二进制含公式图片 → Word COM `SaveAs(FileFormat=17)` 转 PDF → PyMuPDF 渲染 → RapidOCR；中文路径用 `os.listdir` 枚举；控制台 GBK 打印 emoji/✓ 报错 → 写 UTF-8 文件或纯 ASCII；装包统一用 `uv pip install --python D:\envs\docs\Scripts\python.exe …`（**清华镜像已在 `%APPDATA%\uv\uv.toml` 全局配好**，不必再手写 `-i`）
 - RapidOCR v1.4.4 传参用 `RapidOCR(params={...})`（dict 形式，旧 kwargs 不再适用）
-- **旧 `.doc`/`.ppt` 怎么读**（2026-09-18 实测）：OneDrive 资料根目录是 `C:\Users\23720\OneDrive\按章节-原视频和PPT\`（第5章 = 控制88-17~28）与 `C:\Users\23720\OneDrive\Word-补充自O-God\`，不在这两个目录里找旧讲义。
+- **旧 `.doc`/`.ppt` 怎么读**（2026-09-18 实测，**2026-10-10 校正路径**）：资料根目录在 **`C:\Users\23720\OneDrive\自动控制原理\`** 下 —— `…\自动控制原理\按章节-原视频和PPT\`（第5章 = 控制88-17~28）与 `…\自动控制原理\Word-补充自O-God\`（`第五章小结例4.doc` 就在这里）；不在这两个目录里找旧讲义。⚠ 原先记录的 `OneDrive\按章节-原视频和PPT\` 直挂路径**已不存在**（整体下移了一层）。
   - `.doc` → Word COM `SaveAs([ref]$out,[ref]2)`（FileFormat=2 为纯文本）可读；**公式是图片**，只能拿到文字骨架，`第五章小结例4.doc` 这类文档要配合渲染看。
   - `.ppt` → **PowerPoint COM 在本机一律失败**（`Presentations.Open` 报 `Unexpected HRESULT`，换 `MsoTriState`、传整数参、先复制到 `%TEMP%` 都无效）。改用**按文本框记录头定位**：文本以 UTF-16LE 明文存放在 `TextCharsAtom`(0x0FA0) / `TextBytesAtom`(0x0FA8) 里，`data.find(b'\x00\x00\xa0\x0f')` 命中后，紧跟的 4 字节是**小端长度**，按长度切片解 UTF-16LE 即得整段文字（`.a8\x0f` 同理，按 GBK 解）。12 份第 5 章 PPT 用此法抽出 2238 行干净文本；**不要**直接对整文件按 UTF-16 扫描——那会产出 59 万行垃圾，无法读。
 
@@ -148,11 +149,11 @@
 - 源文件首行用注释声明输出名：`.tex` 写 `% figure: 频域-xxx.png`，`.py` 写 `# figure: 频域-xxx.png`——源码保持 ASCII，附件名沿用仓库中文命名规范
 - 构建：`.scripts\figures\build.ps1 -File .\xxx.tex`（或 `-Dir` / `-All`，`-Dpi` 默认 600）；`.tex` 走 xelatex → pdftocairo，`.py` 由脚本自己写 `$env:FIGURE_OUT`
 - **新图先 `-File` 单独构建验证，再批量**
-- **成图核验**：`.scripts\figures\_check_fig_layout.py` 是「看不了图」时的替代流程，跑一遍绘图脚本（拦 `figures_style.save` 与 `Figure.savefig` 两份出口拿到 fig），用 renderer 量三类问题：
+- **成图核验（脚本 + 视觉两道并用）**：① **脚本自检** —— `.scripts\figures\_check_fig_layout.py` 批量筛查可量化的问题，跑一遍绘图脚本（拦 `figures_style.save` 与 `Figure.savefig` 两份出口拿到 fig），用 renderer 量三类问题：
   - `[压字]` 文字白框两两重叠（图例框天然包住自己的文字，已豁免）；
   - `[越界]` 文字跑出画布；
   - `[压线]` **文字白框/图例框压住曲线或参考线**——把每条 Line2D 的数据点（`step*` 按 drawstyle 展开、`axhline/axvline` 按 2px 加密）投到像素后，看有没有落进框里；框按「半个线宽」外扩再内缩 1px，防边界擦边误报。
-  用法：`D:\envs\figures\Scripts\python.exe _check_fig_layout.py <脚本.py> [...]`（内部把 spec 名取 `__main__`，否则脚本的 `if __name__ == "__main__"` 不执行）。**改完任何图的标注位置都要跑**，目标 0 处；配套 `_probe_layout.py` 打印每个标注的**数据坐标 bbox**，用来挑落点（改标注前先跑它，别用眼睛估）。两个脚本都会**拦截存图**，跑完不改动 `附件\`，可放心跑。图源解释器统一用 uv 环境 `D:\envs\figures`（2026-10-09 起，渲染结果与原 conda 环境逐字节一致）；`build.ps1` 已自动选用它，手工调用时才需写全路径，并自行设 `$env:PYTHONIOENCODING='utf-8'`（否则含 `⟹` 的打印会在 GBK 控制台崩）。
+  用法：`D:\envs\figures\Scripts\python.exe _check_fig_layout.py <脚本.py> [...]`（内部把 spec 名取 `__main__`，否则脚本的 `if __name__ == "__main__"` 不执行）。**改完任何图的标注位置都要跑**，目标 0 处；配套 `_probe_layout.py` 打印每个标注的**数据坐标 bbox**，用来挑落点（改标注前先跑它，别用眼睛估）。两个脚本都会**拦截存图**，跑完不改动 `附件\`，可放心跑。图源解释器统一用 uv 环境 `D:\envs\figures`（2026-10-09 起，渲染结果与原 conda 环境逐字节一致）；`build.ps1` 已自动选用它，手工调用时才需写全路径，并自行设 `$env:PYTHONIOENCODING='utf-8'`（否则含 `⟹` 的打印会在 GBK 控制台崩）。② **视觉复核** —— `read_image` 逐张看观感（刻度被压、页脚被裁、标注遮挡），脚本查不出"好不好看"；**两道都要走**。
 - **标注不许贴曲线放（长期遵守，2026-09-24 用户指出「遮挡还挺厉害的」后定）**：带白底 `bbox` 的标注一旦压在曲线上，等于把曲线咬掉一块。落点优先级：① 该曲线**够不到的空区**（如相频 < −90° 以下的世界、Bode 幅频上方的留白）；② 三条曲线挤在一起时，**改用图例**（图例框放空白区，颜色对号）；③ 曲线斜穿整个象限时，把标注**下移/上抬到曲线之外**再拉一条细引线（`arrowstyle="-"`）连回目标点。竖线（`axvline`）上的刻度标签要摆在**竖线旁边**（`ha="left"` 且 `x = kc*1.08`），不要骑在线上。
 - **825 真题材料是本地专用，不进 git**：`.git/info/exclude` 里已有两条规则（`/控制理论/青岛大学825真题/`、`/附件/青大825-*.png`），它们**从未被 git 跟踪过任何文件**，全靠 remotely-save 多端同步。因此：
   - 对 825 的笔记改动**不要 `git add`**（会被拒；`-f` 强制入库是错的，会把本地专用材料泄漏到版本库）；
@@ -171,7 +172,7 @@
 - **`\mathrm` 后面不能跟空格**：`\mathrm j`、`\mathrm{Re}\,G` 这类写法在 custom 字体集下直接 `ParseFatalException: Unknown symbol: \mathrm`（这才是"本机 mathtext 对 `\mathrm` 报错"的真正机制）。改成 `j`、`\mathrm{j}` 或 `\mathrm{Re}` 都正常。`\sqrt3` 同样要写成 `\sqrt{3}`。
 - **`tight_layout()` 遇到 GridSpec 双面板会静默拒绝执行**：只打一条 `UserWarning: ... Axes that are not compatible with tight_layout`，布局**一点不动**，图级 `fig.text` 就压在轴标签上。多面板图用 `fig.subplots_adjust(left=…, right=…, top=…, bottom=…)` 显式排版，别依赖 tight_layout。
 - **`add_subplot(…, sharex=…)` 不会自动隐藏上面板的刻度标签**：共享横轴的双面板要显式写 `ax.tick_params(labelbottom=False)`，否则上一条面板的刻度文字正好落在下面板的标题上。
-- **本机 `Read` 读 PNG 会返回 "current model does not support images"**：换成多模态模型后可目视复核；当前只能靠脚本内断言（相角最低值、交点个数、穿轴位置）+ 上面的排版自检代替，**别跳过断言**——举反例踩过一次形式坑：`(s+0.01)²` 的极点在 ω=0.01，写成 `(0.01s+1)²` 极点就在 ω=100，画出来的相角只到 −89.9°。
+- **视觉可用（2026-10-10 复核，此前"读不了 PNG"的记录作废）**：本机 `read_image` 能直接读图并判读内容；**看图与脚本断言并用**——断言管数值（相角最低值、交点个数、穿轴位置），视觉管观感（刻度被压、页脚被裁、标注遮挡），两者都不能省。举反例踩过一次形式坑：`(s+0.01)²` 的极点在 ω=0.01，写成 `(0.01s+1)²` 极点就在 ω=100，画出来的相角只到 −89.9°（这类错只有断言能拦）。
 - **`control` 的 rcParams 不在 matplotlib 里**：`plt.rcParams["control.grid"]` 会 `KeyError`。与其和它的默认样式搏斗，不如用 `ct.frequency_response()` 取数据自己画
 - **`from matplotlib.path import Path` 与 `pathlib.Path` 撞名**：绘图脚本里同时用到两者时，把前者 `as MplPath`，否则 `fig.savefig(Path(...))` 会抛 `float() argument must be … not 'WindowsPath'`
 - **不要用 PowerShell 管道改含中文的源码**：`python -c "...read/write..."` 经管道会按 GBK 写回，注释成乱码，且 git 不易察觉。改笔记/脚本一律走编辑工具的定点替换
@@ -182,7 +183,7 @@
 - **采样要取到两端极限**，让两支自然贴轴闭合成环；端点若超出视野，用文字或小箭头标"还要继续伸向无穷远"，不要留下看起来像被截断的断头
 - **形状比数值更重要时，先换增益**：同一个"对任意 $k>0$ 稳定"的结论，取 $k=2$ 画出的环宽高比远好于 $k=10$（后者扁成一条）
 - **先做多画法对比再定稿**：临时脚本一次画 2×2（symlog / 有界倒数坐标 / 局部放大 / 双对数）存一张 PNG，肉眼挑完再写正式脚本，比反复改正式脚本快得多
-- **成图必须自己看图**：`read_image` 逐张确认，别只看"脚本没报错"。历史上多次出现刻度被压、页脚被裁、插图压线而脚本"完全正常"
+- **成图必须自己看图**：`read_image` 逐张确认，别只看"脚本没报错"（2026-10-10 起本机视觉可用，这条**真能执行**了）。历史上多次出现刻度被压、页脚被裁、插图压线而脚本"完全正常"
 
 **MATLAB 作为独立复核（环境已装 R2026a）**：不要求用，但**核对容易算错的解析式时值得跑**（见「子代理与数学核对」）。三个已实测的调用坑：
 - **`.m` 文件必须纯 ASCII**：`matlab -batch` 按系统 ANSI 读文件，含中文注释直接报"文本字符无效"，把 `%` 注释写成英文即可
