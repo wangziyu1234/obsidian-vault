@@ -93,6 +93,21 @@
 
 ## 方法技巧与注意事项
 
+### Python 环境（长期遵守，2026-10-09 起 conda 已退役）
+
+**本机 miniconda 已卸载**，Python 统一由 uv 管理。原则：**按用途用独立环境，不要往共享环境里装包**——原 conda base 就是因为被 `pip install --system` 反复灌入 311 个包，才出现"环境不一致 + 26 个包文件缺失 + 解算器无解"。
+
+| 用途 | 解释器 | 环境内已有 |
+|:--|:--|:--|
+| 笔记绘图（图源 `.py`） | `D:\envs\figures\Scripts\python.exe` | numpy scipy matplotlib control sympy pillow（**`build.ps1` 会自动选它**，无需手工指定） |
+| 文档 / OCR / PDF / Office | `D:\envs\docs\Scripts\python.exe` | python-docx · python-pptx · openpyxl · XlsxWriter · pymupdf · pdfplumber · markitdown · rapidocr-onnxruntime · opencv · onnxruntime · shapely · pyclipper |
+| 临时脚本、不想建环境 | DSH 自带：`C:\Users\23720\.dsh\dsh-runtimes\dsh-primary-runtime\dependencies\python\python.exe` | numpy · pandas · python-docx/pptx · openpyxl · Pillow · lxml · XlsxWriter |
+
+- **装包**：`uv pip install --python D:\envs\<env>\Scripts\python.exe <包>`；新项目用 `uv venv <目录> --python 3.12` 再 `uv add`。
+- **别信赖 PATH 里的 `python`**：现在它解析到 Windows 商店的 0 字节占位符（执行返回 9009）。一律写全路径，或交给 `build.ps1` 自动选。
+- **PyPI 走清华镜像**（已写入 `%APPDATA%\uv\uv.toml`）：实测官方 `files.pythonhosted.org` 只有 **8 KB/s**，镜像 **4586 KB/s**；镜像尚未同步的新包临时加 `--index-url https://pypi.org/simple`。
+- uv 本体由 winget 管理（`astral-sh.uv`，0.12.24）；迁移与回滚方案见 `D:\backup\uv-migration\uv迁移方案-20261009.md`，旧 base 的包清单见 `D:\backup\conda-base-backup-20261009-203913\`。
+
 ### 通用处理技巧
 - **CRLF 陷阱**：PowerShell 正则 `^---\n` 匹配不了 CRLF 文件，frontmatter 批量处理必须行级（`Get-Content` 数组 + 保留行尾）
 - **$$ 配对状态机**：行 trim 为 `$$` 翻转块内状态，块内空行删、块间与关闭符后保留
