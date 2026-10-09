@@ -104,7 +104,7 @@
 | 动画（manim） | `D:\envs\manim\Scripts\python.exe` | manim 0.22.0 · manimpango（自带 cairo/pango）· numpy · scipy · pillow；**渲染依赖 ffmpeg**（本机 Gyan.FFmpeg 9.0.2 已在 PATH） |
 | 交互看板（streamlit） | `D:\envs\web\Scripts\python.exe` | streamlit 1.65.0 · pandas 3.0.6 · pyarrow · altair |
 | 语音转写（视频课/录音） | `D:\envs\asr\Scripts\python.exe` | faster-whisper 1.2.1 + ctranslate2 4.8.2（**不需要 torch**）；模型走 HF 镜像缓存在 `~\.cache\huggingface` |
-| 深度学习（GPU） | `D:\envs\dl\Scripts\python.exe` | **torch 2.14.1+cu130** · torchvision 0.29.1+cu130 · ultralytics 8.4.174 · transformers 5.19.0 · accelerate · sentence-transformers 6.1.0 · pix2tex 0.1.4 · timm |
+| 深度学习（GPU） | `D:\envs\dl\Scripts\python.exe` | **torch 2.14.1+cu130** · torchvision 0.29.1+cu130 · ultralytics 8.4.174 · **pix2text 1.1.7** · transformers **4.57.6**（被 pix2text 降级，见下）· accelerate · sentence-transformers 6.1.0 · pix2tex 0.1.4 · timm（128 包 / 4.06 GB） |
 | 临时脚本、不想建环境 | DSH 自带：`C:\Users\23720\.dsh\dsh-runtimes\dsh-primary-runtime\dependencies\python\python.exe` | numpy · pandas · python-docx/pptx · openpyxl · Pillow · lxml · XlsxWriter |
 
 - **装包**：`uv pip install --python D:\envs\<env>\Scripts\python.exe <包>`；新项目用 `uv venv <目录> --python 3.12` 再 `uv add`。**禁止 `pip install --system` / `uv pip install --system`** 指向共享环境——这正是把原 conda base 写脏的元凶。临时依赖用 `uv run --with <包> 脚本.py`（落在 uv 缓存，不污染环境，实测 137 ms 装好 5 个包）；一次性工具用 `uvx <工具>`（实测 `uvx ruff` 秒下秒跑、不装进任何环境）。
