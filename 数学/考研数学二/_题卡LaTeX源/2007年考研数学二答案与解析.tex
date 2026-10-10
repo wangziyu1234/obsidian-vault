@@ -1172,40 +1172,58 @@ $$
 
 例如 $(1,1,0)^{\mathrm T}$ 与 $(0,1,1)^{\mathrm T}$ 构成这一特征子空间的一组基，但“全部特征向量”还包括它们的每个非零线性组合。
 
-\Needspace{6\baselineskip}\textbf{（Ⅱ）利用正交投影还原矩阵 $B$。}
+\Needspace{6\baselineskip}\textbf{（Ⅱ）设未知元素解方程。}
 
-先求投影系数。将任意向量写成 $x=c\alpha_1+w$，其中 $w$ 与 $\alpha_1$ 正交。两边左乘 $\alpha_1^{\mathrm T}$，得到
+（Ⅰ）已经确定两件事：属于 $-2$ 的特征子空间是 $\alpha_1$ 张成的一维空间；属于 $1$ 的特征子空间是 $\alpha_1^{\perp}$。后者取两个线性无关的向量 $(1,1,0)^{\mathrm T}$ 与 $(1,0,-1)^{\mathrm T}$（都满足 $x_1-x_2+x_3=0$）。
 
-$$
-\alpha_1^{\mathrm T}x
-=c\alpha_1^{\mathrm T}\alpha_1+\alpha_1^{\mathrm T}w=3c.
-$$
-
-所以
+$A$ 实对称，$B=p(A)$ 仍实对称，故可设
 
 $$
-c=\frac{\alpha_1^{\mathrm T}x}{3}
-=\frac{x_1-x_2+x_3}{3}.
+B=\begin{pmatrix}a&b&c\\b&d&e\\c&e&f\end{pmatrix},
 $$
 
-投影向量为 $c\alpha_1=\frac13\alpha_1\alpha_1^{\mathrm T}x$，故到 $\alpha_1$ 张成直线上的正交投影矩阵为
+共六个未知量。把上面两件事写成方程：
 
 $$
-P=\frac{\alpha_1\alpha_1^{\mathrm T}}{\alpha_1^{\mathrm T}\alpha_1}
-=\frac13\alpha_1\alpha_1^{\mathrm T}.
+B\alpha_1=-2\alpha_1,
+\qquad
+B(1,1,0)^{\mathrm T}=(1,1,0)^{\mathrm T},
+\qquad
+B(1,0,-1)^{\mathrm T}=(1,0,-1)^{\mathrm T}.
 $$
 
-任意向量 $x$ 可唯一分解为 $Px+(I-P)x$。$B$ 在前一部分乘以 $-2$，在后一部分乘以1，故
+由 $B\alpha_1=-2\alpha_1$（$\alpha_1=(1,-1,1)^{\mathrm T}$）：
 
 $$
-B=-2P+(I-P)=I-3P=I-\alpha_1\alpha_1^{\mathrm T}.
+a-b+c=-2,\qquad b-d+e=2,\qquad c-e+f=-2.
 $$
 
-计算外积，得到
+由 $B(1,1,0)^{\mathrm T}=(1,1,0)^{\mathrm T}$：
 
 $$
-\alpha_1\alpha_1^{\mathrm T}
-=\begin{pmatrix}1&-1&1\\-1&1&-1\\1&-1&1\end{pmatrix}.
+a+b=1,\qquad b+d=1,\qquad c+e=0.
+$$
+
+由 $B(1,0,-1)^{\mathrm T}=(1,0,-1)^{\mathrm T}$：
+
+$$
+a-c=1,\qquad b-e=0,\qquad c-f=-1.
+$$
+
+从 $a+b=1$ 与 $a-c=1$ 得 $b=1-a$、$c=a-1$，代入 $a-b+c=-2$：
+
+$$
+a-(1-a)+(a-1)=-2
+\ \Longrightarrow\
+3a-2=-2
+\ \Longrightarrow\
+a=0.
+$$
+
+于是 $b=1$、$c=-1$；再依次得 $e=1$、$d=0$、$f=0$。余下三条方程自动成立，可作核对：
+
+$$
+b-d+e=1-0+1=2,\qquad c-e+f=-1-1+0=-2,\qquad b-e=0.
 $$
 
 因此
@@ -1214,5 +1232,20 @@ $$
 \boxed{B=\begin{pmatrix}0&1&-1\\1&0&1\\-1&1&0\end{pmatrix}.}
 $$
 
-用此矩阵直接乘以上面给出的两类向量，分别得到原向量的 $-2$ 倍与1倍，也验证了矩阵表达式与全部特征向量的一致性。
+\Needspace{4\baselineskip}
+{\bfseries 另解：用正交谱分解直接写\par}
+属于 $-2$ 与属于 $1$ 的两个特征子空间正交，把任意 $x$ 拆成 $x=Px+(I-P)x$，其中
+
+$$
+P=\frac{\alpha_1\alpha_1^{\mathrm T}}{\alpha_1^{\mathrm T}\alpha_1}
+=\frac13\alpha_1\alpha_1^{\mathrm T}
+$$
+
+是到 $\alpha_1$ 方向的正交投影，则
+
+$$
+B=-2P+(I-P)=I-3P=I-\alpha_1\alpha_1^{\mathrm T}.
+$$
+
+把 $\alpha_1$ 与 $(1,1,0)^{\mathrm T}$ 分别乘回 $B$，得到 $-2$ 倍与原向量，可见特征值和特征向量都对上了；这与另解的表达式一致。
 \end{document}
